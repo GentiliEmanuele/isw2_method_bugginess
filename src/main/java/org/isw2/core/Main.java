@@ -1,32 +1,37 @@
-package org.isw2.complexity;
+package org.isw2.core;
 
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.isw2.changes.controller.GetCommitFromGit;
-import org.isw2.changes.controller.GetVersionsFromJira;
-import org.isw2.changes.controller.MergeVersionAndCommit;
+import org.isw2.changes.controller.*;
 import org.isw2.changes.model.Commit;
 import org.isw2.changes.model.Version;
-import org.isw2.complexity.controller.MethodController;
+import org.isw2.complexity.model.Method;
+import org.isw2.core.boundary.GitController;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public class Main {
 
     public static void main(String[] args) throws IOException, GitAPIException {
         String projectName = "BOOKKEEPER";
+        GitController gitController = new GitController();
         // Get version from Jira
         GetVersionsFromJira getVersionsFromJira = new GetVersionsFromJira();
         List<Version> versions = getVersionsFromJira.getVersionsFromJira(projectName);
         // Get Commit from GitHub
-        GetCommitFromGit getTagFromGit = new GetCommitFromGit();
-        List<Commit> commits = getTagFromGit.getCommitFromGit(projectName);
+        GetCommitFromGit getCommitFromGit = new GetCommitFromGit();
+        List<Commit> commits = getCommitFromGit.getCommitFromGit(projectName, gitController);
         MergeVersionAndCommit mergeVersionAndCommit = new MergeVersionAndCommit();
         mergeVersionAndCommit.mergeVersionAndCommit(versions, commits);
-        versions.forEach(aux -> System.out.println(aux.toString()));
-        // Measure complexity metric for methods
-        MethodController methodController = new MethodController();
-        // methodController.getAllMethodByProject("/home/emanuele/isw2/temp/BOOKKEEPER");
+        MapCommitsAndMethods mapCommitsAndMethods = new MapCommitsAndMethods();
+        Map<Version, List<Method>> methodsByVersions = mapCommitsAndMethods.getBasicInfo("/home/emanuele/isw2/temp/BOOKKEEPER", versions, gitController);
+        methodsByVersions.forEach((version, methods) -> {
+            methods.forEach(method -> {
+                System.out.println(version.getName() + " " +  method.getSignature() + method.getChangesMetrics().getMethodHistories());
+            });
+        });
+
     }
 
 }

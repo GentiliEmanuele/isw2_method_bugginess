@@ -1,15 +1,15 @@
-package org.isw2.complexity_and_smell_metrics.controller;
+package org.isw2.complexity.controller;
 
 import com.sun.source.tree.*;
 import com.sun.source.util.TreeScanner;
-import org.isw2.complexity_and_smell_metrics.model.HalsteadComplexity;
+import org.isw2.complexity.model.HalsteadComplexity;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class HalsteadComplexityController extends TreeScanner<Void, Void> {
-    private static Set<String> uniqueOperators = new HashSet<>();
-    private static Set<String> uniqueOperands = new HashSet<>();
+    private static final Set<String> uniqueOperators = new HashSet<>();
+    private static final Set<String> uniqueOperands = new HashSet<>();
     private int totalOperators = 0;
     private int totalOperands = 0;
 

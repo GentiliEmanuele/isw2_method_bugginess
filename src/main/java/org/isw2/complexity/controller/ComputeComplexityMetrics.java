@@ -4,7 +4,7 @@ import com.sun.source.tree.*;
 import com.sun.source.util.JavacTask;
 import org.isw2.complexity.model.HalsteadComplexity;
 
-public class ComputeMetrics {
+public class ComputeComplexityMetrics {
 
     public int computeLinesOfCode(MethodTree methodTree) {
         BlockTree blockTree = methodTree.getBody();

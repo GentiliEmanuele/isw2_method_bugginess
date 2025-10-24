@@ -1,4 +1,4 @@
-package org.isw2.complexity_and_smell_metrics.model;
+package org.isw2.complexity.model;
 
 public class HalsteadComplexity {
     private int vocabulary = 0;

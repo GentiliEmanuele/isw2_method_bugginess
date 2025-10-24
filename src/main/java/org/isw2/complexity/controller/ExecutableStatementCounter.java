@@ -1,4 +1,4 @@
-package org.isw2.complexity_and_smell_metrics.controller;
+package org.isw2.complexity.controller;
 
 import com.sun.source.tree.*;
 import com.sun.source.util.TreeScanner;

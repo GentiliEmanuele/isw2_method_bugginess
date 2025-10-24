@@ -2,33 +2,28 @@ package org.isw2.core.boundary;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.isw2.core.exception.GitDirException;
 
 import java.io.File;
 import java.io.IOException;
 
-public class GetterGitInstance {
-    private static Git git;
+public class GitController {
+    private Git git;
 
-    private GetterGitInstance(String projectName) throws GitDirException, GitAPIException {
+    public Git cloneRepository(String projectName) throws GitAPIException, IOException {
         File dir = new File(formatDirectoryName(projectName));
         if (!dir.exists()) {
-            GetterGitInstance.git = Git.cloneRepository().setURI(formatGitHubURL(projectName)).setDirectory(dir).call();
+            git = Git.cloneRepository().setURI(formatGitHubURL(projectName)).setDirectory(dir).call();
         } else {
-            try {
-                GetterGitInstance.git = Git.open(dir);
-            } catch (IOException e) {
-                throw new GitDirException(e.getMessage());
-            }
+            git = Git.open(dir);
         }
+        return git;
     }
 
-    public static Git getterGitInstance(String projectName) {
-        if (git == null) {
-            return git;
-        } else {
-            return git;
+    public Git checkout(String commitId) throws GitAPIException {
+        if (git != null) {
+            git.checkout().setName(commitId).call();
         }
+        return git;
     }
 
     private static String formatDirectoryName(String projectName) {

@@ -1,6 +1,6 @@
 package org.isw2.complexity.model;
 
-public class Metrics {
+public class ComplexityMetrics {
     private int linesOfCode;
     private int statementsCount;
     private int cyclomaticComplexity;

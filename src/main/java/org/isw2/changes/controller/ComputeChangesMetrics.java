@@ -1,14 +1,17 @@
 package org.isw2.changes.controller;
 
+import org.isw2.changes.model.Author;
 import org.isw2.changes.model.Commit;
 import org.isw2.changes.model.Version;
 import org.isw2.complexity.model.Method;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-public class ControllerChangesMetrics {
+public class ComputeChangesMetrics {
 
     private LocalDate stringAsLocalDate(String s) {
         return LocalDate.parse(s, DateTimeFormatter.ISO_LOCAL_DATE);
@@ -22,6 +25,20 @@ public class ControllerChangesMetrics {
                 return commitTime.isAfter(stringAsLocalDate(start.getReleaseDate())) && commitTime.isBefore(stringAsLocalDate(end.getReleaseDate()));
             }).count();
         } else return 0;
+    }
+
+    public int computeAuthors(Method method, Version start, Version end) {
+        List<Commit> commits = method.getTouchedBy();
+        Set<Author> authors = new HashSet<>();
+        if (!commits.isEmpty()) {
+            for (Commit c : commits) {
+                LocalDate commitTime = stringAsLocalDate(c.getCommitTime());
+                if (commitTime.isAfter(stringAsLocalDate(start.getReleaseDate())) && commitTime.isBefore(stringAsLocalDate(end.getReleaseDate()))) {
+                    authors.add(c.getAuthor());
+                }
+            }
+        }
+        return authors.size();
     }
 
 }
