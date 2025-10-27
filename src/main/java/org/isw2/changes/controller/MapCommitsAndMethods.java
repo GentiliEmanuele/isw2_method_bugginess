@@ -8,6 +8,13 @@ import com.sun.source.util.JavacTask;
 import com.sun.source.util.TreeScanner;
 import com.sun.source.util.Trees;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.ObjectLoader;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevTree;
+import org.eclipse.jgit.revwalk.RevWalk;
+import org.eclipse.jgit.treewalk.TreeWalk;
 import org.isw2.changes.model.Change;
 import org.isw2.changes.model.Commit;
 import org.isw2.changes.model.Version;
@@ -15,21 +22,12 @@ import org.isw2.complexity.controller.ComputeComplexityMetrics;
 import org.isw2.complexity.model.Method;
 import org.isw2.core.boundary.GitController;
 
-import javax.tools.JavaCompiler;
-import javax.tools.JavaFileObject;
-import javax.tools.StandardJavaFileManager;
-import javax.tools.ToolProvider;
-import java.io.File;
-import java.io.IOException;
+import javax.tools.*;
+import java.io.*;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MapCommitsAndMethods {
 
@@ -39,49 +37,94 @@ public class MapCommitsAndMethods {
     private final ComputeComplexityMetrics computeComplexityMetrics = new ComputeComplexityMetrics();
     private ControllerChangesMetrics controllerChangesMetrics = new ControllerChangesMetrics();
 
-    public Map<Version, List<Method>> getBasicInfo(String projectPath, List<Version> versions, GitController gitController) throws GitAPIException {
+    // Get access to JavaCompiler
+    private final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+    /* We need an appropriate JavaFileManager instance and an appropriate collection JavaFileObject instances to do
+    this. */
+    private final StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, StandardCharsets.UTF_8);
+
+    public Map<Version, List<Method>> getBasicInfo(List<Version> versions, GitController gitController) throws GitAPIException, IOException {
+        int versionSize = versions.size();
+        int processedVersion = 0;
+        Repository repo = gitController.cloneRepository("BOOKKEEPER").getRepository();
         for (Version version : versions) {
+            int percentVersion = (100 * processedVersion) / versionSize;
             List<Commit> commits = version.getCommits();
+            int commitSize =  commits.size();
+            int processedCommits = 0;
             methods = new ArrayList<>();
             for (Commit commit : commits) {
-                System.out.println(commit.getId() + " of version " + version.getId() + " last version is " +  versions.getLast());
-                gitController.checkout(commit.getId());
-                mapCommitsAndMethods(projectPath, version, versions.getFirst(), commits);
+                // System.out.println(commit.getId() + " of version " + version.getId() + " last version is " +  versions.getLast());
+                analyzeCommit(repo, commit, version, versions.getFirst(), commits);
+                processedCommits++;
+                int percentCommit = (100 * processedCommits) / commitSize;
+                System.out.print("\rMap commits and methods, progress of the versions " + percentVersion + "%" + " commits progress " + percentCommit + "%");
             }
             methodsByVersion.put(version, methods);
+            processedVersion ++;
         }
+        System.out.println();
         return methodsByVersion;
     }
 
-    private void mapCommitsAndMethods(String projectPath,  Version current, Version first, List<Commit> commits) {
-        // Get access to JavaCompiler
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        /* We need an appropriate JavaFileManager instance and an appropriate collection JavaFileObject instances to do
-        this. */
-        StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, StandardCharsets.UTF_8);
-        Path startPath = Paths.get(projectPath);
-        try (Stream<Path> paths = Files.walk(startPath)) {
-            paths
-                    .filter(Files::isRegularFile)
-                    .filter(path -> path.toString().endsWith(".java")) // filter only file .java
-                    .filter(path -> !path.toString().endsWith("package-info.java"))
-                    .forEach(path -> {
-                        try {
-                            getMethodsHistory(compiler, fileManager, String.valueOf(path), current, first, commits);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
+    private void analyzeCommit(Repository repository, Commit commit, Version current, Version first, List<Commit> commits) throws IOException {
+        ObjectId commitId = repository.resolve(commit.getId()); // Parse commit id into ObjectId
+        // Create a walker for iterate the commits
+        try (RevWalk walk = new RevWalk(repository)) {
+            RevCommit revCommit = walk.parseCommit(commitId); // Fetch and decode of the specified commit
+            RevTree tree = revCommit.getTree(); // Get the three of the commit
+            // Create a walker for walk on the commits' three
+            try (TreeWalk treeWalk = new TreeWalk(repository)) {
+                treeWalk.addTree(tree); // Add the three to be explored
+                treeWalk.setRecursive(true); // Set recursive mode for explore also the subdirectories
+                while (treeWalk.next()) {
+                    String path = treeWalk.getPathString();
+                    boolean touched = false;
+
+                    if (!path.endsWith(".java") || path.endsWith("package-info.java")) {
+                        continue;
+                    }
+
+                    if (commit.getChanges() == null) continue;
+
+                    for (Change c : commit.getChanges()) {
+                        if (c.getType().equals("MODIFY") && (c.getNewPath().equals(path) && c.getOldPath().equals(path))) {
+                            touched = true;
+                        } else if (c.getType().equals("ADD") && c.getNewPath().equals(path)) {
+                            touched = true;
                         }
-                    });
-        } catch (IOException e) {
-            System.exit(1);
+                    }
+
+                    if (!touched) continue;
+
+                    ObjectLoader loader = repository.open(treeWalk.getObjectId(0));
+                    String content;
+                    try (InputStream is = loader.openStream();
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+                        StringBuilder contentBuilder = new StringBuilder();
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            contentBuilder.append(line).append("\n");
+                        }
+                        content = contentBuilder.toString();
+                    }
+
+                    analyzeJavaSource(content, path, current, first, commits);
+                }
+            }
         }
     }
 
-    private void getMethodsHistory(JavaCompiler compiler, StandardJavaFileManager fileManager, String classPath, Version current, Version first, List<Commit> commits) throws IOException {
-        // Once we've got this, we can the use it (instance of JavaFileManager) to access the file that we want to process
-        Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(List.of(new File(classPath)));
-        // Once we have these, we can then process our files
-        JavacTask javacTask = (JavacTask) compiler.getTask(null, fileManager, null, null, null, compilationUnits);
+    private void analyzeJavaSource(String content, String path, Version current, Version first, List<Commit> commits) throws IOException {
+        // Create a virtual file in memory
+        JavaFileObject fileObject = new SimpleJavaFileObject(URI.create("string:///" + path), JavaFileObject.Kind.SOURCE) {
+            @Override
+            public CharSequence getCharContent(boolean ignoreEncodingErrors) {
+                return content;
+            }
+        };
+
+        JavacTask javacTask = (JavacTask) compiler.getTask(null, fileManager, null, null, null, List.of(fileObject));
         Iterable<? extends CompilationUnitTree> compilationUnitTrees = javacTask.parse();
         Trees trees = Trees.instance(javacTask);
         for (CompilationUnitTree compilationUnitTree : compilationUnitTrees) {
@@ -112,7 +155,7 @@ public class MapCommitsAndMethods {
                         method.getMetrics().setNestingDepth(computeComplexityMetrics.computeNestingDepth(methodTree, compilationUnitTree, javacTask));
                         method.getMetrics().setNumberOfBranchesAndDecisionPoint(method.getMetrics().getCyclomaticComplexity() - 1);
                         method.getMetrics().setParameterCount(getParametersCounter(methodTree));
-                        isToucheBy(method, commits, classPath);
+                        isToucheBy(method, commits, path);
                         method.getChangesMetrics().setMethodHistories(controllerChangesMetrics.wrapperComputeMethodHistories(method, first, current));
                         method.getChangesMetrics().setMethodHistories(controllerChangesMetrics.wrapperComputeAuthors(method, first, current));
                         methods.add(method);

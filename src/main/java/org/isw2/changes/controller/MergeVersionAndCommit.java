@@ -7,9 +7,12 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MergeVersionAndCommit {
     public void mergeVersionAndCommit(List<Version> versions, List<Commit> commits) {
+        int commitSize = commits.size();
+        AtomicInteger processed = new AtomicInteger();
         // Sort versions list using the releaseDate
         versions.sort(Comparator.comparing(v -> LocalDate.parse(v.getReleaseDate(), DateTimeFormatter.ISO_LOCAL_DATE)));
         // Sort commits list using the commitTime
@@ -23,7 +26,11 @@ public class MergeVersionAndCommit {
                     break;
                 }
             }
+            processed.getAndIncrement();
+            int percent = (100 * processed.get()) / commitSize;
+            System.out.print("\rMerge version and commit progress: " + percent + "%");
         });
+        System.out.println();
         versions.removeIf(v -> v.getCommits().isEmpty());
     }
 }
