@@ -31,11 +31,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MapCommitsAndMethods {
 
-    private Map<Version, List<Method>> methodsByVersion = new HashMap<>();
+    private final Map<Version, List<Method>> methodsByVersion = new HashMap<>();
     private String className = "";
-    private List<Method> methods;
     private final ComputeComplexityMetrics computeComplexityMetrics = new ComputeComplexityMetrics();
-    private ControllerChangesMetrics controllerChangesMetrics = new ControllerChangesMetrics();
+    private final ControllerChangesMetrics controllerChangesMetrics = new ControllerChangesMetrics();
+    private final Map<String, List<Method>> methodCache = new HashMap<>();
 
     // Get access to JavaCompiler
     private final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -46,28 +46,29 @@ public class MapCommitsAndMethods {
     public Map<Version, List<Method>> getBasicInfo(List<Version> versions, GitController gitController) throws GitAPIException, IOException {
         int versionSize = versions.size();
         int processedVersion = 0;
-        Repository repo = gitController.cloneRepository("BOOKKEEPER").getRepository();
-        for (Version version : versions) {
-            int percentVersion = (100 * processedVersion) / versionSize;
-            List<Commit> commits = version.getCommits();
-            int commitSize =  commits.size();
-            int processedCommits = 0;
-            methods = new ArrayList<>();
-            for (Commit commit : commits) {
-                // System.out.println(commit.getId() + " of version " + version.getId() + " last version is " +  versions.getLast());
-                analyzeCommit(repo, commit, version, versions.getFirst(), commits);
-                processedCommits++;
-                int percentCommit = (100 * processedCommits) / commitSize;
-                System.out.print("\rMap commits and methods, progress of the versions " + percentVersion + "%" + " commits progress " + percentCommit + "%");
+        try (Repository repo = gitController.cloneRepository("BOOKKEEPER").getRepository()) {
+            for (Version version : versions) {
+                int percentVersion = (100 * processedVersion) / versionSize;
+                List<Commit> commits = version.getCommits();
+                int commitSize = commits.size();
+                int processedCommits = 0;
+                Map<String, Method> methodsMap = new HashMap<>();
+                for (Commit commit : commits) {
+                    // System.out.println(commit.getId() + " of version " + version.getId() + " last version is " +  versions.getLast());
+                    analyzeCommit(repo, commit, version, methodsMap);
+                    processedCommits++;
+                    int percentCommit = (100 * processedCommits) / commitSize;
+                    System.out.print("\rMap commits and methods, progress of the versions " + percentVersion + "%" + " commits progress " + percentCommit + "%");
+                }
+                methodsByVersion.put(version, new ArrayList<>(methodsMap.values()));
+                processedVersion++;
             }
-            methodsByVersion.put(version, methods);
-            processedVersion ++;
         }
         System.out.println();
         return methodsByVersion;
     }
 
-    private void analyzeCommit(Repository repository, Commit commit, Version current, Version first, List<Commit> commits) throws IOException {
+    private void analyzeCommit(Repository repository, Commit commit, Version current, Map<String, Method> methodsMap) throws IOException {
         ObjectId commitId = repository.resolve(commit.getId()); // Parse commit id into ObjectId
         // Create a walker for iterate the commits
         try (RevWalk walk = new RevWalk(repository)) {
@@ -90,12 +91,23 @@ public class MapCommitsAndMethods {
                     for (Change c : commit.getChanges()) {
                         if (c.getType().equals("MODIFY") && (c.getNewPath().equals(path) && c.getOldPath().equals(path))) {
                             touched = true;
+                            break;
                         } else if (c.getType().equals("ADD") && c.getNewPath().equals(path)) {
                             touched = true;
+                            break;
                         }
                     }
 
-                    if (!touched) continue;
+                    if (!touched) {
+                        List<Method> cachedMethods = methodCache.get(path);
+                        if (cachedMethods != null) {
+                            for (Method m : cachedMethods) {
+                                String key = m.getClassName() + "#" + m.getSignature();
+                                methodsMap.put(key, m);
+                            }
+                        }
+                        continue;
+                    }
 
                     ObjectLoader loader = repository.open(treeWalk.getObjectId(0));
                     String content;
@@ -108,14 +120,15 @@ public class MapCommitsAndMethods {
                         }
                         content = contentBuilder.toString();
                     }
-
-                    analyzeJavaSource(content, path, current, first, commits);
+                    List<Method> methodByFile = new ArrayList<>();
+                    analyzeJavaSource(content, path, current, commit, methodsMap, methodByFile);
+                    methodCache.put(path, new ArrayList<>(methodByFile));
                 }
             }
         }
     }
 
-    private void analyzeJavaSource(String content, String path, Version current, Version first, List<Commit> commits) throws IOException {
+    private void analyzeJavaSource(String content, String path, Version current, Commit currentCommit, Map<String, Method> methodsMap, List<Method> methodsByFile) throws IOException {
         // Create a virtual file in memory
         JavaFileObject fileObject = new SimpleJavaFileObject(URI.create("string:///" + path), JavaFileObject.Kind.SOURCE) {
             @Override
@@ -138,9 +151,15 @@ public class MapCommitsAndMethods {
 
                     @Override
                     public Object visitMethod(MethodTree methodTree, Object o) {
-                        Method method = new Method();
-                        method.setClassName(className);
-                        method.setSignature(getReturnValue(methodTree) + " " + getMethodName(methodTree) + "(" + getMethodParameters(methodTree) + ")");
+                        String methodKey = className + "#" + getMethodName(methodTree) + "(" + getMethodParameters(methodTree) + ")";
+                        Method method = methodsMap.get(methodKey);
+                        if (method == null) {
+                            method = new Method();
+                            method.setClassName(className);
+                            method.setSignature(getReturnValue(methodTree) + " " + getMethodName(methodTree) + "(" + getMethodParameters(methodTree) + ")");
+                            methodsMap.put(methodKey, method);
+                        }
+
                         long startPosition = trees.getSourcePositions().getStartPosition(compilationUnitTree, methodTree);
                         long endPosition = trees.getSourcePositions().getEndPosition(compilationUnitTree, methodTree);
                         int startLine = (int) compilationUnitTree.getLineMap().getLineNumber(startPosition);
@@ -155,10 +174,14 @@ public class MapCommitsAndMethods {
                         method.getMetrics().setNestingDepth(computeComplexityMetrics.computeNestingDepth(methodTree, compilationUnitTree, javacTask));
                         method.getMetrics().setNumberOfBranchesAndDecisionPoint(method.getMetrics().getCyclomaticComplexity() - 1);
                         method.getMetrics().setParameterCount(getParametersCounter(methodTree));
-                        isToucheBy(method, commits, path);
-                        method.getChangesMetrics().setMethodHistories(controllerChangesMetrics.wrapperComputeMethodHistories(method, first, current));
-                        method.getChangesMetrics().setMethodHistories(controllerChangesMetrics.wrapperComputeAuthors(method, first, current));
-                        methods.add(method);
+
+                        if (isToucheBy(method, currentCommit, path)) {
+                            method.getChangesMetrics().setMethodHistories(method.getChangesMetrics().getMethodHistories() + 1);
+                            // If the author is already registered newAuthorNr = oldAuthorNr
+                            int newAuthorsNr = method.tryToAddAuthor(currentCommit.getAuthor());
+                            method.getChangesMetrics().setAuthors(newAuthorsNr);
+                        }
+                        methodsByFile.add(method);
                         return super.visitMethod(methodTree, o);
                     }
                 }, null);
@@ -166,24 +189,31 @@ public class MapCommitsAndMethods {
         }
     }
 
-    // TODO(Check if there are cases of changes of type DELETE, RENAME or COPY
-    private void isToucheBy(Method method, List<Commit> commits, String classPath) {
-        List<Commit> touchedBy = new ArrayList<>();
+    private boolean isToucheBy(Method method, Commit commit, String classPath) {
+        boolean touched = false;
         String root = "/home/emanuele/isw2/temp/BOOKKEEPER/";
-        commits.forEach(commit -> {
-            List<Change> changes = commit.getChanges();
-            if (changes != null) {
-                for (Change change : changes) {
-                    if (change.getType().equals("ADD") && change.getNewPath().equals(classPath.replace(root, ""))) {
-                        touchedBy.add(commit);
+        List<Change> changes = commit.getChanges();
+        if (changes != null) {
+            for (Change change : changes) {
+                if (change.getType().equals("ADD") && change.getNewPath().equals(classPath.replace(root, ""))) {
+                    touched = true;
+                    if (method.getTouchedBy() == null) {
+                        method.setTouchedBy(new ArrayList<>());
                     }
-                    if (change.getType().equals("MODIFY") && change.getOldPath().equals(classPath.replace(root, "")) && change.getOldStart() == method.getStartLine() && change.getOldEnd() == method.getEndLine()) {
-                        touchedBy.add(commit);
+                    method.getTouchedBy().add(commit);
+                    break;
+                }
+                if (change.getType().equals("MODIFY") && change.getOldPath().equals(classPath.replace(root, "")) && change.getOldStart() == method.getStartLine() && change.getOldEnd() == method.getEndLine()) {
+                    touched = true;
+                    if (method.getTouchedBy() == null) {
+                        method.setTouchedBy(new ArrayList<>());
                     }
+                    method.getTouchedBy().add(commit);
+                    break;
                 }
             }
-        });
-        method.setTouchedBy(touchedBy);
+        }
+        return touched;
     }
 
 

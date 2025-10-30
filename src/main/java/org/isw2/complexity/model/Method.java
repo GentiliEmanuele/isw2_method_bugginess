@@ -1,9 +1,12 @@
 package org.isw2.complexity.model;
 
+import org.isw2.changes.model.Author;
 import org.isw2.changes.model.ChangesMetrics;
 import org.isw2.changes.model.Commit;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Method {
     private String className;
@@ -13,10 +16,12 @@ public class Method {
     private int startLine;
     private int endLine;
     private List<Commit> touchedBy;
+    private Set<Author> authors;
 
     public Method() {
         metrics = new ComplexityMetrics();
         changesMetrics = new ChangesMetrics();
+        authors = new HashSet<>();
     }
 
     public String getClassName() {
@@ -65,5 +70,18 @@ public class Method {
 
     public ChangesMetrics getChangesMetrics() {
         return changesMetrics;
+    }
+
+    public Set<Author> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(Set<Author> authors) {
+        this.authors = authors;
+    }
+
+    public int tryToAddAuthor(Author author) {
+        authors.add(author);
+        return authors.size();
     }
 }

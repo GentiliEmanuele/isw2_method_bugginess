@@ -35,65 +35,64 @@ public class Main {
         MapCommitsAndMethods mapCommitsAndMethods = new MapCommitsAndMethods();
         Map<Version, List<Method>> methodsByVersions = mapCommitsAndMethods.getBasicInfo(versions, gitController);
 
+        File folder = new File("output");
+        if (!folder.exists()) {
+            if (!folder.mkdirs()) return;
+        }
+
+        CSVWriter writer = new CSVWriter(new FileWriter("output/" + projectName + ".csv"));
+        String[] header = {
+                "ProjectName",
+                "ClassName",
+                "Signature",
+                "ReleaseID",
+                "StartLine",
+                "EndLine",
+                "LOC",
+                "statementsCount",
+                "cyclomaticComplexity",
+                "cognitiveComplexity",
+                "halsteadComplexityEffort",
+                "halsteadComplexityDifficulty",
+                "halstedComplexityVolume",
+                "halsteadEstimatedProgramLength",
+                "halsteadProgramLength",
+                "halstedVocabulary",
+                "nestingDepth",
+                "numberOfBranchesAndDecisionPoint",
+                "parameterCount",
+                "methodHistories",
+                "authors"
+        };
+        writer.writeNext(header);
+
         methodsByVersions.forEach((version, methods) -> {
-
-            try {
-                File folder = new File("output");
-                if (!folder.exists()) {
-                    folder.mkdirs();
-                }
-
-                CSVWriter writer = new CSVWriter(new FileWriter("output/" + version.getName() + ".csv"));
-
-                String[] header = {
-                        "ClassName",
-                        "Signature",
-                        "StartLine",
-                        "EndLine",
-                        "LOC",
-                        "statementsCount",
-                        "cyclomaticComplexity",
-                        "cognitiveComplexity",
-                        "halsteadComplexityEffort",
-                        "halsteadComplexityDifficulty",
-                        "halstedComplexityVolume",
-                        "halsteadEstimatedProgramLength",
-                        "halsteadProgramLength",
-                        "halstedVocabulary",
-                        "nestingDepth",
-                        "numberOfBranchesAndDecisionPoint",
-                        "parameterCount",
-                        "methodHistories",
-                        "authors"
+            methods.forEach(method -> {
+                String[] row = {
+                        projectName,
+                        method.getClassName(),
+                        method.getSignature(),
+                        version.getName(),
+                        String.valueOf(method.getStartLine()),
+                        String.valueOf(method.getEndLine()),
+                        String.valueOf(method.getMetrics().getLinesOfCode()),
+                        String.valueOf(method.getMetrics().getStatementsCount()),
+                        String.valueOf(method.getMetrics().getCyclomaticComplexity()),
+                        String.valueOf(method.getMetrics().getCognitiveComplexity()),
+                        String.valueOf(method.getMetrics().getHalsteadComplexity().getEffort()),
+                        String.valueOf(method.getMetrics().getHalsteadComplexity().getDifficulty()),
+                        String.valueOf(method.getMetrics().getHalsteadComplexity().getVolume()),
+                        String.valueOf(method.getMetrics().getHalsteadComplexity().getEstimatedProgramLength()),
+                        String.valueOf(method.getMetrics().getHalsteadComplexity().getProgramLength()),
+                        String.valueOf(method.getMetrics().getHalsteadComplexity().getVocabulary()),
+                        String.valueOf(method.getMetrics().getNestingDepth()),
+                        String.valueOf(method.getMetrics().getNumberOfBranchesAndDecisionPoint()),
+                        String.valueOf(method.getMetrics().getParameterCount()),
+                        String.valueOf(method.getChangesMetrics().getMethodHistories()),
+                        String.valueOf(method.getChangesMetrics().getAuthors())
                 };
-                writer.writeNext(header);
-                methods.forEach(method -> {
-                    String[] row = {
-                            method.getClassName(),
-                            method.getSignature(),
-                            String.valueOf(method.getStartLine()),
-                            String.valueOf(method.getEndLine()),
-                            String.valueOf(method.getMetrics().getLinesOfCode()),
-                            String.valueOf(method.getMetrics().getStatementsCount()),
-                            String.valueOf(method.getMetrics().getCyclomaticComplexity()),
-                            String.valueOf(method.getMetrics().getCognitiveComplexity()),
-                            String.valueOf(method.getMetrics().getHalsteadComplexity().getEffort()),
-                            String.valueOf(method.getMetrics().getHalsteadComplexity().getDifficulty()),
-                            String.valueOf(method.getMetrics().getHalsteadComplexity().getVolume()),
-                            String.valueOf(method.getMetrics().getHalsteadComplexity().getEstimatedProgramLength()),
-                            String.valueOf(method.getMetrics().getHalsteadComplexity().getProgramLength()),
-                            String.valueOf(method.getMetrics().getHalsteadComplexity().getVocabulary()),
-                            String.valueOf(method.getMetrics().getNestingDepth()),
-                            String.valueOf(method.getMetrics().getNumberOfBranchesAndDecisionPoint()),
-                            String.valueOf(method.getMetrics().getParameterCount()),
-                            String.valueOf(method.getChangesMetrics().getMethodHistories()),
-                            String.valueOf(method.getChangesMetrics().getAuthors())
-                    };
-                    writer.writeNext(row);
-                });
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+                writer.writeNext(row);
+            });
         });
     }
 }

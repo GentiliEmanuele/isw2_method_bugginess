@@ -8,7 +8,7 @@ public class Version {
     private String name;
     private String releaseDate;
     private String description;
-    private List<Commit> commits;
+    private final List<Commit> commits;
 
     public Version() {
         this.commits = new ArrayList<>();

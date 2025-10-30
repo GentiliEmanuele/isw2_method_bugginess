@@ -19,26 +19,47 @@ public class ComputeChangesMetrics {
 
     public long computeMethodHistories(Method method, Version start, Version end) {
         List<Commit> commits = method.getTouchedBy();
+        LocalDate startDate = stringAsLocalDate(start.getReleaseDate());
+        LocalDate endDate = stringAsLocalDate(end.getReleaseDate());
         if (!commits.isEmpty()) {
-            return commits.stream().filter(c -> {
-                LocalDate commitTime = stringAsLocalDate(c.getCommitTime());
-                return commitTime.isAfter(stringAsLocalDate(start.getReleaseDate())) && commitTime.isBefore(stringAsLocalDate(end.getReleaseDate()));
-            }).count();
+            if (startDate.equals(endDate)) {
+                return commits.stream().filter(c -> {
+                    LocalDate commitTime = stringAsLocalDate(c.getCommitTime());
+                    return commitTime.isBefore(endDate) || commitTime.isEqual(endDate);
+                }).count();
+            } else {
+                return commits.stream().filter(c -> {
+                    LocalDate commitTime = stringAsLocalDate(c.getCommitTime());
+                    return (commitTime.isAfter(startDate) || commitTime.isEqual(startDate)) &&
+                            (commitTime.isBefore(endDate) || commitTime.isEqual(endDate));
+                }).count();
+            }
         } else return 0;
     }
 
     public int computeAuthors(Method method, Version start, Version end) {
         List<Commit> commits = method.getTouchedBy();
         Set<Author> authors = new HashSet<>();
+        LocalDate startDate = stringAsLocalDate(start.getReleaseDate());
+        LocalDate endDate = stringAsLocalDate(end.getReleaseDate());
         if (!commits.isEmpty()) {
-            for (Commit c : commits) {
-                LocalDate commitTime = stringAsLocalDate(c.getCommitTime());
-                if (commitTime.isAfter(stringAsLocalDate(start.getReleaseDate())) && commitTime.isBefore(stringAsLocalDate(end.getReleaseDate()))) {
-                    authors.add(c.getAuthor());
+            if (startDate.equals(endDate)) {
+                for (Commit c : commits) {
+                    LocalDate commitTime = stringAsLocalDate(c.getCommitTime());
+                    if (commitTime.isBefore(endDate) || commitTime.isEqual(endDate)) {
+                        authors.add(c.getAuthor());
+                    }
+                }
+            } else {
+                for (Commit c : commits) {
+                    LocalDate commitTime = stringAsLocalDate(c.getCommitTime());
+                    if ((commitTime.isAfter(startDate) || commitTime.isEqual(startDate))
+                            && (commitTime.isBefore(endDate) || commitTime.isEqual(endDate))) {
+                        authors.add(c.getAuthor());
+                    }
                 }
             }
         }
         return authors.size();
     }
-
 }

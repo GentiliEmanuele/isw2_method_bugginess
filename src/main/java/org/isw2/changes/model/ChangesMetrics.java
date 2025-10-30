@@ -1,8 +1,8 @@
 package org.isw2.changes.model;
 
 public class ChangesMetrics {
-    private long methodHistories;
-    private int authors;
+    private long methodHistories = 0;
+    private int authors = 0;
 
     public long getMethodHistories() {
         return methodHistories;
