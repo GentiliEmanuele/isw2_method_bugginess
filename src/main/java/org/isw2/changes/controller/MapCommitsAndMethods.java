@@ -18,7 +18,9 @@ import org.eclipse.jgit.treewalk.TreeWalk;
 import org.isw2.changes.model.Change;
 import org.isw2.changes.model.Commit;
 import org.isw2.changes.model.Version;
+import org.isw2.complexity.controller.CodeSmellAnalyzer;
 import org.isw2.complexity.controller.ComputeComplexityMetrics;
+import org.isw2.complexity.model.CodeSmell;
 import org.isw2.complexity.model.Method;
 import org.isw2.core.boundary.GitController;
 
@@ -34,8 +36,8 @@ public class MapCommitsAndMethods {
     private final Map<Version, List<Method>> methodsByVersion = new HashMap<>();
     private String className = "";
     private final ComputeComplexityMetrics computeComplexityMetrics = new ComputeComplexityMetrics();
-    private final ControllerChangesMetrics controllerChangesMetrics = new ControllerChangesMetrics();
     private final Map<String, List<Method>> methodCache = new HashMap<>();
+    private final CodeSmellAnalyzer codeSmellAnalyzer = new CodeSmellAnalyzer();
 
     // Get access to JavaCompiler
     private final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -121,14 +123,14 @@ public class MapCommitsAndMethods {
                         content = contentBuilder.toString();
                     }
                     List<Method> methodByFile = new ArrayList<>();
-                    analyzeJavaSource(content, path, current, commit, methodsMap, methodByFile);
+                    analyzeJavaSource(content, path, commit, methodsMap, methodByFile);
                     methodCache.put(path, new ArrayList<>(methodByFile));
                 }
             }
         }
     }
 
-    private void analyzeJavaSource(String content, String path, Version current, Commit currentCommit, Map<String, Method> methodsMap, List<Method> methodsByFile) throws IOException {
+    private void analyzeJavaSource(String content, String path, Commit currentCommit, Map<String, Method> methodsMap, List<Method> methodsByFile) throws IOException {
         // Create a virtual file in memory
         JavaFileObject fileObject = new SimpleJavaFileObject(URI.create("string:///" + path), JavaFileObject.Kind.SOURCE) {
             @Override
@@ -140,6 +142,7 @@ public class MapCommitsAndMethods {
         JavacTask javacTask = (JavacTask) compiler.getTask(null, fileManager, null, null, null, List.of(fileObject));
         Iterable<? extends CompilationUnitTree> compilationUnitTrees = javacTask.parse();
         Trees trees = Trees.instance(javacTask);
+        List<CodeSmell> smells = codeSmellAnalyzer.findSmells(content);
         for (CompilationUnitTree compilationUnitTree : compilationUnitTrees) {
             for (Tree tree : compilationUnitTree.getTypeDecls()) {
                 tree.accept(new TreeScanner<>() {
@@ -172,6 +175,7 @@ public class MapCommitsAndMethods {
                         method.getMetrics().setCognitiveComplexity(computeComplexityMetrics.computeCognitiveComplexity(methodTree, compilationUnitTree, javacTask));
                         method.getMetrics().setHalsteadComplexity(computeComplexityMetrics.computeHalstedComplexity(methodTree));
                         method.getMetrics().setNestingDepth(computeComplexityMetrics.computeNestingDepth(methodTree, compilationUnitTree, javacTask));
+                        method.getMetrics().setCodeSmellCounter(computeComplexityMetrics.computeSmellNumber(smells, startLine, endLine));
                         method.getMetrics().setNumberOfBranchesAndDecisionPoint(method.getMetrics().getCyclomaticComplexity() - 1);
                         method.getMetrics().setParameterCount(getParametersCounter(methodTree));
 

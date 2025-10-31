@@ -61,6 +61,7 @@ public class Main {
                 "nestingDepth",
                 "numberOfBranchesAndDecisionPoint",
                 "parameterCount",
+                "codeSmell",
                 "methodHistories",
                 "authors"
         };
@@ -88,6 +89,7 @@ public class Main {
                         String.valueOf(method.getMetrics().getNestingDepth()),
                         String.valueOf(method.getMetrics().getNumberOfBranchesAndDecisionPoint()),
                         String.valueOf(method.getMetrics().getParameterCount()),
+                        String.valueOf(method.getMetrics().getCodeSmellCounter()),
                         String.valueOf(method.getChangesMetrics().getMethodHistories()),
                         String.valueOf(method.getChangesMetrics().getAuthors())
                 };

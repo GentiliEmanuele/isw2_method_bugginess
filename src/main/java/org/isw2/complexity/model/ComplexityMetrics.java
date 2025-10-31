@@ -9,6 +9,7 @@ public class ComplexityMetrics {
     private int nestingDepth;
     private int numberOfBranchesAndDecisionPoint;
     private int parameterCount;
+    private int codeSmellCounter;
 
     public int getLinesOfCode() {
         return linesOfCode;
@@ -72,5 +73,13 @@ public class ComplexityMetrics {
 
     public void setParameterCount(int parameterCount) {
         this.parameterCount = parameterCount;
+    }
+
+    public int getCodeSmellCounter() {
+        return codeSmellCounter;
+    }
+
+    public void setCodeSmellCounter(int codeSmellCounter) {
+        this.codeSmellCounter = codeSmellCounter;
     }
 }
