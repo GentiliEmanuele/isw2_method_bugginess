@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GetFileDiffBetweenCommit {
-    public List<Change> getFileDiffBetweenCommit(Git git, RevCommit startCommit, RevCommit endCommit) throws IOException {
+    public List<Change> getFileDiffBetweenCommit(Git git, RevCommit startCommit, RevCommit endCommit) throws IOException, GitAPIException {
         Repository repository = git.getRepository();
         ObjectId oldHead = startCommit.getTree().getId();
         ObjectId head =  endCommit.getTree().getId();
@@ -33,34 +33,29 @@ public class GetFileDiffBetweenCommit {
             oldTreeIter.reset(reader, oldHead);
             CanonicalTreeParser newTreeIter = new CanonicalTreeParser();
             newTreeIter.reset(reader, head);
-            // Get the list of changed files
-            try (Git newGit = new Git(repository)) {
-                List<DiffEntry> diffs = newGit.diff().setOldTree(oldTreeIter).setNewTree(newTreeIter).call();
-                for (DiffEntry entry : diffs) {
-                    if (entry.getNewPath().endsWith(".java")) {
-                        Change change = new Change();
-                        change.setType(entry.getChangeType().name());
-                        change.setOldPath(entry.getOldPath());
-                        change.setNewPath(entry.getNewPath());
-                        // This is for capture touched method in a class
-                        FileHeader fileHeader = formatter.toFileHeader(entry);
-                        List<HunkHeader> hunks = new ArrayList<>(fileHeader.getHunks());
-                        for (HunkHeader hunk : hunks) {
-                            EditList edits = hunk.toEditList();
-                            for (Edit edit : edits) {
-                                change.setOldStart(edit.getBeginA());
-                                change.setOldEnd(edit.getEndA());
-                                change.setNewStart(edit.getBeginB());
-                                change.setNewEnd(edit.getEndB());
-                            }
+            List<DiffEntry> diffs = git.diff().setOldTree(oldTreeIter).setNewTree(newTreeIter).call();
+            for (DiffEntry entry : diffs) {
+                if ((entry.getOldPath() != null && entry.getOldPath().endsWith(".java"))  || (entry.getNewPath() != null && entry.getNewPath().endsWith(".java"))) {
+                    Change change = new Change();
+                    change.setType(entry.getChangeType().name());
+                    change.setOldPath(entry.getOldPath());
+                    change.setNewPath(entry.getNewPath());
+                    // This is for capture touched method in a class
+                    FileHeader fileHeader = formatter.toFileHeader(entry);
+                    List<HunkHeader> hunks = new ArrayList<>(fileHeader.getHunks());
+                    for (HunkHeader hunk : hunks) {
+                        EditList edits = hunk.toEditList();
+                        for (Edit edit : edits) {
+                            change.setOldStart(edit.getBeginA());
+                            change.setOldEnd(edit.getEndA());
+                            change.setNewStart(edit.getBeginB());
+                            change.setNewEnd(edit.getEndB());
                         }
-                        changes.add(change);
                     }
+                    changes.add(change);
                 }
-                return changes;
-            } catch (GitAPIException e) {
-                throw new RuntimeException(e);
             }
+            return changes;
         }
 
     }

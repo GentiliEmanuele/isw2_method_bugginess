@@ -63,7 +63,11 @@ public class Main {
                 "parameterCount",
                 "codeSmell",
                 "methodHistories",
-                "authors"
+                "authors",
+                "stmtAdded",
+                "maxStmtAdded",
+                "stmtDeleted",
+                "maxStmtDeleted",
         };
         writer.writeNext(header);
 
@@ -91,7 +95,11 @@ public class Main {
                         String.valueOf(method.getMetrics().getParameterCount()),
                         String.valueOf(method.getMetrics().getCodeSmellCounter()),
                         String.valueOf(method.getChangesMetrics().getMethodHistories()),
-                        String.valueOf(method.getChangesMetrics().getAuthors())
+                        String.valueOf(method.getChangesMetrics().getAuthors()),
+                        String.valueOf(method.getChangesMetrics().getStmtAdded()),
+                        String.valueOf(method.getChangesMetrics().getMaxStmtAdded()),
+                        String.valueOf(method.getChangesMetrics().getStmtDeleted()),
+                        String.valueOf(method.getChangesMetrics().getMaxStmtDeleted()),
                 };
                 writer.writeNext(row);
             });

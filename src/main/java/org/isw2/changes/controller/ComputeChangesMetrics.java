@@ -1,65 +1,72 @@
 package org.isw2.changes.controller;
 
-import org.isw2.changes.model.Author;
+import org.isw2.changes.model.Change;
 import org.isw2.changes.model.Commit;
-import org.isw2.changes.model.Version;
 import org.isw2.complexity.model.Method;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class ComputeChangesMetrics {
 
-    private LocalDate stringAsLocalDate(String s) {
-        return LocalDate.parse(s, DateTimeFormatter.ISO_LOCAL_DATE);
+    public void computeMethodHistories(Method method) {
+        int historiesCounter = 0;
+        for (Commit commit : method.getTouchedBy()) {
+            historiesCounter += commit.getChanges().size();
+        }
+        method.getChangesMetrics().setMethodHistories(historiesCounter);
     }
 
-    public long computeMethodHistories(Method method, Version start, Version end) {
-        List<Commit> commits = method.getTouchedBy();
-        LocalDate startDate = stringAsLocalDate(start.getReleaseDate());
-        LocalDate endDate = stringAsLocalDate(end.getReleaseDate());
-        if (!commits.isEmpty()) {
-            if (startDate.equals(endDate)) {
-                return commits.stream().filter(c -> {
-                    LocalDate commitTime = stringAsLocalDate(c.getCommitTime());
-                    return commitTime.isBefore(endDate) || commitTime.isEqual(endDate);
-                }).count();
-            } else {
-                return commits.stream().filter(c -> {
-                    LocalDate commitTime = stringAsLocalDate(c.getCommitTime());
-                    return (commitTime.isAfter(startDate) || commitTime.isEqual(startDate)) &&
-                            (commitTime.isBefore(endDate) || commitTime.isEqual(endDate));
-                }).count();
-            }
-        } else return 0;
+    public void computeAuthors(Method method, Commit currentCommit) {
+        // If the author is already registered newAuthorNr = oldAuthorNr
+        int newAuthorsNr = method.tryToAddAuthor(currentCommit.getAuthor());
+        method.getChangesMetrics().setAuthors(newAuthorsNr);
     }
 
-    public int computeAuthors(Method method, Version start, Version end) {
-        List<Commit> commits = method.getTouchedBy();
-        Set<Author> authors = new HashSet<>();
-        LocalDate startDate = stringAsLocalDate(start.getReleaseDate());
-        LocalDate endDate = stringAsLocalDate(end.getReleaseDate());
-        if (!commits.isEmpty()) {
-            if (startDate.equals(endDate)) {
-                for (Commit c : commits) {
-                    LocalDate commitTime = stringAsLocalDate(c.getCommitTime());
-                    if (commitTime.isBefore(endDate) || commitTime.isEqual(endDate)) {
-                        authors.add(c.getAuthor());
-                    }
+    public void computeStmtAdded(Method method) {
+        int stmtAdded = 0;
+        int maxStmtAdded = 0;
+        int changeStmtAdded = 0;
+        for (Commit commit : method.getTouchedBy()) {
+            for (Change change : commit.getChanges()) {
+                if (change.getType().equals("ADD")) {
+                    changeStmtAdded = method.getEndLine() - method.getStartLine();
+                } else if (change.getType().equals("MODIFY")) {
+                    // Compute old and new lengths
+                    int oldLength = change.getOldEnd() - change.getOldStart();
+                    int newLength = change.getNewEnd() - change.getNewStart();
+                    // Check if the method is bigger
+                    changeStmtAdded = newLength - oldLength;
                 }
-            } else {
-                for (Commit c : commits) {
-                    LocalDate commitTime = stringAsLocalDate(c.getCommitTime());
-                    if ((commitTime.isAfter(startDate) || commitTime.isEqual(startDate))
-                            && (commitTime.isBefore(endDate) || commitTime.isEqual(endDate))) {
-                        authors.add(c.getAuthor());
+                if (changeStmtAdded > 0) {
+                    stmtAdded += changeStmtAdded;
+                }
+                if (changeStmtAdded > maxStmtAdded) {
+                    maxStmtAdded = changeStmtAdded;
+                }
+            }
+        }
+        method.getChangesMetrics().setStmtAdded(stmtAdded);
+        method.getChangesMetrics().setMaxStmtAdded(maxStmtAdded);
+    }
+
+    public void computeStmtDeleted(Method method) {
+        int stmtDeleted = 0;
+        int  maxStmtDeleted = 0;
+        int changeStmtDeleted;
+        for (Commit commit : method.getTouchedBy()) {
+            for (Change change : commit.getChanges()) {
+                if (change.getType().equals("MODIFY")) {
+                    int oldLength = change.getOldEnd() - change.getOldStart();
+                    int newLength = change.getNewEnd() - change.getNewStart();
+                    changeStmtDeleted = oldLength - newLength;
+                    if (changeStmtDeleted > 0) {
+                        stmtDeleted += changeStmtDeleted;
+                    }
+                    if (changeStmtDeleted > maxStmtDeleted) {
+                        maxStmtDeleted = changeStmtDeleted;
                     }
                 }
             }
         }
-        return authors.size();
+        method.getChangesMetrics().setStmtDeleted(stmtDeleted);
+        method.getChangesMetrics().setMaxStmtDeleted(maxStmtDeleted);
     }
 }

@@ -38,6 +38,7 @@ public class MapCommitsAndMethods {
     private final ComputeComplexityMetrics computeComplexityMetrics = new ComputeComplexityMetrics();
     private final Map<String, List<Method>> methodCache = new HashMap<>();
     private final CodeSmellAnalyzer codeSmellAnalyzer = new CodeSmellAnalyzer();
+    private final ComputeChangesMetrics computeChangesMetrics = new ComputeChangesMetrics();
 
     // Get access to JavaCompiler
     private final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -56,8 +57,7 @@ public class MapCommitsAndMethods {
                 int processedCommits = 0;
                 Map<String, Method> methodsMap = new HashMap<>();
                 for (Commit commit : commits) {
-                    // System.out.println(commit.getId() + " of version " + version.getId() + " last version is " +  versions.getLast());
-                    analyzeCommit(repo, commit, version, methodsMap);
+                    analyzeCommit(repo, commit, methodsMap);
                     processedCommits++;
                     int percentCommit = (100 * processedCommits) / commitSize;
                     System.out.print("\rMap commits and methods, progress of the versions " + percentVersion + "%" + " commits progress " + percentCommit + "%");
@@ -70,7 +70,7 @@ public class MapCommitsAndMethods {
         return methodsByVersion;
     }
 
-    private void analyzeCommit(Repository repository, Commit commit, Version current, Map<String, Method> methodsMap) throws IOException {
+    private void analyzeCommit(Repository repository, Commit commit, Map<String, Method> methodsMap) throws IOException {
         ObjectId commitId = repository.resolve(commit.getId()); // Parse commit id into ObjectId
         // Create a walker for iterate the commits
         try (RevWalk walk = new RevWalk(repository)) {
@@ -180,10 +180,10 @@ public class MapCommitsAndMethods {
                         method.getMetrics().setParameterCount(getParametersCounter(methodTree));
 
                         if (isToucheBy(method, currentCommit, path)) {
-                            method.getChangesMetrics().setMethodHistories(method.getChangesMetrics().getMethodHistories() + 1);
-                            // If the author is already registered newAuthorNr = oldAuthorNr
-                            int newAuthorsNr = method.tryToAddAuthor(currentCommit.getAuthor());
-                            method.getChangesMetrics().setAuthors(newAuthorsNr);
+                            computeChangesMetrics.computeMethodHistories(method);
+                            computeChangesMetrics.computeAuthors(method,  currentCommit);
+                            computeChangesMetrics.computeStmtAdded(method);
+                            computeChangesMetrics.computeStmtDeleted(method);
                         }
                         methodsByFile.add(method);
                         return super.visitMethod(methodTree, o);
@@ -195,11 +195,10 @@ public class MapCommitsAndMethods {
 
     private boolean isToucheBy(Method method, Commit commit, String classPath) {
         boolean touched = false;
-        String root = "/home/emanuele/isw2/temp/BOOKKEEPER/";
         List<Change> changes = commit.getChanges();
         if (changes != null) {
             for (Change change : changes) {
-                if (change.getType().equals("ADD") && change.getNewPath().equals(classPath.replace(root, ""))) {
+                if (change.getType().equals("ADD") && change.getNewPath().equals(classPath)) {
                     touched = true;
                     if (method.getTouchedBy() == null) {
                         method.setTouchedBy(new ArrayList<>());
@@ -207,7 +206,7 @@ public class MapCommitsAndMethods {
                     method.getTouchedBy().add(commit);
                     break;
                 }
-                if (change.getType().equals("MODIFY") && change.getOldPath().equals(classPath.replace(root, "")) && change.getOldStart() == method.getStartLine() && change.getOldEnd() == method.getEndLine()) {
+                if (change.getType().equals("MODIFY") && change.getOldPath().equals(classPath) && change.getOldStart() == method.getStartLine() && change.getOldEnd() == method.getEndLine()) {
                     touched = true;
                     if (method.getTouchedBy() == null) {
                         method.setTouchedBy(new ArrayList<>());
