@@ -17,7 +17,8 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.isw2.changes.model.Change;
 import org.isw2.changes.model.Commit;
-import org.isw2.changes.model.Version;
+import org.isw2.jira.model.Ticket;
+import org.isw2.jira.model.Version;
 import org.isw2.complexity.controller.CodeSmellAnalyzer;
 import org.isw2.complexity.controller.ComputeComplexityMetrics;
 import org.isw2.complexity.model.CodeSmell;
@@ -29,7 +30,6 @@ import java.io.*;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MapCommitsAndMethods {
 
@@ -46,10 +46,10 @@ public class MapCommitsAndMethods {
     this. */
     private final StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, StandardCharsets.UTF_8);
 
-    public Map<Version, List<Method>> getBasicInfo(List<Version> versions, GitController gitController) throws GitAPIException, IOException {
+    public Map<Version, List<Method>> getBasicInfo(String projectName, List<Version> versions, GitController gitController, List<Ticket> tickets) throws GitAPIException, IOException {
         int versionSize = versions.size();
         int processedVersion = 0;
-        try (Repository repo = gitController.cloneRepository("BOOKKEEPER").getRepository()) {
+        try (Repository repo = gitController.cloneRepository(projectName).getRepository()) {
             for (Version version : versions) {
                 int percentVersion = (100 * processedVersion) / versionSize;
                 List<Commit> commits = version.getCommits();
@@ -82,52 +82,47 @@ public class MapCommitsAndMethods {
                 treeWalk.setRecursive(true); // Set recursive mode for explore also the subdirectories
                 while (treeWalk.next()) {
                     String path = treeWalk.getPathString();
-                    boolean touched = false;
+                    boolean touched;
 
-                    if (!path.endsWith(".java") || path.endsWith("package-info.java")) {
-                        continue;
-                    }
-
-                    if (commit.getChanges() == null) continue;
-
-                    for (Change c : commit.getChanges()) {
-                        if (c.getType().equals("MODIFY") && (c.getNewPath().equals(path) && c.getOldPath().equals(path))) {
-                            touched = true;
-                            break;
-                        } else if (c.getType().equals("ADD") && c.getNewPath().equals(path)) {
-                            touched = true;
-                            break;
+                    if (path.endsWith(".java") && path.endsWith("package-info.java") && commit.getChanges() != null) {
+                        touched = classIsTouchedBy(commit, path);
+                        if (!touched) {
+                            getInfoFromCache(path, methodsMap);
+                            continue;
                         }
+                        String content = getClassContent(repository, treeWalk);
+                        List<Method> methodByFile = new ArrayList<>();
+                        analyzeJavaSource(content, path, commit, methodsMap, methodByFile);
+                        methodCache.put(path, new ArrayList<>(methodByFile));
                     }
-
-                    if (!touched) {
-                        List<Method> cachedMethods = methodCache.get(path);
-                        if (cachedMethods != null) {
-                            for (Method m : cachedMethods) {
-                                String key = m.getClassName() + "#" + m.getSignature();
-                                methodsMap.put(key, m);
-                            }
-                        }
-                        continue;
-                    }
-
-                    ObjectLoader loader = repository.open(treeWalk.getObjectId(0));
-                    String content;
-                    try (InputStream is = loader.openStream();
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
-                        StringBuilder contentBuilder = new StringBuilder();
-                        String line;
-                        while ((line = reader.readLine()) != null) {
-                            contentBuilder.append(line).append("\n");
-                        }
-                        content = contentBuilder.toString();
-                    }
-                    List<Method> methodByFile = new ArrayList<>();
-                    analyzeJavaSource(content, path, commit, methodsMap, methodByFile);
-                    methodCache.put(path, new ArrayList<>(methodByFile));
                 }
             }
         }
+    }
+
+    private void getInfoFromCache(String path, Map<String, Method> methodsMap) {
+        List<Method> cachedMethods = methodCache.get(path);
+        if (cachedMethods != null) {
+            for (Method m : cachedMethods) {
+                String key = m.getClassName() + "#" + m.getSignature();
+                methodsMap.put(key, m);
+            }
+        }
+    }
+
+    private String getClassContent(Repository repository, TreeWalk treeWalk) throws IOException {
+        ObjectLoader loader = repository.open(treeWalk.getObjectId(0));
+        String content;
+        try (InputStream is = loader.openStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+            StringBuilder contentBuilder = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                contentBuilder.append(line).append("\n");
+            }
+            content = contentBuilder.toString();
+        }
+        return content;
     }
 
     private void analyzeJavaSource(String content, String path, Commit currentCommit, Map<String, Method> methodsMap, List<Method> methodsByFile) throws IOException {
@@ -179,7 +174,7 @@ public class MapCommitsAndMethods {
                         method.getMetrics().setNumberOfBranchesAndDecisionPoint(method.getMetrics().getCyclomaticComplexity() - 1);
                         method.getMetrics().setParameterCount(getParametersCounter(methodTree));
 
-                        if (isToucheBy(method, currentCommit, path)) {
+                        if (methodIsToucheBy(method, currentCommit, path)) {
                             computeChangesMetrics.computeMethodHistories(method);
                             computeChangesMetrics.computeAuthors(method,  currentCommit);
                             computeChangesMetrics.computeStmtAdded(method);
@@ -193,30 +188,41 @@ public class MapCommitsAndMethods {
         }
     }
 
-    private boolean isToucheBy(Method method, Commit commit, String classPath) {
+    private boolean methodIsToucheBy(Method method, Commit commit, String classPath) {
         boolean touched = false;
         List<Change> changes = commit.getChanges();
-        if (changes != null) {
-            for (Change change : changes) {
-                if (change.getType().equals("ADD") && change.getNewPath().equals(classPath)) {
-                    touched = true;
-                    if (method.getTouchedBy() == null) {
-                        method.setTouchedBy(new ArrayList<>());
-                    }
-                    method.getTouchedBy().add(commit);
-                    break;
+        if (changes == null) return false;
+        for (Change change : changes) {
+            touched = isTouchedByAdd(change, classPath) || methodIsTouchedByModify(change, classPath, method);
+            if (touched) {
+                if (method.getTouchedBy() == null) {
+                    method.setTouchedBy(new ArrayList<>());
                 }
-                if (change.getType().equals("MODIFY") && change.getOldPath().equals(classPath) && change.getOldStart() == method.getStartLine() && change.getOldEnd() == method.getEndLine()) {
-                    touched = true;
-                    if (method.getTouchedBy() == null) {
-                        method.setTouchedBy(new ArrayList<>());
-                    }
-                    method.getTouchedBy().add(commit);
-                    break;
-                }
+                method.getTouchedBy().add(commit);
             }
         }
         return touched;
+    }
+
+    private boolean classIsTouchedBy(Commit commit, String classPath) {
+        for (Change c : commit.getChanges()) {
+            if (isTouchedByAdd(c, classPath) || classIsTouchedByModify(c, classPath)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isTouchedByAdd (Change change, String classPath) {
+        return change.getType().equals("ADD") && change.getNewPath().equals(classPath);
+    }
+
+    private boolean methodIsTouchedByModify(Change change, String classPath, Method method) {
+        return change.getType().equals("MODIFY") && change.getOldPath().equals(classPath) && change.getOldStart() == method.getStartLine() && change.getOldEnd() == method.getEndLine();
+    }
+
+    private boolean classIsTouchedByModify(Change change, String classPath) {
+        return change.getType().equals("MODIFY") && change.getOldPath().equals(classPath);
     }
 
 

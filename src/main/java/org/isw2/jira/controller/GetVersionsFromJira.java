@@ -1,6 +1,6 @@
-package org.isw2.changes.controller;
+package org.isw2.jira.controller;
 
-import org.isw2.changes.model.Version;
+import org.isw2.jira.model.Version;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

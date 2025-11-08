@@ -1,7 +1,7 @@
 package org.isw2.changes.controller;
 
 import org.isw2.changes.model.Commit;
-import org.isw2.changes.model.Version;
+import org.isw2.jira.model.Version;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

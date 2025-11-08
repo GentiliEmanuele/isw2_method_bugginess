@@ -42,7 +42,6 @@ public class GetCommitFromGit {
             if (commit.getParents().length != 0) {
                 RevCommit prevCommit = commit.getParent(0);
                 String key = prevCommit.getName() + "->" + commit.getName();
-                // System.out.println("Work with diff between " + prevCommit + " and " + commit.getName());
                 if (!diffCache.containsKey(key)) {
                     diffCache.put(key, getFileDiffBetweenCommit.getFileDiffBetweenCommit(git, prevCommit, commit));
                 }
@@ -60,7 +59,7 @@ public class GetCommitFromGit {
 
     private static int getCommitsLength(Iterable<RevCommit> commits) {
         int lenght = 0;
-        for (RevCommit commit : commits) {
+        for (var _ : commits) {
             lenght++;
         }
         return lenght;

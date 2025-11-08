@@ -4,9 +4,12 @@ import com.opencsv.CSVWriter;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.isw2.changes.controller.*;
 import org.isw2.changes.model.Commit;
-import org.isw2.changes.model.Version;
+import org.isw2.jira.controller.GetTicketFromJira;
+import org.isw2.jira.model.Ticket;
+import org.isw2.jira.model.Version;
 import org.isw2.complexity.model.Method;
 import org.isw2.core.boundary.GitController;
+import org.isw2.jira.controller.GetVersionsFromJira;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -18,22 +21,27 @@ public class Main {
 
     public static void main(String[] args) throws IOException, GitAPIException {
         String projectName = "BOOKKEEPER";
-        GitController gitController = new GitController();
+
         // Get version from Jira
         GetVersionsFromJira getVersionsFromJira = new GetVersionsFromJira();
         List<Version> versions = getVersionsFromJira.getVersionsFromJira(projectName);
-        // versions.forEach(version -> {System.out.println(version.getName());});
+
+        // Get ticket from Jira
+        GetTicketFromJira getTicketFromJira = new GetTicketFromJira();
+        List<Ticket> tickets = getTicketFromJira.getTicketFromJira(projectName, versions);
 
         // Get Commit from GitHub
+        GitController gitController = new GitController();
         GetCommitFromGit getCommitFromGit = new GetCommitFromGit();
         List<Commit> commits = getCommitFromGit.getCommitFromGit(projectName, gitController);
-        // commits.forEach(commit -> {System.out.println(commit.getId());});
+
+        // Merge version and commit
         MergeVersionAndCommit mergeVersionAndCommit = new MergeVersionAndCommit();
         mergeVersionAndCommit.mergeVersionAndCommit(versions, commits);
-        // versions.forEach(version -> {System.out.println(version.toString());});
 
+        // Map commit, method and tickets
         MapCommitsAndMethods mapCommitsAndMethods = new MapCommitsAndMethods();
-        Map<Version, List<Method>> methodsByVersions = mapCommitsAndMethods.getBasicInfo(versions, gitController);
+        Map<Version, List<Method>> methodsByVersions = mapCommitsAndMethods.getBasicInfo(projectName, versions, gitController, tickets);
 
         File folder = new File("output");
         if (!folder.exists()) {

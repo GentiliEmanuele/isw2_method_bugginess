@@ -8,7 +8,7 @@ import com.sun.source.util.JavacTask;
 import com.sun.source.util.TreeScanner;
 import com.sun.source.util.Trees;
 import org.isw2.changes.model.Commit;
-import org.isw2.changes.model.Version;
+import org.isw2.jira.model.Version;
 import org.isw2.complexity.controller.ComputeComplexityMetrics;
 import org.isw2.complexity.model.Method;
 import javax.tools.JavaCompiler;

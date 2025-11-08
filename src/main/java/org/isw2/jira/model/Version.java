@@ -1,4 +1,6 @@
-package org.isw2.changes.model;
+package org.isw2.jira.model;
+
+import org.isw2.changes.model.Commit;
 
 import java.util.ArrayList;
 import java.util.List;
