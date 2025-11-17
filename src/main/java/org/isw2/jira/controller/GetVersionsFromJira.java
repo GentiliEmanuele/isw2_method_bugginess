@@ -1,5 +1,9 @@
 package org.isw2.jira.controller;
 
+import org.isw2.core.controller.context.EntryPointContext;
+import org.isw2.exceptions.ProcessingException;
+import org.isw2.factory.Controller;
+import org.isw2.factory.ExecutionContext;
 import org.isw2.jira.model.Version;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -7,50 +11,71 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GetVersionsFromJira {
-    List<Version> versions = new ArrayList<>();
-    public List<Version> getVersionsFromJira(String projectName) throws IOException {
-        String url = "https://issues.apache.org/jira/rest/api/2/project/" + projectName;
+public class GetVersionsFromJira implements Controller {
+
+    private static final String BASE_URL = "https://issues.apache.org/jira/rest/api/2/project/";
+    private static final String VERSIONS = "versions";
+    private static final String RELEASE_DATE = "releaseDate";
+    private static final String NAME =  "name";
+    private static final String DESCRIPTION = "description";
+    private static final String ID  = "id";
+
+    private final List<Version> jiraVersions = new ArrayList<>();
+
+    @Override
+    public void execute(ExecutionContext context) throws ProcessingException {
+        if (!(context instanceof EntryPointContext(String projectName))) {
+            throw new IllegalArgumentException("Required params: EntryPointContext. Received: " +
+                    (context != null ? context.getClass().getSimpleName() : "null"));
+        }
+
+        try {
+            getVersionsFromJira(projectName);
+        } catch (IOException e) {
+            throw new ProcessingException(e.getMessage());
+        }
+    }
+
+    public List<Version> getJiraVersions() {
+        return jiraVersions;
+    }
+
+    private void getVersionsFromJira(String projectName) throws IOException {
+        String url = BASE_URL + projectName;
         JSONObject json = readJsonFromUrl(url);
-        JSONArray jsonVersions = json.getJSONArray("versions");
+        JSONArray jsonVersions = json.getJSONArray(VERSIONS);
         for (int i = 0; i < jsonVersions.length(); i++ ) {
             String name = "";
             String id = "";
             String description = "";
             String releaseDate = "";
-            if(jsonVersions.getJSONObject(i).has("releaseDate")) {
-                if (jsonVersions.getJSONObject(i).has("name"))
-                    name = jsonVersions.getJSONObject(i).get("name").toString();
-                if (jsonVersions.getJSONObject(i).has("id"))
-                    id = jsonVersions.getJSONObject(i).get("id").toString();
-                if (jsonVersions.getJSONObject(i).has("description"))
-                    description = jsonVersions.getJSONObject(i).get("description").toString();
-                if (jsonVersions.getJSONObject(i).has("releaseDate"))
-                    releaseDate = jsonVersions.getJSONObject(i).get("releaseDate").toString();
+            if(jsonVersions.getJSONObject(i).has(RELEASE_DATE)) {
+                if (jsonVersions.getJSONObject(i).has(NAME))
+                    name = jsonVersions.getJSONObject(i).get(NAME).toString();
+                if (jsonVersions.getJSONObject(i).has(ID))
+                    id = jsonVersions.getJSONObject(i).get(ID).toString();
+                if (jsonVersions.getJSONObject(i).has(DESCRIPTION))
+                    description = jsonVersions.getJSONObject(i).get(DESCRIPTION).toString();
+                if (jsonVersions.getJSONObject(i).has(RELEASE_DATE))
+                    releaseDate = jsonVersions.getJSONObject(i).get(RELEASE_DATE).toString();
             }
             Version version = new Version();
             version.setName(name);
             version.setId(id);
             version.setReleaseDate(releaseDate);
             version.setDescription(description);
-            versions.add(version);
+            jiraVersions.add(version);
         }
-        return versions;
     }
 
     public static JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
-        InputStream is = new URL(url).openStream();
-        try {
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+        try (InputStream is = new URL(url).openStream(); BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
             String jsonText = readAll(rd);
-            JSONObject json = new JSONObject(jsonText);
-            return json;
-        } finally {
-            is.close();
+            return new JSONObject(jsonText);
         }
     }
 
@@ -62,4 +87,5 @@ public class GetVersionsFromJira {
         }
         return sb.toString();
     }
+
 }

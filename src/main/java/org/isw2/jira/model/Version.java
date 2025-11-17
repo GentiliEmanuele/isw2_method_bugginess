@@ -1,6 +1,6 @@
 package org.isw2.jira.model;
 
-import org.isw2.changes.model.Commit;
+import org.isw2.git.model.Commit;
 
 import java.util.ArrayList;
 import java.util.List;
