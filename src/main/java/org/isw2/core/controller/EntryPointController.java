@@ -2,13 +2,10 @@ package org.isw2.core.controller;
 
 import org.isw2.core.boundary.ExitPointBoundary;
 import org.isw2.core.boundary.Outcome;
-import org.isw2.core.controller.context.EntryPointContext;
-import org.isw2.core.controller.context.ProportionContext;
+import org.isw2.core.controller.context.*;
 import org.isw2.core.model.Method;
 import org.isw2.git.controller.context.GetCommitFromGitContext;
 import org.isw2.jira.controller.context.GetTicketFromJiraContext;
-import org.isw2.core.controller.context.MapCommitsAndMethodContext;
-import org.isw2.core.controller.context.MergeVersionAndCommitContext;
 import org.isw2.exceptions.ProcessingException;
 import org.isw2.factory.Controller;
 import org.isw2.factory.ControllerFactory;
@@ -68,7 +65,7 @@ public class EntryPointController implements Controller {
             mergeVersionsAndCommits();
 
             // Map commit, method and tickets
-            mapCommitsMethods(new MapCommitsAndMethodContext(projectName, versions, controller, tickets));
+            mapCommitsMethods(new MapCommitsAndMethodContext(projectName, versions, controller));
 
         } else {
             throw new ProcessingException("Controller is not a GitController");
@@ -111,12 +108,14 @@ public class EntryPointController implements Controller {
     }
 
     private void mapCommitsMethods(ExecutionContext context) throws ProcessingException {
-        if (context instanceof MapCommitsAndMethodContext(String projectName, _, _, _)) {
+        if (context instanceof MapCommitsAndMethodContext(String projectName, _, _)) {
             Controller mapCommitsMethods = ControllerFactory.createController(ControllerType.MAP_COMMITS_AND_METHODS);
             mapCommitsMethods.execute(context);
             if (mapCommitsMethods instanceof MapCommitsAndMethods controller) {
                 try {
-                    writeOutcome(projectName, controller.getMethodsByVersion());
+                    Map<Version, List<Method>> methodByVersion = controller.getMethodsByVersion();
+                    labeling(new LabelingContext(methodByVersion, tickets));
+                    writeOutcome(projectName, methodByVersion);
                 } catch (IOException _) {
                     throw new ProcessingException("An error occurred while writing the results");
                 }
@@ -124,7 +123,16 @@ public class EntryPointController implements Controller {
                 throw new ProcessingException("Processing error occurred");
             }
         } else  {
-            throw new ProcessingException("Controller is not a MapCommitsAndMethodContext");
+            throw new ProcessingException("Context is not a MapCommitsAndMethodContext");
+        }
+    }
+
+    private void labeling(ExecutionContext context) throws ProcessingException {
+        if (context instanceof LabelingContext) {
+            Controller labelingController = ControllerFactory.createController(ControllerType.LABELING);
+            labelingController.execute(context);
+        } else {
+            throw new ProcessingException("Context is not a LabelingContext");
         }
     }
 
@@ -162,6 +170,7 @@ public class EntryPointController implements Controller {
         outcome.setMaxStmtDeleted(method.getChangesMetrics().getMaxStmtDeleted());
         outcome.setStartLine(method.getStartLine());
         outcome.setEndLine(method.getEndLine());
+        outcome.setBuggy(method.getBuggy());
         return outcome;
     }
 

@@ -37,7 +37,8 @@ public class ExitPointBoundary {
             "stmtAdded",
             "maxStmtAdded",
             "stmtDeleted",
-            "maxStmtDeleted"
+            "maxStmtDeleted",
+            "buggy"
     };
 
     public static void toCsv(String projectName, List<Outcome> outcomes) throws IOException {
@@ -72,6 +73,7 @@ public class ExitPointBoundary {
                         String.valueOf(outcome.getMaxStmtAdded()),
                         String.valueOf(outcome.getStmtDeleted()),
                         String.valueOf(outcome.getMaxStmtDeleted()),
+                        String.valueOf(outcome.getBuggy())
                 };
                 writer.writeNext(row);
             });

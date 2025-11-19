@@ -18,6 +18,7 @@ public class Method {
     private int endLine;
     private List<Commit> touchedBy;
     private Set<Author> authors;
+    private int buggy = 0;
 
     public Method() {
         metrics = new ComplexityMetrics();
@@ -84,5 +85,13 @@ public class Method {
     public int tryToAddAuthor(Author author) {
         authors.add(author);
         return authors.size();
+    }
+
+    public int getBuggy() {
+        return buggy;
+    }
+
+    public void setBuggy(int buggy) {
+        this.buggy = buggy;
     }
 }

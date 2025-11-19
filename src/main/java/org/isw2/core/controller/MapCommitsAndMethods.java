@@ -23,7 +23,6 @@ import org.isw2.factory.ExecutionContext;
 import org.isw2.metrics.changes.controller.ComputeChangesMetrics;
 import org.isw2.git.model.Change;
 import org.isw2.git.model.Commit;
-import org.isw2.jira.model.Ticket;
 import org.isw2.jira.model.Version;
 import org.isw2.metrics.complexity.controller.CodeSmellAnalyzer;
 import org.isw2.metrics.complexity.controller.ComputeComplexityMetrics;
@@ -55,7 +54,7 @@ public class MapCommitsAndMethods implements Controller {
     @Override
     public void execute(ExecutionContext context) throws ProcessingException {
         if (!(context instanceof MapCommitsAndMethodContext(
-                String projectName, List<Version> versions, GitController gitController, List<Ticket> tickets
+                String projectName, List<Version> versions, GitController gitController
         ))) {
             throw new IllegalArgumentException("Required params: MapCommitsContext. Received: " +
                     (context != null ? context.getClass().getSimpleName() : "null"));
@@ -65,8 +64,7 @@ public class MapCommitsAndMethods implements Controller {
             gitController.execute(new EntryPointContext(projectName));
             getBasicInfo(
                     getGit(gitController),
-                    versions,
-                    tickets
+                    versions
             );
         } catch (IOException e) {
             throw new ProcessingException(e.getMessage());
@@ -85,7 +83,7 @@ public class MapCommitsAndMethods implements Controller {
         }
     }
 
-    private void getBasicInfo(Git git, List<Version> versions, List<Ticket> tickets) throws IOException {
+    private void getBasicInfo(Git git, List<Version> versions) throws IOException {
         int versionSize = versions.size();
         int processedVersion = 0;
         try (Repository repo = git.getRepository()) {
@@ -181,7 +179,7 @@ public class MapCommitsAndMethods implements Controller {
                 tree.accept(new TreeScanner<>() {
                     @Override
                     public Object visitClass(ClassTree classTree, Object o) {
-                        className = classTree.getSimpleName().toString();
+                        className = sanitize(classTree.getSimpleName().toString());
                         return super.visitClass(classTree, o);
                     }
 
@@ -263,11 +261,6 @@ public class MapCommitsAndMethods implements Controller {
         return change.getType().equals("MODIFY") && change.getOldPath().equals(classPath);
     }
 
-
-    private String getMethodName(MethodTree methodTree) {
-        return methodTree.getName().toString();
-    }
-
     private int getParametersCounter(MethodTree methodTree) {
         String all = getMethodParameters(methodTree);
         String[] listAll = all.split(",");
@@ -280,17 +273,31 @@ public class MapCommitsAndMethods implements Controller {
         return counter;
     }
 
+    private String sanitize(String input) {
+        if (input == null) return "";
+
+        return input.replace("\n", " ")
+                .replace("\r", " ")
+                .replace("\t", " ")
+                .replaceAll("\\s+", " ")
+                .trim();
+    }
+
+    private String getMethodName(MethodTree methodTree) {
+        return sanitize(methodTree.getName().toString());
+    }
+
     private String getMethodParameters(MethodTree methodTree) {
         if (methodTree.getParameters().isEmpty()) {
             return "void";
         } else {
-            return methodTree.getParameters().toString();
+            return sanitize(methodTree.getParameters().toString());
         }
     }
 
     private String getReturnValue(MethodTree methodTree) {
         if (methodTree.getReturnType() != null) {
-            return methodTree.getReturnType().toString();
+            return sanitize(methodTree.getReturnType().toString());
         } else {
             return "void";
         }

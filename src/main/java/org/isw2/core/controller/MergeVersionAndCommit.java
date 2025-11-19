@@ -45,7 +45,6 @@ public class MergeVersionAndCommit implements Controller {
             int percent = (100 * processed.get()) / commitSize;
             System.out.print("\rMerge version and commit progress: " + percent + "%");
         });
-        System.out.println();
         versions.removeIf(v -> v.getCommits().isEmpty());
     }
 

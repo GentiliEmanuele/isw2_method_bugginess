@@ -27,6 +27,7 @@ public class Outcome {
     private int maxStmtDeleted;
     private int startLine;
     private int endLine;
+    private int buggy = 0;
 
     public String getClassName() {
         return className;
@@ -228,5 +229,13 @@ public class Outcome {
 
     public void setEndLine(int endLine) {
         this.endLine = endLine;
+    }
+
+    public int getBuggy() {
+        return buggy;
+    }
+
+    public void setBuggy(int buggy) {
+        this.buggy = buggy;
     }
 }
