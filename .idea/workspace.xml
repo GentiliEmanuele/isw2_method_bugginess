@@ -4,47 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Added mechanism that read ticket information by Jira. Removed some code smells.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/boundary/EntryPointBoundary.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/boundary/ExitPointBoundary.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/boundary/Outcome.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/EntryPointController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/context/EntryPointContext.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/context/MapCommitsAndMethodContext.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/context/MergeVersionAndCommitContext.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/exceptions/ProcessingException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/Controller.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/ControllerFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/ControllerType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/ExecutionContext.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/git/controller/context/GetCommitFromGitContext.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/jira/controller/context/GetTicketFromJiraContext.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/ComputeComplexityBoundary.java" afterDir="false" />
+    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="General refactoring">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/Proportion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/context/ProportionContext.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/changes/controller/ComputeChangesMetrics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/changes/controller/ComputeChangesMetrics.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/changes/controller/GetCommitFromGit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/git/controller/GetCommitFromGit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/changes/controller/GetFileDiffBetweenCommit.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/changes/controller/MapCommitsAndMethods.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/MapCommitsAndMethods.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/changes/controller/MergeVersionAndCommit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/MergeVersionAndCommit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/changes/model/Author.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/git/model/Author.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/changes/model/Change.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/git/model/Change.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/changes/model/ChangesMetrics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/changes/model/ChangesMetrics.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/changes/model/Commit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/git/model/Commit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/complexity/controller/CodeSmellAnalyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/controller/CodeSmellAnalyzer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/complexity/controller/CognitiveComplexityController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/controller/CognitiveComplexityController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/complexity/controller/ComputeComplexityMetrics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/controller/ComputeComplexityMetrics.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/complexity/controller/ExecutableStatementCounter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/controller/ExecutableStatementCounter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/complexity/controller/HalsteadComplexityController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/controller/HalsteadComplexityController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/complexity/controller/NestingDepthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/controller/NestingDepthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/complexity/model/CodeSmell.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/model/CodeSmell.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/complexity/model/ComplexityMetrics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/model/ComplexityMetrics.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/complexity/model/HalsteadComplexity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/model/HalsteadComplexity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/complexity/model/Method.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/model/Method.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/MethodController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/boundary/GitController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/git/controller/GitController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/jira/controller/GetTicketFromJira.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/jira/controller/GetTicketFromJira.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/jira/controller/GetVersionsFromJira.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/jira/controller/GetVersionsFromJira.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/EntryPointController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/EntryPointController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/factory/ControllerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/ControllerFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/factory/ControllerType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/ControllerType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/jira/model/Ticket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/jira/model/Ticket.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/jira/model/Version.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/jira/model/Version.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -88,6 +55,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.JiraBoundary.executor": "Run",
+    "Application.JiraTempMain.executor": "Run",
     "Application.Main.executor": "Run",
     "Maven.isw2_method_bugginess [pmd:pmd].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -107,7 +75,20 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Main">
+    <configuration name="JiraTempMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.isw2.jira.JiraTempMain" />
+      <module name="isw2_method_bugginess" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.isw2.jira.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.isw2.Main" />
       <module name="isw2_method_bugginess" />
@@ -124,6 +105,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.JiraTempMain" />
       </list>
     </recent_temporary>
   </component>
@@ -180,7 +162,9 @@
       <workItem from="1762510827611" duration="6103000" />
       <workItem from="1762600714629" duration="7694000" />
       <workItem from="1763120669978" duration="12708000" />
-      <workItem from="1763377513712" duration="8850000" />
+      <workItem from="1763377513712" duration="9040000" />
+      <workItem from="1763459552606" duration="10648000" />
+      <workItem from="1763539932073" duration="7225000" />
     </task>
     <task id="LOCAL-00001" summary="Optimized the code and added the mechanism that save computed metrics in CSV.">
       <option name="closed" value="true" />
@@ -222,7 +206,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762608931236</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="General refactoring">
+      <option name="closed" value="true" />
+      <created>1763403902631</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1763403902631</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -234,14 +226,15 @@
     <MESSAGE value="Added mechanism that computes code smell." />
     <MESSAGE value="Added mechanism that computes stmtAdded, maxStmtAdded, stmtDeleted and maxStmtDeleted." />
     <MESSAGE value="Added mechanism that read ticket information by Jira. Removed some code smells." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added mechanism that read ticket information by Jira. Removed some code smells." />
+    <MESSAGE value="General refactoring" />
+    <option name="LAST_COMMIT_MESSAGE" value="General refactoring" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/isw2/core/controller/MapCommitsAndMethods.java</url>
-          <line>108</line>
+          <line>107</line>
           <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>
@@ -255,6 +248,7 @@
       <configuration name="Application">
         <watch expression="((HashMap.Node)((HashMap)this.methodCache).entrySet().toArray()[1]).getKey()" custom="org.isw2.changes.controller.MapCommitsAndMethods,java.util.HashMap.Node,java.util.HashMap" />
         <watch expression="((ParametricRuleViolation)report.violations.get(0)).rule" custom="net.sourceforge.pmd.reporting.ParametricRuleViolation" />
+        <watch expression="ticket" />
       </configuration>
     </watches-manager>
   </component>

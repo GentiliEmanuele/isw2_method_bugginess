@@ -3,9 +3,9 @@ package org.isw2.jira.model;
 import java.util.List;
 
 public class Ticket {
-    private String id;
+    private final String id;
     private List<Version> affectedVersions;
-    private Version fixedVersion;
+    private final Version fixedVersion;
     private Version injectedVersion;
     private Version openingVersion;
 
@@ -25,6 +25,10 @@ public class Ticket {
         return affectedVersions;
     }
 
+    public void setAffectedVersions(List<Version> affectedVersions) {
+        this.affectedVersions = affectedVersions;
+    }
+
     public Version getFixedVersion() {
         return fixedVersion;
     }
@@ -33,8 +37,26 @@ public class Ticket {
         return injectedVersion;
     }
 
+    public void setInjectedVersion(Version injectedVersion) {
+        this.injectedVersion = injectedVersion;
+    }
+
     public Version getOpeningVersion() {
         return openingVersion;
     }
 
+    public void setOpeningVersion(Version openingVersion) {
+        this.openingVersion = openingVersion;
+    }
+
+    @Override
+    public String toString() {
+        return "Ticket{" +
+                "id='" + id + '\'' +
+                ", affectedVersions=" + affectedVersions +
+                ", fixedVersion=" + fixedVersion +
+                ", injectedVersion=" + injectedVersion +
+                ", openingVersion=" + openingVersion +
+                '}';
+    }
 }

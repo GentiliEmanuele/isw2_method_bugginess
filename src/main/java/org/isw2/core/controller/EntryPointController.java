@@ -3,6 +3,7 @@ package org.isw2.core.controller;
 import org.isw2.core.boundary.ExitPointBoundary;
 import org.isw2.core.boundary.Outcome;
 import org.isw2.core.controller.context.EntryPointContext;
+import org.isw2.core.controller.context.ProportionContext;
 import org.isw2.core.model.Method;
 import org.isw2.git.controller.context.GetCommitFromGitContext;
 import org.isw2.jira.controller.context.GetTicketFromJiraContext;
@@ -22,7 +23,9 @@ import org.isw2.jira.model.Ticket;
 import org.isw2.jira.model.Version;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -43,8 +46,16 @@ public class EntryPointController implements Controller {
         // Get version from Jira
         getVersionsFromJira(context);
 
+        // Sort version list
+        versions.sort(Comparator.comparing(o -> LocalDate.parse(o.getReleaseDate())));
+
+
         // Get ticket from Jira
         getTicketsFromJira(new GetTicketFromJiraContext(projectName, versions));
+
+        // Create proportion controller and apply proportion
+        Controller proportion = ControllerFactory.createController(ControllerType.PROPORTION);
+        proportion.execute(new ProportionContext(versions, tickets));
 
         // Create gitController and GetCommitFromGit
         Controller gitController = ControllerFactory.createController(ControllerType.GIT_CONTROLLER);
@@ -62,7 +73,6 @@ public class EntryPointController implements Controller {
         } else {
             throw new ProcessingException("Controller is not a GitController");
         }
-
     }
 
     private void getVersionsFromJira(ExecutionContext context) throws ProcessingException {

@@ -4,6 +4,7 @@ import org.isw2.git.model.Commit;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Version {
     private String id;
@@ -61,5 +62,17 @@ public class Version {
                 ", description='" + description + '\'' +
                 ", commits=" + commits.toString() +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Version version = (Version) o;
+        return Objects.equals(id, version.id) && Objects.equals(name, version.name) && Objects.equals(releaseDate, version.releaseDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, releaseDate);
     }
 }
