@@ -3,6 +3,7 @@ package org.isw2.core.controller;
 import org.isw2.core.boundary.ExitPointBoundary;
 import org.isw2.core.boundary.Outcome;
 import org.isw2.core.controller.context.*;
+import org.isw2.core.model.FileClass;
 import org.isw2.core.model.Method;
 import org.isw2.git.controller.context.GetCommitFromGitContext;
 import org.isw2.jira.controller.context.GetTicketFromJiraContext;
@@ -18,6 +19,7 @@ import org.isw2.jira.controller.GetTicketFromJira;
 import org.isw2.jira.controller.GetVersionsFromJira;
 import org.isw2.jira.model.Ticket;
 import org.isw2.jira.model.Version;
+import org.isw2.metrics.complexity.controller.context.CodeSmellAnalyzerContext;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -114,6 +116,8 @@ public class EntryPointController implements Controller {
             if (mapCommitsMethods instanceof MapCommitsAndMethods controller) {
                 try {
                     Map<Version, List<Method>> methodByVersion = controller.getMethodsByVersion();
+                    Map<Version, List<FileClass>> fileClassByVersion = controller.getFileClassByVersion();
+                    computeCodeSmell(new CodeSmellAnalyzerContext(fileClassByVersion));
                     labeling(new LabelingContext(methodByVersion, tickets));
                     writeOutcome(projectName, methodByVersion);
                 } catch (IOException _) {
@@ -124,6 +128,15 @@ public class EntryPointController implements Controller {
             }
         } else  {
             throw new ProcessingException("Context is not a MapCommitsAndMethodContext");
+        }
+    }
+
+    private void computeCodeSmell(ExecutionContext context) throws ProcessingException {
+        if (context instanceof CodeSmellAnalyzerContext) {
+            Controller codeSmellAnalyzer =  ControllerFactory.createController(ControllerType.CODE_SMELL_ANALYZER);
+            codeSmellAnalyzer.execute(context);
+        } else {
+            throw new ProcessingException("Context is not a CodeSmellAnalyzerContext");
         }
     }
 

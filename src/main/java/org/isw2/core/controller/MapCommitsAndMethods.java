@@ -17,6 +17,7 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.isw2.core.controller.context.EntryPointContext;
 import org.isw2.core.controller.context.MapCommitsAndMethodContext;
+import org.isw2.core.model.FileClass;
 import org.isw2.exceptions.ProcessingException;
 import org.isw2.factory.Controller;
 import org.isw2.factory.ExecutionContext;
@@ -24,9 +25,7 @@ import org.isw2.metrics.changes.controller.ComputeChangesMetrics;
 import org.isw2.git.model.Change;
 import org.isw2.git.model.Commit;
 import org.isw2.jira.model.Version;
-import org.isw2.metrics.complexity.controller.CodeSmellAnalyzer;
 import org.isw2.metrics.complexity.controller.ComputeComplexityMetrics;
-import org.isw2.metrics.complexity.model.CodeSmell;
 import org.isw2.core.model.Method;
 import org.isw2.git.controller.GitController;
 
@@ -42,7 +41,7 @@ public class MapCommitsAndMethods implements Controller {
     private String className = "";
     private final ComputeComplexityMetrics computeComplexityMetrics = new ComputeComplexityMetrics();
     private final Map<String, List<Method>> methodCache = new HashMap<>();
-    private final CodeSmellAnalyzer codeSmellAnalyzer = new CodeSmellAnalyzer();
+    private final Map<Version, List<FileClass>> fileClassByVersion = new HashMap<>();
     private final ComputeChangesMetrics computeChangesMetrics = new ComputeChangesMetrics();
 
     // Get access to JavaCompiler
@@ -93,20 +92,26 @@ public class MapCommitsAndMethods implements Controller {
                 int commitSize = commits.size();
                 int processedCommits = 0;
                 Map<String, Method> methodsMap = new HashMap<>();
+                List<FileClass> fileClassList = new ArrayList<>();
                 for (Commit commit : commits) {
-                    analyzeCommit(repo, commit, methodsMap);
+                    analyzeCommit(repo, commit, methodsMap, fileClassList);
                     processedCommits++;
                     int percentCommit = (100 * processedCommits) / commitSize;
                     System.out.print("\rMap commits and methods, progress of the versions " + percentVersion + "%" + " commits progress " + percentCommit + "%");
                 }
                 methodsByVersion.put(version, new ArrayList<>(methodsMap.values()));
+                fileClassByVersion.put(version, new ArrayList<>(fileClassList));
                 processedVersion++;
             }
         }
         System.out.println();
     }
 
-    private void analyzeCommit(Repository repository, Commit commit, Map<String, Method> methodsMap) throws IOException {
+    public Map<Version, List<FileClass>> getFileClassByVersion() {
+        return fileClassByVersion;
+    }
+
+    private void analyzeCommit(Repository repository, Commit commit, Map<String, Method> methodsMap, List<FileClass> fileClassList) throws IOException {
         ObjectId commitId = repository.resolve(commit.getId()); // Parse commit id into ObjectId
         // Create a walker for iterate the commits
         try (RevWalk walk = new RevWalk(repository)) {
@@ -126,10 +131,12 @@ public class MapCommitsAndMethods implements Controller {
                             getInfoFromCache(path, methodsMap);
                             continue;
                         }
+
                         String content = getClassContent(repository, treeWalk);
-                        List<Method> methodByFile = new ArrayList<>();
-                        analyzeJavaSource(content, path, commit, methodsMap, methodByFile);
-                        methodCache.put(path, new ArrayList<>(methodByFile));
+                        FileClass fileClass = new FileClass(path, content);
+                        analyzeJavaSource(content, path, commit, methodsMap, fileClass.getMethods());
+                        methodCache.put(path, new ArrayList<>(fileClass.getMethods()));
+                        fileClassList.add(fileClass);
                     }
                 }
             }
@@ -173,7 +180,6 @@ public class MapCommitsAndMethods implements Controller {
         JavacTask javacTask = (JavacTask) compiler.getTask(null, fileManager, null, null, null, List.of(fileObject));
         Iterable<? extends CompilationUnitTree> compilationUnitTrees = javacTask.parse();
         Trees trees = Trees.instance(javacTask);
-        List<CodeSmell> smells = codeSmellAnalyzer.findSmells(content);
         for (CompilationUnitTree compilationUnitTree : compilationUnitTrees) {
             for (Tree tree : compilationUnitTree.getTypeDecls()) {
                 tree.accept(new TreeScanner<>() {
@@ -206,7 +212,6 @@ public class MapCommitsAndMethods implements Controller {
                         method.getMetrics().setCognitiveComplexity(computeComplexityMetrics.computeCognitiveComplexity(methodTree, compilationUnitTree, javacTask));
                         method.getMetrics().setHalsteadComplexity(computeComplexityMetrics.computeHalstedComplexity(methodTree));
                         method.getMetrics().setNestingDepth(computeComplexityMetrics.computeNestingDepth(methodTree, compilationUnitTree, javacTask));
-                        method.getMetrics().setCodeSmellCounter(computeComplexityMetrics.computeSmellNumber(smells, startLine, endLine));
                         method.getMetrics().setNumberOfBranchesAndDecisionPoint(method.getMetrics().getCyclomaticComplexity() - 1);
                         method.getMetrics().setParameterCount(getParametersCounter(methodTree));
 

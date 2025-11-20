@@ -4,19 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Implemented proportion">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/Labeling.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/context/LabelingContext.java" afterDir="false" />
+    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Implemented labeling">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/model/FileClass.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/controller/context/CodeSmellAnalyzerContext.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/boundary/ExitPointBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/boundary/ExitPointBoundary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/boundary/Outcome.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/boundary/Outcome.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/EntryPointController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/EntryPointController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/MapCommitsAndMethods.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/MapCommitsAndMethods.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/MergeVersionAndCommit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/MergeVersionAndCommit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/context/MapCommitsAndMethodContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/context/MapCommitsAndMethodContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/model/Method.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/model/Method.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/factory/ControllerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/ControllerFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/factory/ControllerType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/ControllerType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/controller/CodeSmellAnalyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/controller/CodeSmellAnalyzer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -169,7 +165,8 @@
       <workItem from="1763377513712" duration="9040000" />
       <workItem from="1763459552606" duration="10648000" />
       <workItem from="1763539932073" duration="12150000" />
-      <workItem from="1763578712852" duration="3256000" />
+      <workItem from="1763578712852" duration="3306000" />
+      <workItem from="1763633694453" duration="10284000" />
     </task>
     <task id="LOCAL-00001" summary="Optimized the code and added the mechanism that save computed metrics in CSV.">
       <option name="closed" value="true" />
@@ -227,7 +224,15 @@
       <option name="project" value="LOCAL" />
       <updated>1763549577024</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Implemented labeling">
+      <option name="closed" value="true" />
+      <created>1763593194207</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1763593194207</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -241,18 +246,10 @@
     <MESSAGE value="Added mechanism that read ticket information by Jira. Removed some code smells." />
     <MESSAGE value="General refactoring" />
     <MESSAGE value="Implemented proportion" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented proportion" />
+    <MESSAGE value="Implemented labeling" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented labeling" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/isw2/core/controller/MapCommitsAndMethods.java</url>
-          <line>105</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="org.isw2.complexity.model.Method" memberName="metrics" />
