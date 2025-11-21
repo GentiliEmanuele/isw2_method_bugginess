@@ -28,6 +28,8 @@ import org.isw2.jira.model.Version;
 import org.isw2.metrics.complexity.controller.ComputeComplexityMetrics;
 import org.isw2.core.model.Method;
 import org.isw2.git.controller.GitController;
+import org.isw2.metrics.complexity.controller.VisitMethod;
+import org.isw2.metrics.complexity.controller.context.VisitReturn;
 
 import javax.tools.*;
 import java.io.*;
@@ -82,7 +84,7 @@ public class MapCommitsAndMethods implements Controller {
         }
     }
 
-    private void getBasicInfo(Git git, List<Version> versions) throws IOException {
+    private void getBasicInfo(Git git, List<Version> versions) throws IOException, ProcessingException {
         int versionSize = versions.size();
         int processedVersion = 0;
         try (Repository repo = git.getRepository()) {
@@ -111,7 +113,7 @@ public class MapCommitsAndMethods implements Controller {
         return fileClassByVersion;
     }
 
-    private void analyzeCommit(Repository repository, Commit commit, Map<String, Method> methodsMap, List<FileClass> fileClassList) throws IOException {
+    private void analyzeCommit(Repository repository, Commit commit, Map<String, Method> methodsMap, List<FileClass> fileClassList) throws IOException, ProcessingException {
         ObjectId commitId = repository.resolve(commit.getId()); // Parse commit id into ObjectId
         // Create a walker for iterate the commits
         try (RevWalk walk = new RevWalk(repository)) {
@@ -168,7 +170,7 @@ public class MapCommitsAndMethods implements Controller {
         return content;
     }
 
-    private void analyzeJavaSource(String content, String path, Commit currentCommit, Map<String, Method> methodsMap, List<Method> methodsByFile) throws IOException {
+    private void analyzeJavaSource(String content, String path, Commit currentCommit, Map<String, Method> methodsMap, List<Method> methodsByFile) throws IOException, ProcessingException {
         // Create a virtual file in memory
         JavaFileObject fileObject = new SimpleJavaFileObject(URI.create("string:///" + path), JavaFileObject.Kind.SOURCE) {
             @Override
@@ -206,10 +208,11 @@ public class MapCommitsAndMethods implements Controller {
                         int endLine = (int) compilationUnitTree.getLineMap().getLineNumber(endPosition);
                         method.setStartLine(startLine);
                         method.setEndLine(endLine);
-                        method.getMetrics().setLinesOfCode(computeComplexityMetrics.computeLinesOfCode(methodTree));
-                        method.getMetrics().setCyclomaticComplexity(computeComplexityMetrics.computeCyclomaticComplexity(methodTree));
-                        method.getMetrics().setStatementsCount(computeComplexityMetrics.computeStatementsCount(methodTree));
-                        method.getMetrics().setCognitiveComplexity(computeComplexityMetrics.computeCognitiveComplexity(methodTree, compilationUnitTree, javacTask));
+                        method.getMetrics().setLinesOfCode(endLine - startLine);
+                        VisitReturn ret = VisitMethod.execute(methodTree);
+                        method.getMetrics().setCyclomaticComplexity(ret.cyclomaticComplexity());
+                        method.getMetrics().setStatementsCount(ret.statementCount());
+                        method.getMetrics().setCognitiveComplexity(ret.cognitiveComplexity());
                         method.getMetrics().setHalsteadComplexity(computeComplexityMetrics.computeHalstedComplexity(methodTree));
                         method.getMetrics().setNestingDepth(computeComplexityMetrics.computeNestingDepth(methodTree, compilationUnitTree, javacTask));
                         method.getMetrics().setNumberOfBranchesAndDecisionPoint(method.getMetrics().getCyclomaticComplexity() - 1);
