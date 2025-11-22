@@ -1,4 +1,6 @@
 package org.isw2.metrics.complexity.controller.context;
 
-public record VisitReturn(int cyclomaticComplexity, int statementCount, int cognitiveComplexity) {
+import org.isw2.metrics.complexity.model.HalsteadComplexity;
+
+public record VisitReturn(int cyclomaticComplexity, int statementCount, int cognitiveComplexity, HalsteadComplexity hc, int nestingDepth) {
 }

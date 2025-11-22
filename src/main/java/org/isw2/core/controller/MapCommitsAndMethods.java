@@ -25,7 +25,6 @@ import org.isw2.metrics.changes.controller.ComputeChangesMetrics;
 import org.isw2.git.model.Change;
 import org.isw2.git.model.Commit;
 import org.isw2.jira.model.Version;
-import org.isw2.metrics.complexity.controller.ComputeComplexityMetrics;
 import org.isw2.core.model.Method;
 import org.isw2.git.controller.GitController;
 import org.isw2.metrics.complexity.controller.VisitMethod;
@@ -41,7 +40,6 @@ public class MapCommitsAndMethods implements Controller {
 
     private final Map<Version, List<Method>> methodsByVersion = new HashMap<>();
     private String className = "";
-    private final ComputeComplexityMetrics computeComplexityMetrics = new ComputeComplexityMetrics();
     private final Map<String, List<Method>> methodCache = new HashMap<>();
     private final Map<Version, List<FileClass>> fileClassByVersion = new HashMap<>();
     private final ComputeChangesMetrics computeChangesMetrics = new ComputeChangesMetrics();
@@ -84,7 +82,7 @@ public class MapCommitsAndMethods implements Controller {
         }
     }
 
-    private void getBasicInfo(Git git, List<Version> versions) throws IOException, ProcessingException {
+    private void getBasicInfo(Git git, List<Version> versions) throws IOException {
         int versionSize = versions.size();
         int processedVersion = 0;
         try (Repository repo = git.getRepository()) {
@@ -113,7 +111,7 @@ public class MapCommitsAndMethods implements Controller {
         return fileClassByVersion;
     }
 
-    private void analyzeCommit(Repository repository, Commit commit, Map<String, Method> methodsMap, List<FileClass> fileClassList) throws IOException, ProcessingException {
+    private void analyzeCommit(Repository repository, Commit commit, Map<String, Method> methodsMap, List<FileClass> fileClassList) throws IOException {
         ObjectId commitId = repository.resolve(commit.getId()); // Parse commit id into ObjectId
         // Create a walker for iterate the commits
         try (RevWalk walk = new RevWalk(repository)) {
@@ -170,7 +168,7 @@ public class MapCommitsAndMethods implements Controller {
         return content;
     }
 
-    private void analyzeJavaSource(String content, String path, Commit currentCommit, Map<String, Method> methodsMap, List<Method> methodsByFile) throws IOException, ProcessingException {
+    private void analyzeJavaSource(String content, String path, Commit currentCommit, Map<String, Method> methodsMap, List<Method> methodsByFile) throws IOException {
         // Create a virtual file in memory
         JavaFileObject fileObject = new SimpleJavaFileObject(URI.create("string:///" + path), JavaFileObject.Kind.SOURCE) {
             @Override
@@ -213,9 +211,9 @@ public class MapCommitsAndMethods implements Controller {
                         method.getMetrics().setCyclomaticComplexity(ret.cyclomaticComplexity());
                         method.getMetrics().setStatementsCount(ret.statementCount());
                         method.getMetrics().setCognitiveComplexity(ret.cognitiveComplexity());
-                        method.getMetrics().setHalsteadComplexity(computeComplexityMetrics.computeHalstedComplexity(methodTree));
-                        method.getMetrics().setNestingDepth(computeComplexityMetrics.computeNestingDepth(methodTree, compilationUnitTree, javacTask));
-                        method.getMetrics().setNumberOfBranchesAndDecisionPoint(method.getMetrics().getCyclomaticComplexity() - 1);
+                        method.getMetrics().setHalsteadComplexity(ret.hc());
+                        method.getMetrics().setNestingDepth(ret.nestingDepth());
+                        method.getMetrics().setNumberOfBranchesAndDecisionPoint(ret.cyclomaticComplexity() - 1);
                         method.getMetrics().setParameterCount(getParametersCounter(methodTree));
 
                         if (methodIsToucheBy(method, currentCommit, path)) {
