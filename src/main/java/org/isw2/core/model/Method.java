@@ -1,8 +1,8 @@
 package org.isw2.core.model;
 
-import org.isw2.metrics.complexity.model.ComplexityMetrics;
+import org.isw2.metrics.model.ComplexityMetrics;
 import org.isw2.git.model.Author;
-import org.isw2.metrics.changes.model.ChangesMetrics;
+import org.isw2.metrics.model.ChangesMetrics;
 import org.isw2.git.model.Commit;
 
 import java.util.HashSet;

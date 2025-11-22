@@ -1,4 +1,4 @@
-package org.isw2.metrics.complexity.controller;
+package org.isw2.metrics.controller;
 
 
 import net.sourceforge.pmd.PMDConfiguration;
@@ -15,8 +15,8 @@ import org.isw2.exceptions.ProcessingException;
 import org.isw2.factory.Controller;
 import org.isw2.factory.ExecutionContext;
 import org.isw2.jira.model.Version;
-import org.isw2.metrics.complexity.controller.context.CodeSmellAnalyzerContext;
-import org.isw2.metrics.complexity.model.CodeSmell;
+import org.isw2.metrics.controller.context.CodeSmellAnalyzerContext;
+import org.isw2.metrics.model.CodeSmell;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;

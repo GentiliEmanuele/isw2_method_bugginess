@@ -1,4 +1,4 @@
-package org.isw2.metrics.complexity.model;
+package org.isw2.metrics.model;
 
 public class CodeSmell {
     private final int startLine;

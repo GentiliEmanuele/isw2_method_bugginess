@@ -1,9 +1,9 @@
-package org.isw2.metrics.complexity.controller;
+package org.isw2.metrics.controller;
 
 import com.sun.source.tree.*;
 import com.sun.source.util.TreeScanner;
-import org.isw2.metrics.complexity.controller.context.VisitReturn;
-import org.isw2.metrics.complexity.model.HalsteadComplexity;
+import org.isw2.metrics.controller.context.VisitReturn;
+import org.isw2.metrics.model.HalsteadComplexity;
 
 import java.util.HashSet;
 import java.util.Set;

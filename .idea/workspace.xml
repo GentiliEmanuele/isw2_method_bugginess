@@ -4,14 +4,30 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Changed the calculation of some complexity metrics">
+    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Changed the calculation of some complexity metrics (pt2)">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/ComputeComplexityMetrics.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/JavaMetricParser.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/context/ComputeMetricsContext.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/context/JavaMetricParserContext.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/MapCommitsAndMethods.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/MapCommitsAndMethods.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/controller/ComputeComplexityMetrics.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/controller/HalsteadComplexityController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/controller/NestingDepthController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/controller/VisitMethod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/controller/VisitMethod.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/controller/context/VisitReturn.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/controller/context/VisitReturn.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/boundary/ExitPointBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/boundary/ExitPointBoundary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/boundary/Outcome.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/boundary/Outcome.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/EntryPointController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/EntryPointController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/MapCommitsAndMethods.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/FileIsTouchedBy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/model/FileClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/model/FileClass.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/model/Method.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/model/Method.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/factory/ControllerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/ControllerFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/factory/ControllerType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/ControllerType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/changes/controller/ComputeChangesMetrics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/ComputeChangesMetrics.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/changes/model/ChangesMetrics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/model/ChangesMetrics.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/controller/CodeSmellAnalyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/CodeSmellAnalyzer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/controller/VisitMethod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/VisitMethod.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/controller/context/CodeSmellAnalyzerContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/context/CodeSmellAnalyzerContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/controller/context/VisitMethodContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/context/VisitMethodContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/controller/context/VisitReturn.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/context/VisitReturn.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/model/CodeSmell.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/model/CodeSmell.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/model/ComplexityMetrics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/model/ComplexityMetrics.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/model/HalsteadComplexity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/model/HalsteadComplexity.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,29 +67,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.JiraBoundary.executor&quot;: &quot;Run&quot;,
-    &quot;Application.JiraTempMain.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Main.executor&quot;: &quot;Debug&quot;,
-    &quot;Maven.isw2_method_bugginess [pmd:pmd].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/emanuele/IdeaProjects/isw2_method_bugginess&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.JiraBoundary.executor": "Run",
+    "Application.JiraTempMain.executor": "Run",
+    "Application.Main.executor": "Run",
+    "Maven.isw2_method_bugginess [pmd:pmd].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/emanuele/IdeaProjects/isw2_method_bugginess",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Application.Main">
     <configuration name="JiraTempMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.isw2.jira.JiraTempMain" />
@@ -167,7 +183,7 @@
       <workItem from="1763578712852" duration="3306000" />
       <workItem from="1763633694453" duration="10711000" />
       <workItem from="1763717926472" duration="8856000" />
-      <workItem from="1763810843816" duration="6182000" />
+      <workItem from="1763810843816" duration="19563000" />
     </task>
     <task id="LOCAL-00001" summary="Optimized the code and added the mechanism that save computed metrics in CSV.">
       <option name="closed" value="true" />
@@ -249,7 +265,15 @@
       <option name="project" value="LOCAL" />
       <updated>1763728940380</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Changed the calculation of some complexity metrics (pt2)">
+      <option name="closed" value="true" />
+      <created>1763820908749</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1763820908749</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -266,15 +290,16 @@
     <MESSAGE value="Implemented labeling" />
     <MESSAGE value="Changed the way code smells are calculated" />
     <MESSAGE value="Changed the calculation of some complexity metrics" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed the calculation of some complexity metrics" />
+    <MESSAGE value="Changed the calculation of some complexity metrics (pt2)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed the calculation of some complexity metrics (pt2)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/isw2/core/controller/MapCommitsAndMethods.java</url>
-          <line>214</line>
-          <option name="timeStamp" value="2" />
+          <url>file://$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/JavaMetricParser.java</url>
+          <line>108</line>
+          <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

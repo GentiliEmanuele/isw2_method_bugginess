@@ -19,7 +19,9 @@ import org.isw2.jira.controller.GetTicketFromJira;
 import org.isw2.jira.controller.GetVersionsFromJira;
 import org.isw2.jira.model.Ticket;
 import org.isw2.jira.model.Version;
-import org.isw2.metrics.complexity.controller.context.CodeSmellAnalyzerContext;
+import org.isw2.metrics.controller.ComputeComplexityMetrics;
+import org.isw2.metrics.controller.context.CodeSmellAnalyzerContext;
+import org.isw2.metrics.controller.context.ComputeMetricsContext;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -27,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 
 public class EntryPointController implements Controller {
@@ -34,6 +37,8 @@ public class EntryPointController implements Controller {
     private List<Version> versions;
     private List<Ticket> tickets;
     private List<Commit> commits;
+
+    private static final Logger logger = Logger.getLogger(EntryPointController.class.getName());
 
     @Override
     public void execute(ExecutionContext context) throws ProcessingException {
@@ -43,16 +48,18 @@ public class EntryPointController implements Controller {
         }
 
         // Get version from Jira
+        logger.info("Get versions from Jira");
         getVersionsFromJira(context);
 
         // Sort version list
         versions.sort(Comparator.comparing(o -> LocalDate.parse(o.getReleaseDate())));
 
-
         // Get ticket from Jira
+        logger.info("Get tickets from Jira");
         getTicketsFromJira(new GetTicketFromJiraContext(projectName, versions));
 
         // Create proportion controller and apply proportion
+        logger.info("Execute proportion algorithm");
         Controller proportion = ControllerFactory.createController(ControllerType.PROPORTION);
         proportion.execute(new ProportionContext(versions, tickets));
 
@@ -61,13 +68,16 @@ public class EntryPointController implements Controller {
         if (gitController instanceof GitController controller) {
 
             // Get commits from git
+            logger.info("Get commits from git");
             getCommitsFromGit(new GetCommitFromGitContext(projectName, controller));
 
             // Merge versions and commits
+            logger.info("Merge versions and commits");
             mergeVersionsAndCommits();
 
             // Map commit, method and tickets
-            mapCommitsMethods(new MapCommitsAndMethodContext(projectName, versions, controller));
+            logger.info("Analyze files");
+            analyzeFiles(new MapCommitsAndMethodContext(projectName, versions, controller));
 
         } else {
             throw new ProcessingException("Controller is not a GitController");
@@ -109,15 +119,17 @@ public class EntryPointController implements Controller {
         mergeVersionAndCommit.execute(new MergeVersionAndCommitContext(versions, commits));
     }
 
-    private void mapCommitsMethods(ExecutionContext context) throws ProcessingException {
+    private void analyzeFiles(ExecutionContext context) throws ProcessingException {
         if (context instanceof MapCommitsAndMethodContext(String projectName, _, _)) {
-            Controller mapCommitsMethods = ControllerFactory.createController(ControllerType.MAP_COMMITS_AND_METHODS);
-            mapCommitsMethods.execute(context);
-            if (mapCommitsMethods instanceof MapCommitsAndMethods controller) {
+            Controller fileIsTouchedBy = ControllerFactory.createController(ControllerType.FILE_IS_TOUCHED_BY);
+            fileIsTouchedBy.execute(context);
+            if (fileIsTouchedBy instanceof FileIsTouchedBy controller) {
                 try {
-                    Map<Version, List<Method>> methodByVersion = controller.getMethodsByVersion();
                     Map<Version, List<FileClass>> fileClassByVersion = controller.getFileClassByVersion();
+                    Map<Version, List<Method>> methodByVersion = computeComplexityMetrics(new ComputeMetricsContext(fileClassByVersion));
                     computeCodeSmell(new CodeSmellAnalyzerContext(fileClassByVersion));
+                    // TODO(Review computeChangesMetrics)
+                    // computeChangesMetrics(new ComputeMetricsContext(fileClassByVersion));
                     labeling(new LabelingContext(methodByVersion, tickets));
                     writeOutcome(projectName, methodByVersion);
                 } catch (IOException _) {
@@ -128,6 +140,29 @@ public class EntryPointController implements Controller {
             }
         } else  {
             throw new ProcessingException("Context is not a MapCommitsAndMethodContext");
+        }
+    }
+
+    private Map<Version, List<Method>> computeComplexityMetrics(ExecutionContext context) throws ProcessingException {
+        if (context instanceof ComputeMetricsContext) {
+            Controller computeComplexityMetrics = ControllerFactory.createController(ControllerType.COMPUTE_COMPLEXITY_METRICS);
+            computeComplexityMetrics.execute(context);
+            if (computeComplexityMetrics instanceof ComputeComplexityMetrics controller) {
+                return controller.getMethodsByVersion();
+            } else {
+                return Map.of();
+            }
+        } else {
+            throw new ProcessingException("Context is not a ComputeMetricsContext");
+        }
+    }
+
+    private void computeChangesMetrics(ExecutionContext context) throws ProcessingException {
+        if (context instanceof ComputeMetricsContext) {
+            Controller computeChangesMetrics = ControllerFactory.createController(ControllerType.COMPUTE_CHANGES_METRICS);
+            computeChangesMetrics.execute(context);
+        } else {
+            throw new ProcessingException("Context is not a ComputeMetricsContext");
         }
     }
 
@@ -181,8 +216,6 @@ public class EntryPointController implements Controller {
         outcome.setMaxStmtAdded(method.getChangesMetrics().getMaxStmtAdded());
         outcome.setStmtDeleted(method.getChangesMetrics().getStmtDeleted());
         outcome.setMaxStmtDeleted(method.getChangesMetrics().getMaxStmtDeleted());
-        outcome.setStartLine(method.getStartLine());
-        outcome.setEndLine(method.getEndLine());
         outcome.setBuggy(method.getBuggy());
         return outcome;
     }

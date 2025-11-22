@@ -1,4 +1,4 @@
-package org.isw2.metrics.complexity.controller.context;
+package org.isw2.metrics.controller.context;
 
 import org.isw2.core.model.FileClass;
 import org.isw2.factory.ExecutionContext;

@@ -1,20 +1,18 @@
 package org.isw2.core.model;
 
-import org.isw2.metrics.complexity.model.CodeSmell;
+import org.isw2.metrics.model.CodeSmell;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FileClass {
     private final String path;
     private final String content;
-    private final List<Method> methods;
+    private List<Method> methods;
     private List<CodeSmell> smells;
 
     public FileClass(String className, String content) {
         this.path = className;
         this.content = content;
-        this.methods = new ArrayList<>();
     }
 
     public String getPath() {
@@ -31,6 +29,10 @@ public class FileClass {
 
     public List<CodeSmell> getSmells() {
         return smells;
+    }
+
+    public void setMethods(List<Method> methods) {
+        this.methods = methods;
     }
 
     public void setSmells(List<CodeSmell> smells) {

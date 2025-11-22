@@ -1,4 +1,4 @@
-package org.isw2.metrics.changes.model;
+package org.isw2.metrics.model;
 
 public class ChangesMetrics {
     private long methodHistories = 0;
