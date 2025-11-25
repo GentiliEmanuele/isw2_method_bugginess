@@ -4,30 +4,56 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Changed the calculation of some complexity metrics (pt2)">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/ComputeComplexityMetrics.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/JavaMetricParser.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/context/ComputeMetricsContext.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/context/JavaMetricParserContext.java" afterDir="false" />
+    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="General refactoring and changed factory implementation">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/AbstractControllerFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/AnalyzeFileFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/ComputeChangesMetricsFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/EntryPointControllerFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/GetCommitFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/GetTicketFromJiraFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/GetVersionFromJiraFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/JavaMetricParserFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/LabelingFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/MergeVersionAndCommitFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/PmdFileAnalyzerFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/PmdFileCollectorFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/ProportionFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/PmdFileAnalyzer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/PmdFileCollector.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/context/ParserContext.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/context/PmdFileAnalyzerContext.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/context/PmdFileCollectorContext.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/boundary/ExitPointBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/boundary/ExitPointBoundary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/boundary/Outcome.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/boundary/Outcome.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/boundary/EntryPointBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/boundary/EntryPointBoundary.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/EntryPointController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/EntryPointController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/MapCommitsAndMethods.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/FileIsTouchedBy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/model/FileClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/model/FileClass.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/model/Method.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/model/Method.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/factory/ControllerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/ControllerFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/factory/ControllerType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/ControllerType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/changes/controller/ComputeChangesMetrics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/ComputeChangesMetrics.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/changes/model/ChangesMetrics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/model/ChangesMetrics.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/controller/CodeSmellAnalyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/CodeSmellAnalyzer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/controller/VisitMethod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/VisitMethod.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/controller/context/CodeSmellAnalyzerContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/context/CodeSmellAnalyzerContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/controller/context/VisitMethodContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/context/VisitMethodContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/controller/context/VisitReturn.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/context/VisitReturn.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/model/CodeSmell.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/model/CodeSmell.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/model/ComplexityMetrics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/model/ComplexityMetrics.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/complexity/model/HalsteadComplexity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/model/HalsteadComplexity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/FileIsTouchedBy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/AnalyzeFile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/Labeling.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/Labeling.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/MergeVersionAndCommit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/MergeVersionAndCommit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/Proportion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/Proportion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/context/EntryPointContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/context/EntryPointContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/context/LabelingContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/context/LabelingContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/context/MapCommitsAndMethodContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/context/AnalyzeFileContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/context/MergeVersionAndCommitContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/context/MergeVersionAndCommitContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/context/ProportionContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/context/ProportionContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/factory/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/factory/ControllerFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/factory/ControllerType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/factory/ExecutionContext.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/git/controller/GetCommitFromGit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/git/controller/GetCommitFromGit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/git/controller/GitController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/git/controller/context/GetCommitFromGitContext.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/jira/controller/GetTicketFromJira.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/jira/controller/GetTicketFromJira.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/jira/controller/GetVersionsFromJira.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/jira/controller/GetVersionsFromJira.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/jira/controller/context/GetTicketFromJiraContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/jira/controller/context/GetTicketFromJiraContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/CodeSmellAnalyzer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/ComputeChangesMetrics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/ComputeChangesMetrics.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/ComputeComplexityMetrics.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/JavaMetricParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/JavaMetricParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/context/CodeSmellAnalyzerContext.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/context/ComputeMetricsContext.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/context/JavaMetricParserContext.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/context/VisitMethodContext.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/model/ComplexityMetrics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/model/ComplexityMetrics.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,8 +65,8 @@
       <list>
         <option value="Enum" />
         <option value="Interface" />
-        <option value="Class" />
         <option value="Record" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -56,13 +82,14 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/GentiliEmanuele/isw2_method_bugginess.git&quot;,
-    &quot;accountId&quot;: &quot;28c91a8c-7d1c-45de-9d42-ed8461a03f35&quot;
+    &quot;accountId&quot;: &quot;e3869a61-8b15-451a-90d8-c51955ff8dae&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
 }</component>
   <component name="ProjectId" id="2voYCoDadD2lyeoZ4oHsMuGTkp7" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -127,8 +154,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.27397.103" />
-        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.27397.103" />
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62" />
       </set>
     </attachedChunks>
   </component>
@@ -184,6 +211,11 @@
       <workItem from="1763633694453" duration="10711000" />
       <workItem from="1763717926472" duration="8856000" />
       <workItem from="1763810843816" duration="19563000" />
+      <workItem from="1764008101857" duration="8970000" />
+      <workItem from="1764069431591" duration="4112000" />
+      <workItem from="1764075019367" duration="10062000" />
+      <workItem from="1764094226885" duration="4374000" />
+      <workItem from="1764101230205" duration="2599000" />
     </task>
     <task id="LOCAL-00001" summary="Optimized the code and added the mechanism that save computed metrics in CSV.">
       <option name="closed" value="true" />
@@ -291,18 +323,10 @@
     <MESSAGE value="Changed the way code smells are calculated" />
     <MESSAGE value="Changed the calculation of some complexity metrics" />
     <MESSAGE value="Changed the calculation of some complexity metrics (pt2)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed the calculation of some complexity metrics (pt2)" />
+    <MESSAGE value="General refactoring and changed factory implementation" />
+    <option name="LAST_COMMIT_MESSAGE" value="General refactoring and changed factory implementation" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/JavaMetricParser.java</url>
-          <line>108</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="org.isw2.complexity.model.Method" memberName="metrics" />

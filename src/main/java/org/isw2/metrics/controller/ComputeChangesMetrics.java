@@ -1,66 +1,28 @@
 package org.isw2.metrics.controller;
 
 
-import org.isw2.core.model.FileClass;
 import org.isw2.core.model.Method;
 import org.isw2.exceptions.ProcessingException;
 import org.isw2.factory.Controller;
-import org.isw2.factory.ExecutionContext;
 import org.isw2.git.model.Change;
 import org.isw2.git.model.Commit;
-import org.isw2.jira.model.Version;
-import org.isw2.metrics.controller.context.ComputeMetricsContext;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ComputeChangesMetrics implements Controller {
+public class ComputeChangesMetrics implements Controller<Map<String, List<Method>>, Void> {
 
     @Override
-    public void execute(ExecutionContext context) throws ProcessingException {
-        if (!(context instanceof ComputeMetricsContext(Map<Version, List<FileClass>> fileClassByVersion))) {
-            throw new ProcessingException("Context is not a ComputeMetricsContext");
-        }
-
-        fileClassByVersion.forEach((version, fileClasses) -> {
-            fileClasses.forEach(fileClass -> {
-                fileClass.getMethods().forEach(method -> {
-                    version.getCommits().forEach(commit -> {
-                        if (methodIsToucheBy(method, commit, fileClass.getPath())) {
-                            computeMethodHistories(method);
-                            computeAuthors(method,  commit);
-                            computeStmtAdded(method);
-                            computeStmtDeleted(method);
-                        }
-                    });
-                });
-            });
-        });
-    }
-
-    private boolean methodIsToucheBy(Method method, Commit commit, String classPath) {
-        boolean touched = false;
-        List<Change> changes = commit.getChanges();
-        if (changes == null) return false;
-        for (Change change : changes) {
-            touched = isTouchedByAdd(change, classPath) || methodIsTouchedByModify(change, classPath, method);
-            if (touched) {
-                if (method.getTouchedBy() == null) {
-                    method.setTouchedBy(new ArrayList<>());
-                }
-                method.getTouchedBy().add(commit);
+    public Void execute(Map<String, List<Method>> methodByVersionAndPath) throws ProcessingException {
+        methodByVersionAndPath.forEach((key, methods) -> methods.forEach(method -> {
+            if (method.getTouchedBy() != null) {
+                computeMethodHistories(method);
+                computeStmtAdded(method);
+                computeStmtDeleted(method);
+                computeAuthors(method);
             }
-        }
-        return touched;
-    }
-
-    private boolean isTouchedByAdd (Change change, String classPath) {
-        return change.getType().equals("ADD") && change.getNewPath().equals(classPath);
-    }
-
-    private boolean methodIsTouchedByModify(Change change, String classPath, Method method) {
-        return change.getType().equals("MODIFY") && change.getOldPath().equals(classPath) && change.getOldStart() == method.getStartLine() && change.getOldEnd() == method.getEndLine();
+        }));
+        return null;
     }
 
     private void computeMethodHistories(Method method) {
@@ -71,10 +33,12 @@ public class ComputeChangesMetrics implements Controller {
         method.getChangesMetrics().setMethodHistories(historiesCounter);
     }
 
-    private void computeAuthors(Method method, Commit currentCommit) {
+    private void computeAuthors(Method method) {
         // If the author is already registered newAuthorNr = oldAuthorNr
-        int newAuthorsNr = method.tryToAddAuthor(currentCommit.getAuthor());
-        method.getChangesMetrics().setAuthors(newAuthorsNr);
+        for (Commit commit : method.getTouchedBy()) {
+            int newAuthorsNr = method.tryToAddAuthor(commit.getAuthor());
+            method.getChangesMetrics().setAuthors(newAuthorsNr);
+        }
     }
 
     private void computeStmtAdded(Method method) {

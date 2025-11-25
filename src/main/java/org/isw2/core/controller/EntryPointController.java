@@ -3,190 +3,88 @@ package org.isw2.core.controller;
 import org.isw2.core.boundary.ExitPointBoundary;
 import org.isw2.core.boundary.Outcome;
 import org.isw2.core.controller.context.*;
-import org.isw2.core.model.FileClass;
 import org.isw2.core.model.Method;
-import org.isw2.git.controller.context.GetCommitFromGitContext;
+import org.isw2.factory.*;
 import org.isw2.jira.controller.context.GetTicketFromJiraContext;
 import org.isw2.exceptions.ProcessingException;
-import org.isw2.factory.Controller;
-import org.isw2.factory.ControllerFactory;
-import org.isw2.factory.ControllerType;
-import org.isw2.factory.ExecutionContext;
-import org.isw2.git.controller.GetCommitFromGit;
-import org.isw2.git.controller.GitController;
 import org.isw2.git.model.Commit;
-import org.isw2.jira.controller.GetTicketFromJira;
-import org.isw2.jira.controller.GetVersionsFromJira;
 import org.isw2.jira.model.Ticket;
 import org.isw2.jira.model.Version;
-import org.isw2.metrics.controller.ComputeComplexityMetrics;
-import org.isw2.metrics.controller.context.CodeSmellAnalyzerContext;
-import org.isw2.metrics.controller.context.ComputeMetricsContext;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 
-public class EntryPointController implements Controller {
-
-    private List<Version> versions;
-    private List<Ticket> tickets;
-    private List<Commit> commits;
+public class EntryPointController implements Controller<String, Void> {
 
     private static final Logger logger = Logger.getLogger(EntryPointController.class.getName());
 
     @Override
-    public void execute(ExecutionContext context) throws ProcessingException {
-        if (!(context instanceof EntryPointContext(String projectName))) {
-            throw new IllegalArgumentException("Required params: EntryPointContext. Received: " +
-                    (context != null ? context.getClass().getSimpleName() : "null"));
-        }
+    public Void execute(String projectName) throws ProcessingException {
+        List<Commit> commits;
+        List<Ticket> tickets;
+        List<Version> versions;
 
         // Get version from Jira
         logger.info("Get versions from Jira");
-        getVersionsFromJira(context);
+        AbstractControllerFactory<String, List<Version>> getVersionFromJiraFactory = new GetVersionFromJiraFactory();
+        versions = getVersionFromJiraFactory.process(projectName);
 
         // Sort version list
         versions.sort(Comparator.comparing(o -> LocalDate.parse(o.getReleaseDate())));
 
         // Get ticket from Jira
         logger.info("Get tickets from Jira");
-        getTicketsFromJira(new GetTicketFromJiraContext(projectName, versions));
+        AbstractControllerFactory<GetTicketFromJiraContext, List<Ticket>> getTicketFromJiraFactory= new GetTicketFromJiraFactory();
+        tickets = getTicketFromJiraFactory.process(new GetTicketFromJiraContext(projectName, versions));
 
         // Create proportion controller and apply proportion
         logger.info("Execute proportion algorithm");
-        Controller proportion = ControllerFactory.createController(ControllerType.PROPORTION);
-        proportion.execute(new ProportionContext(versions, tickets));
+        AbstractControllerFactory<ProportionContext, Void> proportionFactory = new ProportionFactory();
+        proportionFactory.process(new ProportionContext(versions, tickets));
 
         // Create gitController and GetCommitFromGit
-        Controller gitController = ControllerFactory.createController(ControllerType.GIT_CONTROLLER);
-        if (gitController instanceof GitController controller) {
+        logger.info("Get commits from git");
+        AbstractControllerFactory<String, List<Commit>> getCommitFactory = new GetCommitFactory();
+        commits = getCommitFactory.process(projectName);
 
-            // Get commits from git
-            logger.info("Get commits from git");
-            getCommitsFromGit(new GetCommitFromGitContext(projectName, controller));
+        // Merge versions and commits
+        logger.info("Merge versions and commits");
+        AbstractControllerFactory<MergeVersionAndCommitContext, Void> mergeVersionAndCommit = new MergeVersionAndCommitFactory();
+        mergeVersionAndCommit.process(new MergeVersionAndCommitContext(versions, commits));
 
-            // Merge versions and commits
-            logger.info("Merge versions and commits");
-            mergeVersionsAndCommits();
+        // Analyze files
+        logger.info("Analyze files");
+        AbstractControllerFactory<AnalyzeFileContext, Map<String, List<Method>>> analyzeFileFactory = new AnalyzeFileFactory();
+        Map<String, List<Method>> methodByVersionAndPath = analyzeFileFactory.process(new AnalyzeFileContext(projectName, versions));
 
-            // Map commit, method and tickets
-            logger.info("Analyze files");
-            analyzeFiles(new MapCommitsAndMethodContext(projectName, versions, controller));
+        // Compute changes metrics
+        AbstractControllerFactory<Map<String, List<Method>>, Void> computeChangesMetricsFactory = new ComputeChangesMetricsFactory();
+        computeChangesMetricsFactory.process(methodByVersionAndPath);
 
-        } else {
-            throw new ProcessingException("Controller is not a GitController");
+        // Methods labeling
+        AbstractControllerFactory<LabelingContext, Void> labelingController = new LabelingFactory();
+        labelingController.process(new LabelingContext(methodByVersionAndPath, tickets));
+
+        // Write result on CSV
+        try {
+            writeOutcome(projectName, methodByVersionAndPath);
+        } catch (IOException e) {
+            throw new ProcessingException(e.getMessage());
         }
+
+        return null;
     }
 
-    private void getVersionsFromJira(ExecutionContext context) throws ProcessingException {
-        Controller getVersionsFromJira = ControllerFactory.createController(ControllerType.GET_VERSION_FROM_JIRA);
-        getVersionsFromJira.execute(context);
-        if (getVersionsFromJira instanceof GetVersionsFromJira controller) {
-            versions = new ArrayList<>(controller.getJiraVersions());
-        } else {
-            throw new ProcessingException("Processing error occurred");
-        }
-    }
-
-    private void getTicketsFromJira(ExecutionContext context) throws ProcessingException {
-        Controller getTicketFromJira = ControllerFactory.createController(ControllerType.GET_TICKET_FROM_JIRA);
-        getTicketFromJira.execute(context);
-        if (getTicketFromJira instanceof GetTicketFromJira controller) {
-            tickets = new ArrayList<>(controller.getJiraTickets());
-        } else {
-            throw new ProcessingException("Processing error occurred");
-        }
-    }
-
-    private void getCommitsFromGit(ExecutionContext context) throws ProcessingException {
-        Controller getCommitFromGit = ControllerFactory.createController(ControllerType.GET_COMMIT_FROM_GIT);
-        getCommitFromGit.execute(context);
-        if (getCommitFromGit instanceof GetCommitFromGit controller) {
-            commits = new ArrayList<>(controller.getCommits());
-        } else {
-            throw new ProcessingException("Processing error occurred");
-        }
-    }
-
-    private void mergeVersionsAndCommits() throws ProcessingException {
-        Controller mergeVersionAndCommit = ControllerFactory.createController(ControllerType.MERGE_VERSION_AND_COMMIT);
-        mergeVersionAndCommit.execute(new MergeVersionAndCommitContext(versions, commits));
-    }
-
-    private void analyzeFiles(ExecutionContext context) throws ProcessingException {
-        if (context instanceof MapCommitsAndMethodContext(String projectName, _, _)) {
-            Controller fileIsTouchedBy = ControllerFactory.createController(ControllerType.FILE_IS_TOUCHED_BY);
-            fileIsTouchedBy.execute(context);
-            if (fileIsTouchedBy instanceof FileIsTouchedBy controller) {
-                try {
-                    Map<Version, List<FileClass>> fileClassByVersion = controller.getFileClassByVersion();
-                    Map<Version, List<Method>> methodByVersion = computeComplexityMetrics(new ComputeMetricsContext(fileClassByVersion));
-                    computeCodeSmell(new CodeSmellAnalyzerContext(fileClassByVersion));
-                    // TODO(Review computeChangesMetrics)
-                    // computeChangesMetrics(new ComputeMetricsContext(fileClassByVersion));
-                    labeling(new LabelingContext(methodByVersion, tickets));
-                    writeOutcome(projectName, methodByVersion);
-                } catch (IOException _) {
-                    throw new ProcessingException("An error occurred while writing the results");
-                }
-            } else {
-                throw new ProcessingException("Processing error occurred");
-            }
-        } else  {
-            throw new ProcessingException("Context is not a MapCommitsAndMethodContext");
-        }
-    }
-
-    private Map<Version, List<Method>> computeComplexityMetrics(ExecutionContext context) throws ProcessingException {
-        if (context instanceof ComputeMetricsContext) {
-            Controller computeComplexityMetrics = ControllerFactory.createController(ControllerType.COMPUTE_COMPLEXITY_METRICS);
-            computeComplexityMetrics.execute(context);
-            if (computeComplexityMetrics instanceof ComputeComplexityMetrics controller) {
-                return controller.getMethodsByVersion();
-            } else {
-                return Map.of();
-            }
-        } else {
-            throw new ProcessingException("Context is not a ComputeMetricsContext");
-        }
-    }
-
-    private void computeChangesMetrics(ExecutionContext context) throws ProcessingException {
-        if (context instanceof ComputeMetricsContext) {
-            Controller computeChangesMetrics = ControllerFactory.createController(ControllerType.COMPUTE_CHANGES_METRICS);
-            computeChangesMetrics.execute(context);
-        } else {
-            throw new ProcessingException("Context is not a ComputeMetricsContext");
-        }
-    }
-
-    private void computeCodeSmell(ExecutionContext context) throws ProcessingException {
-        if (context instanceof CodeSmellAnalyzerContext) {
-            Controller codeSmellAnalyzer =  ControllerFactory.createController(ControllerType.CODE_SMELL_ANALYZER);
-            codeSmellAnalyzer.execute(context);
-        } else {
-            throw new ProcessingException("Context is not a CodeSmellAnalyzerContext");
-        }
-    }
-
-    private void labeling(ExecutionContext context) throws ProcessingException {
-        if (context instanceof LabelingContext) {
-            Controller labelingController = ControllerFactory.createController(ControllerType.LABELING);
-            labelingController.execute(context);
-        } else {
-            throw new ProcessingException("Context is not a LabelingContext");
-        }
-    }
-
-    private void writeOutcome(String projectName, Map<Version, List<Method>> methodsByVersion) throws IOException {
+    private void writeOutcome(String projectName, Map<String, List<Method>> methodByVersionAndPath) throws IOException {
         List<Outcome> outcomes = new ArrayList<>();
-        methodsByVersion.forEach((version, methods) -> methods.forEach(method -> outcomes.add(createOutcome(version.getName(), method))));
+        methodByVersionAndPath.forEach((key, methods) ->
+            methods.forEach(method ->
+                outcomes.add(createOutcome(key.split("_")[0], method))
+            )
+        );
         ExitPointBoundary.toCsv(projectName, outcomes);
 
     }

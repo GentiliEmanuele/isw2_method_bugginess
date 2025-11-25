@@ -11,15 +11,13 @@ import org.eclipse.jgit.patch.HunkHeader;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
-import org.isw2.core.controller.context.EntryPointContext;
-import org.isw2.git.controller.context.GetCommitFromGitContext;
 import org.isw2.exceptions.ProcessingException;
 import org.isw2.factory.Controller;
-import org.isw2.factory.ExecutionContext;
 import org.isw2.git.model.Author;
 import org.isw2.git.model.Change;
 import org.isw2.git.model.Commit;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -28,30 +26,42 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GetCommitFromGit implements Controller {
+public class GetCommitFromGit implements Controller<String, List<Commit>> {
     private final List<Commit> cleanedCommits = new ArrayList<>();
-    private Map<String, List<Change>> diffCache = new HashMap<>();
+    private final Map<String, List<Change>> diffCache = new HashMap<>();
+    private Git git;
 
     @Override
-    public void execute(ExecutionContext context) throws ProcessingException {
-        if (!(context instanceof GetCommitFromGitContext(String projectName, GitController gitController))) {
-            throw new IllegalArgumentException("Required params: GetCommitFromGitContext. Received: " +
-                    (context != null ? context.getClass().getSimpleName() : "null"));
-        }
+    public List<Commit> execute(String projectName) throws ProcessingException {
         try {
-            getCommitFromGit(projectName, gitController);
+            this.git = cloneRepository(projectName);
+            getCommitFromGit();
+            return cleanedCommits;
         } catch (GitAPIException | IOException | ProcessingException e) {
             throw new ProcessingException(e.getMessage());
         }
     }
 
-    public List<Commit> getCommits() {
-        return cleanedCommits;
+    public static Git cloneRepository(String projectName) throws GitAPIException, IOException {
+        File dir = new File(formatDirectoryName(projectName));
+        if (!dir.exists()) {
+            return Git.cloneRepository().setURI(formatGitHubURL(projectName)).setDirectory(dir).call();
+        } else {
+            return Git.open(dir);
+        }
     }
 
-    private void getCommitFromGit(String projectName, GitController gitController) throws GitAPIException, IOException, ProcessingException {
-        gitController.execute(new EntryPointContext(projectName));
-        Git git = gitController.getGit();
+    private static String formatDirectoryName(String projectName) {
+        String baseDir = "/home/emanuele/isw2/temp/";
+        return baseDir.concat(projectName);
+    }
+
+    private static String formatGitHubURL(String projectName) {
+        String url = "https://github.com/apache/";
+        return url.concat(projectName).concat(".git");
+    }
+
+    private void getCommitFromGit() throws GitAPIException, IOException, ProcessingException {
         Iterable<RevCommit> commits = git.log().all().call();
         int length = getCommitsLength(commits);
         commits = git.log().all().call();

@@ -10,8 +10,9 @@ import com.sun.source.util.Trees;
 import org.isw2.core.model.Method;
 import org.isw2.exceptions.ProcessingException;
 import org.isw2.factory.Controller;
-import org.isw2.factory.ExecutionContext;
-import org.isw2.metrics.controller.context.JavaMetricParserContext;
+import org.isw2.git.model.Change;
+import org.isw2.git.model.Commit;
+import org.isw2.metrics.controller.context.ParserContext;
 import org.isw2.metrics.controller.context.VisitReturn;
 
 import javax.tools.*;
@@ -21,33 +22,37 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JavaMetricParser implements Controller {
+public class JavaMetricParser implements Controller<ParserContext, List<Method>> {
+
     // Get access to JavaCompiler
     private final JavaCompiler compiler;
     /* We need an appropriate JavaFileManager instance and an appropriate collection JavaFileObject instances to do
     this. */
     private final StandardJavaFileManager fileManager;
 
-    private String className = "";
-    private final List<Method> methods;
+    private String className;
 
-    public JavaMetricParser() {
+    JavaMetricParser() {
         this.compiler = ToolProvider.getSystemJavaCompiler();
         this.fileManager = this.compiler.getStandardFileManager(null, null, StandardCharsets.UTF_8);
-        methods = new ArrayList<>();
+    }
+
+    private static class SingletonHelper {
+        private static final JavaMetricParser INSTANCE = new JavaMetricParser();
+    }
+
+    public static JavaMetricParser getInstance() {
+        return SingletonHelper.INSTANCE;
     }
 
     @Override
-    public void execute(ExecutionContext context) throws ProcessingException {
-        if (!(context instanceof JavaMetricParserContext(String content, String path))) {
-            throw new ProcessingException("Context is not a JavaMetricParserContext");
-        }
-
+    public List<Method> execute(ParserContext context) throws ProcessingException {
+        List<Method> methods = new ArrayList<>();
         // Create a virtual file in memory
-        JavaFileObject fileObject = new SimpleJavaFileObject(URI.create("string:///" + path), JavaFileObject.Kind.SOURCE) {
+        JavaFileObject fileObject = new SimpleJavaFileObject(URI.create("string:///" + context.filePath()), JavaFileObject.Kind.SOURCE) {
             @Override
             public CharSequence getCharContent(boolean ignoreEncodingErrors) {
-                return content;
+                return context.content();
             }
         };
 
@@ -55,27 +60,20 @@ public class JavaMetricParser implements Controller {
         try {
             Iterable<? extends CompilationUnitTree> compilationUnitTrees = javacTask.parse();
             Trees trees = Trees.instance(javacTask);
-            parseCompilationUnitTree(compilationUnitTrees, trees);
+            parseCompilationUnitTree(compilationUnitTrees, trees, methods, context.commit(), context.filePath());
         } catch (IOException e) {
             throw new ProcessingException(e.getMessage());
         }
-    }
-
-    public List<Method> getMethods() {
         return methods;
     }
 
-    public void cleanMethodsList() {
-        methods.clear();
-    }
-
-    private void parseCompilationUnitTree(Iterable<? extends CompilationUnitTree> compilationUnitTrees, Trees trees) {
+    private void parseCompilationUnitTree(Iterable<? extends CompilationUnitTree> compilationUnitTrees, Trees trees, List<Method> outMethods, Commit commit, String path) {
         for (CompilationUnitTree compilationUnitTree : compilationUnitTrees) {
-            parseTrees(compilationUnitTree, trees);
+            parseTrees(compilationUnitTree, trees, outMethods, commit, path);
         }
     }
 
-    private void parseTrees(CompilationUnitTree compilationUnitTree, Trees trees) {
+    private void parseTrees(CompilationUnitTree compilationUnitTree, Trees trees, List<Method> methods, Commit commit, String path) {
         for (Tree tree : compilationUnitTree.getTypeDecls()) {
             tree.accept(new TreeScanner<>() {
                 @Override
@@ -105,6 +103,8 @@ public class JavaMetricParser implements Controller {
                     method.getMetrics().setNestingDepth(ret.nestingDepth());
                     method.getMetrics().setNumberOfBranchesAndDecisionPoint(ret.cyclomaticComplexity() - 1);
                     method.getMetrics().setParameterCount(getParametersCounter(methodTree));
+
+                    methodIsToucheBy(method, commit, path);
 
                     methods.add(method);
                     return super.visitMethod(methodTree, o);
@@ -153,5 +153,27 @@ public class JavaMetricParser implements Controller {
             }
         }
         return counter;
+    }
+
+    private void methodIsToucheBy(Method method, Commit commit, String classPath) {
+        List<Change> changes = commit.getChanges();
+        if (changes == null) return;
+        for (Change change : changes) {
+            boolean touched = isTouchedByAdd(change, classPath) || methodIsTouchedByModify(change, classPath, method);
+            if (touched) {
+                if (method.getTouchedBy() == null) {
+                    method.setTouchedBy(new ArrayList<>());
+                }
+                method.getTouchedBy().add(commit);
+            }
+        }
+    }
+
+    private boolean isTouchedByAdd (Change change, String classPath) {
+        return change.getType().equals("ADD") && change.getNewPath().equals(classPath);
+    }
+
+    private boolean methodIsTouchedByModify(Change change, String classPath, Method method) {
+        return change.getType().equals("MODIFY") && change.getOldPath().equals(classPath) && change.getOldStart() == method.getStartLine() && change.getOldEnd() == method.getEndLine();
     }
 }

@@ -1,10 +1,8 @@
 package org.isw2.core.boundary;
 
-import org.isw2.core.controller.context.EntryPointContext;
 import org.isw2.exceptions.ProcessingException;
-import org.isw2.factory.Controller;
-import org.isw2.factory.ControllerFactory;
-import org.isw2.factory.ControllerType;
+import org.isw2.factory.AbstractControllerFactory;
+import org.isw2.factory.EntryPointControllerFactory;
 
 public class EntryPointBoundary {
 
@@ -12,8 +10,8 @@ public class EntryPointBoundary {
     }
 
     public static void startAnalysis(String projectName) throws ProcessingException {
-        Controller entryPointController = ControllerFactory.createController(ControllerType.ENTRY_POINT_CONTROLLER);
-        entryPointController.execute(new EntryPointContext(projectName));
+        AbstractControllerFactory<String, Void> entryPointFactory = new EntryPointControllerFactory();
+        entryPointFactory.process(projectName);
     }
 
 }

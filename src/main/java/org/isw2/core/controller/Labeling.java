@@ -4,39 +4,44 @@ import org.isw2.core.controller.context.LabelingContext;
 import org.isw2.core.model.Method;
 import org.isw2.exceptions.ProcessingException;
 import org.isw2.factory.Controller;
-import org.isw2.factory.ExecutionContext;
-import org.isw2.jira.model.Ticket;
+import org.isw2.git.model.Change;
 import org.isw2.jira.model.Version;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Labeling implements Controller {
+
+public class Labeling implements Controller<LabelingContext, Void> {
+
     @Override
-    public void execute(ExecutionContext context) throws ProcessingException {
-        if (!(context instanceof LabelingContext(Map<Version, List<Method>> methodByVersion, List<Ticket> tickets))) {
-            throw new IllegalArgumentException("Required params: LabelingContext. Received: " +
-                    (context != null ? context.getClass().getSimpleName() : "null"));
-        }
-        methodByVersion.forEach((version, methods) -> {
-           methods.forEach(method -> {
-               if (method.getTouchedBy() != null) {
-                   method.getTouchedBy().forEach(commit -> {
-                       if (version.getCommits().contains(commit) && itAffectedVersion(tickets, version)) {
-                           method.setBuggy(1);
-                       }
-                   });
-               }
-           });
+    public Void execute(LabelingContext context) throws ProcessingException {
+        context.tickets().forEach(ticket -> {
+            if (ticket.getAffectedVersions() != null) {
+                ticket.getAffectedVersions().forEach(av -> {
+                    if (av.getCommits() != null) {
+                        av.getCommits().forEach(commit -> {
+                            if (commit.getChanges() != null) {
+                                commit.getChanges().forEach(change ->
+                                    setMethodAsBuggy(av, change, context.methodsByVersionAndPath())
+                                );
+                            }
+                        });
+                    }
+                });
+            }
         });
+        return null;
     }
 
-    private boolean itAffectedVersion(List<Ticket> tickets, Version version) {
-        for (Ticket ticket : tickets) {
-            if (ticket.getAffectedVersions().contains(version)) {
-                return true;
-            }
+    private void setMethodAsBuggy(Version version, Change change, Map<String, List<Method>> methodsByVersionAndPath) {
+        if (change.getType().equals("MODIFY")) {
+            List<Method> methods = methodsByVersionAndPath.getOrDefault(version.getName() + "_" + change.getNewPath(), new ArrayList<>());
+            methods.forEach(method -> {
+                if (change.getOldStart() <= method.getEndLine() && change.getOldEnd() >= method.getStartLine())
+                    method.setBuggy(1);
+            });
         }
-        return false;
     }
+
 }

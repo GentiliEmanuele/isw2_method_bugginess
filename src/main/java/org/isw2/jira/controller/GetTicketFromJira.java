@@ -3,7 +3,6 @@ package org.isw2.jira.controller;
 import org.isw2.jira.controller.context.GetTicketFromJiraContext;
 import org.isw2.exceptions.ProcessingException;
 import org.isw2.factory.Controller;
-import org.isw2.factory.ExecutionContext;
 import org.isw2.jira.model.Ticket;
 import org.isw2.jira.model.Version;
 import org.json.JSONArray;
@@ -19,7 +18,7 @@ import java.util.List;
 
 import static org.isw2.jira.controller.GetVersionsFromJira.readJsonFromUrl;
 
-public class GetTicketFromJira implements Controller {
+public class GetTicketFromJira implements Controller<GetTicketFromJiraContext, List<Ticket>> {
 
     private static final String FIX_VERSIONS = "fixVersions";
     private static final String FIELDS = "fields";
@@ -34,14 +33,10 @@ public class GetTicketFromJira implements Controller {
     private final List<Ticket> tickets = new ArrayList<>();
 
     @Override
-    public void execute(ExecutionContext context) throws ProcessingException {
-        if (!(context instanceof GetTicketFromJiraContext(String projectName, List<Version> allVersions))) {
-            throw new IllegalArgumentException("Required params: GetTicketFromJiraContext. Received: " +
-                    (context != null ? context.getClass().getSimpleName() : "null"));
-        }
-
+    public List<Ticket> execute(GetTicketFromJiraContext context) throws ProcessingException {
         try {
-            getTicketFromJira(projectName, allVersions);
+            getTicketFromJira(context.projectName(), context.allVersions());
+            return tickets;
         } catch (IOException e) {
             throw new ProcessingException(e.getMessage());
         }

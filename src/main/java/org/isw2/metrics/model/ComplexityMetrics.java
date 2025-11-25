@@ -9,7 +9,7 @@ public class ComplexityMetrics {
     private int nestingDepth;
     private int numberOfBranchesAndDecisionPoint;
     private int parameterCount;
-    private int codeSmellCounter;
+    private int codeSmellCounter = 0;
 
     public int getLinesOfCode() {
         return linesOfCode;

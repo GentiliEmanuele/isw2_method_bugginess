@@ -3,7 +3,6 @@ package org.isw2.core.controller;
 import org.isw2.core.controller.context.MergeVersionAndCommitContext;
 import org.isw2.exceptions.ProcessingException;
 import org.isw2.factory.Controller;
-import org.isw2.factory.ExecutionContext;
 import org.isw2.git.model.Commit;
 import org.isw2.jira.model.Version;
 
@@ -13,16 +12,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class MergeVersionAndCommit implements Controller {
+public class MergeVersionAndCommit implements Controller<MergeVersionAndCommitContext, Void> {
 
     @Override
-    public void execute(ExecutionContext context) throws ProcessingException {
-        if (!(context instanceof MergeVersionAndCommitContext(List<Version> versions, List<Commit> commits))) {
-            throw new IllegalArgumentException("Required params: MergeVersionAndCommitContext. Received: " +
-                    (context != null ? context.getClass().getSimpleName() : "null"));
-        }
-
-        mergeVersionAndCommit(versions, commits);
+    public Void execute(MergeVersionAndCommitContext context) throws ProcessingException {
+        mergeVersionAndCommit(context.versions(), context.commits());
+        return null;
     }
 
     private void mergeVersionAndCommit(List<Version> versions, List<Commit> commits) {

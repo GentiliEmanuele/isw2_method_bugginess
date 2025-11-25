@@ -3,7 +3,6 @@ package org.isw2.core.controller;
 import org.isw2.core.controller.context.ProportionContext;
 import org.isw2.exceptions.ProcessingException;
 import org.isw2.factory.Controller;
-import org.isw2.factory.ExecutionContext;
 import org.isw2.jira.model.Ticket;
 import org.isw2.jira.model.Version;
 
@@ -12,23 +11,19 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class Proportion implements Controller {
-
+public class Proportion implements Controller<ProportionContext, Void> {
 
     @Override
-    public void execute(ExecutionContext context) throws ProcessingException {
-        if (!(context instanceof ProportionContext(List<Version> versions, List<Ticket> tickets))) {
-            throw new IllegalArgumentException("Required params: ProportionContext. Received: " +
-                    (context != null ? context.getClass().getSimpleName() : "null"));
-        }
+    public Void execute(ProportionContext context) throws ProcessingException {
 
-        List<Ticket> consistent = new ArrayList<>(tickets);
+        List<Ticket> consistent = new ArrayList<>(context.tickets());
         removeInconsistent(consistent);
 
-        float p = computeWithComplete(consistent, versions);
+        float p = computeWithComplete(consistent, context.versions());
 
-        correct(tickets, versions, (int) Math.ceil(p));
-        removeInconsistent(tickets);
+        correct(context.tickets(), context.versions(), (int) Math.ceil(p));
+        removeInconsistent(context.tickets());
+        return null;
     }
 
     private float computeWithComplete(List<Ticket> tickets, List<Version> versions) {

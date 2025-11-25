@@ -1,9 +1,7 @@
 package org.isw2.jira.controller;
 
-import org.isw2.core.controller.context.EntryPointContext;
 import org.isw2.exceptions.ProcessingException;
 import org.isw2.factory.Controller;
-import org.isw2.factory.ExecutionContext;
 import org.isw2.jira.model.Version;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GetVersionsFromJira implements Controller {
+public class GetVersionsFromJira implements Controller<String, List<Version>> {
 
     private static final String BASE_URL = "https://issues.apache.org/jira/rest/api/2/project/";
     private static final String VERSIONS = "versions";
@@ -27,21 +25,13 @@ public class GetVersionsFromJira implements Controller {
     private final List<Version> jiraVersions = new ArrayList<>();
 
     @Override
-    public void execute(ExecutionContext context) throws ProcessingException {
-        if (!(context instanceof EntryPointContext(String projectName))) {
-            throw new IllegalArgumentException("Required params: EntryPointContext. Received: " +
-                    (context != null ? context.getClass().getSimpleName() : "null"));
-        }
-
+    public List<Version> execute(String projectName) throws ProcessingException {
         try {
             getVersionsFromJira(projectName);
+            return jiraVersions;
         } catch (IOException e) {
             throw new ProcessingException(e.getMessage());
         }
-    }
-
-    public List<Version> getJiraVersions() {
-        return jiraVersions;
     }
 
     private void getVersionsFromJira(String projectName) throws IOException {
