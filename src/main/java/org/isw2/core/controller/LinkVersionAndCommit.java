@@ -10,9 +10,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
-public class MergeVersionAndCommit implements Controller<MergeVersionAndCommitContext, Void> {
+public class LinkVersionAndCommit implements Controller<MergeVersionAndCommitContext, Void> {
 
     @Override
     public Void execute(MergeVersionAndCommitContext context) throws ProcessingException {
@@ -21,8 +20,6 @@ public class MergeVersionAndCommit implements Controller<MergeVersionAndCommitCo
     }
 
     private void mergeVersionAndCommit(List<Version> versions, List<Commit> commits) {
-        int commitSize = commits.size();
-        AtomicInteger processed = new AtomicInteger();
         // Sort versions list using the releaseDate
         versions.sort(Comparator.comparing(v -> LocalDate.parse(v.getReleaseDate(), DateTimeFormatter.ISO_LOCAL_DATE)));
         // Sort commits list using the commitTime
@@ -36,8 +33,6 @@ public class MergeVersionAndCommit implements Controller<MergeVersionAndCommitCo
                     break;
                 }
             }
-            processed.getAndIncrement();
-            int percent = (100 * processed.get()) / commitSize;
         });
         versions.removeIf(v -> v.getCommits().isEmpty());
     }

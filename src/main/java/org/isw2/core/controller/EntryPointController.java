@@ -50,6 +50,10 @@ public class EntryPointController implements Controller<String, Void> {
         AbstractControllerFactory<String, List<Commit>> getCommitFactory = new GetCommitFactory();
         commits = getCommitFactory.process(projectName);
 
+        logger.info("Link commits and tickets");
+        AbstractControllerFactory<LinkCommitsAndTicketsContext, Void> linkCommitsAndTicketsFactory = new LinkCommitsAndTicketsFactory();
+        linkCommitsAndTicketsFactory.process(new LinkCommitsAndTicketsContext(projectName, commits, tickets));
+
         // Merge versions and commits
         logger.info("Merge versions and commits");
         AbstractControllerFactory<MergeVersionAndCommitContext, Void> mergeVersionAndCommit = new MergeVersionAndCommitFactory();

@@ -1,24 +1,27 @@
 package org.isw2.jira.model;
 
+import org.isw2.git.model.Commit;
+
 import java.util.List;
 
 public class Ticket {
-    private final String id;
+    private final String key;
     private List<Version> affectedVersions;
     private final Version fixedVersion;
     private Version injectedVersion;
     private Version openingVersion;
+    private List<Commit> fixedCommits;
 
     public Ticket(String id, List<Version> affectedVersions, Version fixedVersion, Version injectedVersion, Version openingVersion) {
-        this.id = id;
+        this.key = id;
         this.affectedVersions = affectedVersions;
         this.fixedVersion = fixedVersion;
         this.injectedVersion = injectedVersion;
         this.openingVersion = openingVersion;
     }
 
-    public String getId() {
-        return id;
+    public String getKey() {
+        return key;
     }
 
     public List<Version> getAffectedVersions() {
@@ -49,14 +52,11 @@ public class Ticket {
         this.openingVersion = openingVersion;
     }
 
-    @Override
-    public String toString() {
-        return "Ticket{" +
-                "id='" + id + '\'' +
-                ", affectedVersions=" + affectedVersions +
-                ", fixedVersion=" + fixedVersion +
-                ", injectedVersion=" + injectedVersion +
-                ", openingVersion=" + openingVersion +
-                '}';
+    public List<Commit> getFixedCommits() {
+        return fixedCommits;
+    }
+
+    public void setFixedCommits(List<Commit> fixedCommits) {
+        this.fixedCommits = fixedCommits;
     }
 }
