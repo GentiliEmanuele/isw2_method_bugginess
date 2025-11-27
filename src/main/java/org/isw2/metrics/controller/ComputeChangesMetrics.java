@@ -28,7 +28,7 @@ public class ComputeChangesMetrics implements Controller<Map<String, List<Method
     private void computeMethodHistories(Method method) {
         int historiesCounter = 0;
         for (Commit commit : method.getTouchedBy()) {
-            historiesCounter += commit.getChanges().size();
+            historiesCounter += commit.changes().size();
         }
         method.getChangesMetrics().setMethodHistories(historiesCounter);
     }
@@ -36,7 +36,7 @@ public class ComputeChangesMetrics implements Controller<Map<String, List<Method
     private void computeAuthors(Method method) {
         // If the author is already registered newAuthorNr = oldAuthorNr
         for (Commit commit : method.getTouchedBy()) {
-            int newAuthorsNr = method.tryToAddAuthor(commit.getAuthor());
+            int newAuthorsNr = method.tryToAddAuthor(commit.author());
             method.getChangesMetrics().setAuthors(newAuthorsNr);
         }
     }

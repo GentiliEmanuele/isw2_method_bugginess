@@ -26,19 +26,18 @@ public class MergeVersionAndCommit implements Controller<MergeVersionAndCommitCo
         // Sort versions list using the releaseDate
         versions.sort(Comparator.comparing(v -> LocalDate.parse(v.getReleaseDate(), DateTimeFormatter.ISO_LOCAL_DATE)));
         // Sort commits list using the commitTime
-        commits.sort(Comparator.comparing(c -> LocalDate.parse(c.getCommitTime(), DateTimeFormatter.ISO_LOCAL_DATE)));
+        commits.sort(Comparator.comparing(c -> LocalDate.parse(c.commitTime(), DateTimeFormatter.ISO_LOCAL_DATE)));
         // Associate commits and versions
         commits.forEach(c -> {
             for (Version v : versions) {
-                if (LocalDate.parse(c.getCommitTime(), DateTimeFormatter.ISO_LOCAL_DATE).isBefore(LocalDate.parse(v.getReleaseDate(), DateTimeFormatter.ISO_LOCAL_DATE)) ||
-                    LocalDate.parse(c.getCommitTime(), DateTimeFormatter.ISO_LOCAL_DATE).isEqual(LocalDate.parse(v.getReleaseDate(), DateTimeFormatter.ISO_LOCAL_DATE))) {
+                if (LocalDate.parse(c.commitTime(), DateTimeFormatter.ISO_LOCAL_DATE).isBefore(LocalDate.parse(v.getReleaseDate(), DateTimeFormatter.ISO_LOCAL_DATE)) ||
+                    LocalDate.parse(c.commitTime(), DateTimeFormatter.ISO_LOCAL_DATE).isEqual(LocalDate.parse(v.getReleaseDate(), DateTimeFormatter.ISO_LOCAL_DATE))) {
                     v.getCommits().add(c);
                     break;
                 }
             }
             processed.getAndIncrement();
             int percent = (100 * processed.get()) / commitSize;
-            System.out.print("\rMerge version and commit progress: " + percent + "%");
         });
         versions.removeIf(v -> v.getCommits().isEmpty());
     }

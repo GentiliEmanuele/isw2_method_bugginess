@@ -70,7 +70,7 @@ public class AnalyzeFile implements Controller<AnalyzeFileContext, Map<String, L
     }
 
     private PmdAnalysis analyzeCommit(Repository repository, Commit commit, Version current, Version previous) throws IOException, ProcessingException {
-        ObjectId commitId = repository.resolve(commit.getId()); // Parse commit id into ObjectId
+        ObjectId commitId = repository.resolve(commit.id()); // Parse commit id into ObjectId
         PmdAnalysis pmdAnalysis = null;
         // Create a walker for iterate the commits
         try (RevWalk walk = new RevWalk(repository)) {
@@ -84,7 +84,7 @@ public class AnalyzeFile implements Controller<AnalyzeFileContext, Map<String, L
                     String path = treeWalk.getPathString();
                     boolean touched;
                     List<Method> methods;
-                    if (path.endsWith(".java") && !path.endsWith("package-info.java") && commit.getChanges() != null) {
+                    if (path.endsWith(".java") && !path.endsWith("package-info.java") && commit.changes() != null) {
                         touched = fileIsTouchedBy(commit, path);
                         if (!touched) {
                             manageUntouched(previous, current, path);
@@ -154,7 +154,7 @@ public class AnalyzeFile implements Controller<AnalyzeFileContext, Map<String, L
     }
 
     private boolean fileIsTouchedBy(Commit commit, String classPath) {
-        for (Change c : commit.getChanges()) {
+        for (Change c : commit.changes()) {
             if (fileIsTouchedByAdd(c, classPath) || fileIsTouchedByModify(c, classPath)) {
                 return true;
             }

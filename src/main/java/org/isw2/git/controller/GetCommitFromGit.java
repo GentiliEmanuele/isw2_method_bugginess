@@ -23,13 +23,10 @@ import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class GetCommitFromGit implements Controller<String, List<Commit>> {
     private final List<Commit> cleanedCommits = new ArrayList<>();
-    private final Map<String, List<Change>> diffCache = new HashMap<>();
     private Git git;
 
     @Override
@@ -38,7 +35,7 @@ public class GetCommitFromGit implements Controller<String, List<Commit>> {
             this.git = cloneRepository(projectName);
             getCommitFromGit();
             return cleanedCommits;
-        } catch (GitAPIException | IOException | ProcessingException e) {
+        } catch (GitAPIException | IOException e) {
             throw new ProcessingException(e.getMessage());
         }
     }
@@ -62,48 +59,24 @@ public class GetCommitFromGit implements Controller<String, List<Commit>> {
         return url.concat(projectName).concat(".git");
     }
 
-    private void getCommitFromGit() throws GitAPIException, IOException, ProcessingException {
+    private void getCommitFromGit() throws GitAPIException, IOException {
         Iterable<RevCommit> commits = git.log().all().call();
-        int length = getCommitsLength(commits);
-        commits = git.log().all().call();
-        int processed = 0;
         for (RevCommit commit : commits) {
-            String commitId = commit.getId().getName();
-            String name = commit.getAuthorIdent().getName();
-            String authorEmail = commit.getAuthorIdent().getEmailAddress();
-            Author author = new Author();
-            author.setName(name);
-            author.setAuthorEmail(authorEmail);
-            Commit newCommit = new Commit();
-            newCommit.setId(commitId);
-            newCommit.setAuthor(author);
-            newCommit.setCommitTime(formatDate(commit.getAuthorIdent().getWhenAsInstant().toString()));
-
+            Author author = new Author(commit.getAuthorIdent().getName(), commit.getAuthorIdent().getEmailAddress());
             if (commit.getParents().length != 0) {
-                RevCommit prevCommit = commit.getParent(0);
-                String key = prevCommit.getName() + "->" + commit.getName();
-                if (!diffCache.containsKey(key)) {
-                    diffCache.put(key, getFileDiffBetweenCommit(git, prevCommit, commit));
+                if (commit.getParentCount() > 1 || commit.getParentCount() == 0) {
+                    continue;
                 }
-                newCommit.setChanges(diffCache.get(key));
+                RevCommit prevCommit = commit.getParent(0);
+                Commit newCommit = new Commit(
+                        commit.getId().getName(),
+                        author, formatDate(commit.getAuthorIdent().getWhenAsInstant().toString()), commit.getFullMessage(),
+                        getFileDiffBetweenCommit(git, prevCommit, commit));
+                cleanedCommits.add(newCommit);
             }
-            processed++;
-            int percent = 0;
-            if (length != 0) percent = (processed * 100) / length;
-            System.out.print("\rGet commit from git: progress: " + percent + "%");
-
-            cleanedCommits.add(newCommit);
         }
-        System.out.println();
     }
 
-    private static int getCommitsLength(Iterable<RevCommit> commits) {
-        int lenght = 0;
-        for (var _ : commits) {
-            lenght++;
-        }
-        return lenght;
-    }
 
     private static String formatDate(String dateTime) {
         OffsetDateTime odt = OffsetDateTime.parse(dateTime);

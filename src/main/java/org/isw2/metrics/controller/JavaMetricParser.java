@@ -155,7 +155,7 @@ public class JavaMetricParser implements Controller<ParserContext, List<Method>>
     }
 
     private void methodIsToucheBy(Method method, Commit commit, String classPath) {
-        List<Change> changes = commit.getChanges();
+        List<Change> changes = commit.changes();
         if (changes == null) return;
         for (Change change : changes) {
             for (MyEdit edit : change.getEdits()) {
