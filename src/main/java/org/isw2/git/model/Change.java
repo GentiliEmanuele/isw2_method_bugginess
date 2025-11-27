@@ -1,13 +1,17 @@
 package org.isw2.git.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Change {
     private String type;
     private String oldPath;
     private String newPath;
-    private int oldStart;
-    private int oldEnd;
-    private int newStart;
-    private int newEnd;
+    private final List<MyEdit> edits;
+
+    public Change() {
+        this.edits = new ArrayList<>();
+    }
 
     public String getType() {
         return type;
@@ -33,48 +37,8 @@ public class Change {
         this.newPath = newPath;
     }
 
-    public int getOldStart() {
-        return oldStart;
+    public List<MyEdit> getEdits() {
+        return edits;
     }
 
-    public void setOldStart(int oldStart) {
-        this.oldStart = oldStart;
-    }
-
-    public int getOldEnd() {
-        return oldEnd;
-    }
-
-    public void setOldEnd(int oldEnd) {
-        this.oldEnd = oldEnd;
-    }
-
-    public int getNewStart() {
-        return newStart;
-    }
-
-    public void setNewStart(int newStart) {
-        this.newStart = newStart;
-    }
-
-    public int getNewEnd() {
-        return newEnd;
-    }
-
-    public void setNewEnd(int newEnd) {
-        this.newEnd = newEnd;
-    }
-
-    @Override
-    public String toString() {
-        return "Change{" +
-                "type='" + type + '\'' +
-                ", oldPath='" + oldPath + '\'' +
-                ", newPath='" + newPath + '\'' +
-                ", oldStart=" + oldStart +
-                ", oldEnd=" + oldEnd +
-                ", newStart=" + newStart +
-                ", newEnd=" + newEnd +
-                '}';
-    }
 }

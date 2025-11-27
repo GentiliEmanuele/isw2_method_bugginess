@@ -16,6 +16,7 @@ import org.isw2.factory.Controller;
 import org.isw2.git.model.Author;
 import org.isw2.git.model.Change;
 import org.isw2.git.model.Commit;
+import org.isw2.git.model.MyEdit;
 
 import java.io.File;
 import java.io.IOException;
@@ -137,10 +138,12 @@ public class GetCommitFromGit implements Controller<String, List<Commit>> {
                     for (HunkHeader hunk : hunks) {
                         EditList edits = hunk.toEditList();
                         for (Edit edit : edits) {
-                            change.setOldStart(edit.getBeginA());
-                            change.setOldEnd(edit.getEndA());
-                            change.setNewStart(edit.getBeginB());
-                            change.setNewEnd(edit.getEndB());
+                            MyEdit myEdit = new MyEdit();
+                            myEdit.setOldStart(edit.getBeginA());
+                            myEdit.setOldEnd(edit.getEndA());
+                            myEdit.setNewStart(edit.getBeginB());
+                            myEdit.setNewEnd(edit.getEndB());
+                            change.getEdits().add(myEdit);
                         }
                     }
                     changes.add(change);

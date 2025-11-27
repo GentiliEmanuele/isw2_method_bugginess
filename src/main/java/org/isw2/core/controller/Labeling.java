@@ -17,19 +17,11 @@ public class Labeling implements Controller<LabelingContext, Void> {
     @Override
     public Void execute(LabelingContext context) throws ProcessingException {
         context.tickets().forEach(ticket -> {
-            if (ticket.getAffectedVersions() != null) {
-                ticket.getAffectedVersions().forEach(av -> {
-                    if (av.getCommits() != null) {
-                        av.getCommits().forEach(commit -> {
-                            if (commit.getChanges() != null) {
-                                commit.getChanges().forEach(change ->
-                                    setMethodAsBuggy(av, change, context.methodsByVersionAndPath())
-                                );
-                            }
-                        });
-                    }
+            ticket.getFixedVersion().getCommits().forEach(commit -> {
+                commit.getChanges().forEach(change -> {
+                    setMethodAsBuggy(ticket.getFixedVersion(), change, context.methodsByVersionAndPath());
                 });
-            }
+            });
         });
         return null;
     }
@@ -38,8 +30,10 @@ public class Labeling implements Controller<LabelingContext, Void> {
         if (change.getType().equals("MODIFY")) {
             List<Method> methods = methodsByVersionAndPath.getOrDefault(version.getName() + "_" + change.getNewPath(), new ArrayList<>());
             methods.forEach(method -> {
-                if (change.getOldStart() <= method.getEndLine() && change.getOldEnd() >= method.getStartLine())
-                    method.setBuggy(1);
+                change.getEdits().forEach(edit -> {
+                    if (edit.getOldStart() <= method.getEndLine() && edit.getOldEnd() >= method.getStartLine())
+                        method.setBuggy(1);
+                });
             });
         }
     }

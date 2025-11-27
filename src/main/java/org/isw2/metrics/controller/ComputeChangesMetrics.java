@@ -17,8 +17,8 @@ public class ComputeChangesMetrics implements Controller<Map<String, List<Method
         methodByVersionAndPath.forEach((key, methods) -> methods.forEach(method -> {
             if (method.getTouchedBy() != null) {
                 computeMethodHistories(method);
-                computeStmtAdded(method);
-                computeStmtDeleted(method);
+                // computeStmtAdded(method);
+                // computeStmtDeleted(method);
                 computeAuthors(method);
             }
         }));
@@ -40,6 +40,8 @@ public class ComputeChangesMetrics implements Controller<Map<String, List<Method
             method.getChangesMetrics().setAuthors(newAuthorsNr);
         }
     }
+
+    /*
 
     private void computeStmtAdded(Method method) {
         int stmtAdded = 0;
@@ -90,4 +92,6 @@ public class ComputeChangesMetrics implements Controller<Map<String, List<Method
         method.getChangesMetrics().setStmtDeleted(stmtDeleted);
         method.getChangesMetrics().setMaxStmtDeleted(maxStmtDeleted);
     }
+
+     */
 }

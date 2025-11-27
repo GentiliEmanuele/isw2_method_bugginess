@@ -12,6 +12,7 @@ import org.isw2.exceptions.ProcessingException;
 import org.isw2.factory.Controller;
 import org.isw2.git.model.Change;
 import org.isw2.git.model.Commit;
+import org.isw2.git.model.MyEdit;
 import org.isw2.metrics.controller.context.ParserContext;
 import org.isw2.metrics.controller.context.VisitReturn;
 
@@ -29,8 +30,6 @@ public class JavaMetricParser implements Controller<ParserContext, List<Method>>
     /* We need an appropriate JavaFileManager instance and an appropriate collection JavaFileObject instances to do
     this. */
     private final StandardJavaFileManager fileManager;
-
-    private String className;
 
     JavaMetricParser() {
         this.compiler = ToolProvider.getSystemJavaCompiler();
@@ -75,17 +74,25 @@ public class JavaMetricParser implements Controller<ParserContext, List<Method>>
 
     private void parseTrees(CompilationUnitTree compilationUnitTree, Trees trees, List<Method> methods, Commit commit, String path) {
         for (Tree tree : compilationUnitTree.getTypeDecls()) {
-            tree.accept(new TreeScanner<>() {
+            tree.accept(new TreeScanner<Object, String>() {
                 @Override
-                public Object visitClass(ClassTree classTree, Object o) {
-                    className = sanitize(classTree.getSimpleName().toString());
-                    return super.visitClass(classTree, o);
+                public Object visitClass(ClassTree classTree, String parentName) {
+                    String simpleName = sanitize(classTree.getSimpleName().toString());
+                    String currentClassName;
+
+                    if (parentName != null && !parentName.isEmpty()) {
+                        currentClassName = parentName + "." + simpleName;
+                    } else {
+                        currentClassName = simpleName;
+                    }
+
+                    return super.visitClass(classTree, currentClassName);
                 }
 
                 @Override
-                public Object visitMethod(MethodTree methodTree, Object o) {
+                public Object visitMethod(MethodTree methodTree, String currentClassName) {
                     Method method = new Method();
-                    method.setClassName(className);
+                    method.setClassName(currentClassName);
                     method.setSignature(getReturnValue(methodTree) + " " + getMethodName(methodTree) + "(" + getMethodParameters(methodTree) + ")");
 
                     long startPosition = trees.getSourcePositions().getStartPosition(compilationUnitTree, methodTree);
@@ -107,7 +114,7 @@ public class JavaMetricParser implements Controller<ParserContext, List<Method>>
                     methodIsToucheBy(method, commit, path);
 
                     methods.add(method);
-                    return super.visitMethod(methodTree, o);
+                    return super.visitMethod(methodTree, currentClassName);
                 }
             }, null);
         }
@@ -144,36 +151,29 @@ public class JavaMetricParser implements Controller<ParserContext, List<Method>>
     }
 
     private int getParametersCounter(MethodTree methodTree) {
-        String all = getMethodParameters(methodTree);
-        String[] listAll = all.split(",");
-        int counter = 0;
-        for (String s : listAll) {
-            if (!s.trim().equals("void")) {
-                counter ++;
-            }
-        }
-        return counter;
+        return methodTree.getParameters().size();
     }
 
     private void methodIsToucheBy(Method method, Commit commit, String classPath) {
         List<Change> changes = commit.getChanges();
         if (changes == null) return;
         for (Change change : changes) {
-            boolean touched = isTouchedByAdd(change, classPath) || methodIsTouchedByModify(change, classPath, method);
-            if (touched) {
-                if (method.getTouchedBy() == null) {
-                    method.setTouchedBy(new ArrayList<>());
+            for (MyEdit edit : change.getEdits()) {
+                if (change.getNewPath().equals(classPath) && isOverlapping(method.getStartLine(), method.getEndLine(), edit)) {
+                    if (method.getTouchedBy() == null) {
+                        method.setTouchedBy(new ArrayList<>());
+                    }
+                    method.getTouchedBy().add(commit);
+                    break;
                 }
-                method.getTouchedBy().add(commit);
             }
         }
     }
 
-    private boolean isTouchedByAdd (Change change, String classPath) {
-        return change.getType().equals("ADD") && change.getNewPath().equals(classPath);
+    private boolean isOverlapping(int methodStart, int methodEnd, MyEdit edit) {
+        int editStart = edit.getNewStart() + 1;
+        int editEnd = edit.getNewEnd();
+        return (editStart <= methodEnd) && (editEnd >= methodStart);
     }
 
-    private boolean methodIsTouchedByModify(Change change, String classPath, Method method) {
-        return change.getType().equals("MODIFY") && change.getOldPath().equals(classPath) && change.getOldStart() == method.getStartLine() && change.getOldEnd() == method.getEndLine();
-    }
 }
