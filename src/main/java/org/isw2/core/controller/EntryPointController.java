@@ -5,6 +5,7 @@ import org.isw2.core.boundary.Outcome;
 import org.isw2.core.controller.context.*;
 import org.isw2.core.model.Method;
 import org.isw2.factory.*;
+import org.isw2.git.controller.GitHistoriesControllerContext;
 import org.isw2.jira.controller.context.GetTicketFromJiraContext;
 import org.isw2.exceptions.ProcessingException;
 import org.isw2.git.model.Commit;
@@ -64,9 +65,10 @@ public class EntryPointController implements Controller<String, Void> {
         AbstractControllerFactory<AnalyzeFileContext, Map<String, List<Method>>> analyzeFileFactory = new AnalyzeFileFactory();
         Map<String, List<Method>> methodByVersionAndPath = analyzeFileFactory.process(new AnalyzeFileContext(projectName, versions));
 
-        // Compute changes metrics
-        AbstractControllerFactory<Map<String, List<Method>>, Void> computeChangesMetricsFactory = new ComputeChangesMetricsFactory();
-        computeChangesMetricsFactory.process(methodByVersionAndPath);
+        // Compute GitHistories
+        logger.info("Compute git histories");
+        AbstractControllerFactory<GitHistoriesControllerContext, Void> gitHistoriesControllerFactory = new GitHistoriesControllerFactory();
+        gitHistoriesControllerFactory.process(new GitHistoriesControllerContext(methodByVersionAndPath, commits, versions));
 
         // Methods labeling
         AbstractControllerFactory<LabelingContext, Void> labelingController = new LabelingFactory();

@@ -37,4 +37,12 @@ public class MyEdit {
     public void setNewEnd(int newEnd) {
         this.newEnd = newEnd;
     }
+
+    public int getLengthA() {
+        return oldEnd - oldStart;
+    }
+
+    public int getLengthB() {
+        return newEnd - newStart;
+    }
 }

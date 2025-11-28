@@ -4,11 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Modified labeling mechanism.">
+    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Change bugginess type from int to boolean">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/GitHistoriesControllerFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/git/controller/GitHistoriesController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/git/controller/GitHistoriesControllerContext.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/boundary/Outcome.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/boundary/Outcome.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/Labeling.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/Labeling.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/EntryPointController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/EntryPointController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/model/Method.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/model/Method.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/factory/ComputeChangesMetricsFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/git/model/MyEdit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/git/model/MyEdit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/ComputeChangesMetrics.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/JavaMetricParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/JavaMetricParser.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -172,7 +178,7 @@
       <workItem from="1764101230205" duration="2640000" />
       <workItem from="1764153342420" duration="4283000" />
       <workItem from="1764167231826" duration="2289000" />
-      <workItem from="1764324514068" duration="3116000" />
+      <workItem from="1764324514068" duration="13748000" />
     </task>
     <task id="LOCAL-00001" summary="Optimized the code and added the mechanism that save computed metrics in CSV.">
       <option name="closed" value="true" />
@@ -294,7 +300,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764326391569</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Change bugginess type from int to boolean">
+      <option name="closed" value="true" />
+      <created>1764327706794</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1764327706794</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -316,9 +330,20 @@
     <MESSAGE value="Modified mechanism that get commit from Git. Modified Author and Commit models." />
     <MESSAGE value="Added the mechanism for the linkage between commits and tickets." />
     <MESSAGE value="Modified labeling mechanism." />
-    <option name="LAST_COMMIT_MESSAGE" value="Modified labeling mechanism." />
+    <MESSAGE value="Change bugginess type from int to boolean" />
+    <option name="LAST_COMMIT_MESSAGE" value="Change bugginess type from int to boolean" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <condition expression="locAddedMap.getOrDefault(method, 0) != maxLocAddedMap.getOrDefault(method, 0)" language="JAVA" />
+          <url>file://$PROJECT_DIR$/src/main/java/org/isw2/git/controller/GitHistoriesController.java</url>
+          <line>71</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="org.isw2.complexity.model.Method" memberName="metrics" />

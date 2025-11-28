@@ -10,9 +10,6 @@ import com.sun.source.util.Trees;
 import org.isw2.core.model.Method;
 import org.isw2.exceptions.ProcessingException;
 import org.isw2.factory.Controller;
-import org.isw2.git.model.Change;
-import org.isw2.git.model.Commit;
-import org.isw2.git.model.MyEdit;
 import org.isw2.metrics.controller.context.ParserContext;
 import org.isw2.metrics.controller.context.VisitReturn;
 
@@ -59,20 +56,20 @@ public class JavaMetricParser implements Controller<ParserContext, List<Method>>
         try {
             Iterable<? extends CompilationUnitTree> compilationUnitTrees = javacTask.parse();
             Trees trees = Trees.instance(javacTask);
-            parseCompilationUnitTree(compilationUnitTrees, trees, methods, context.commit(), context.filePath());
+            parseCompilationUnitTree(compilationUnitTrees, trees, methods, context.filePath());
         } catch (IOException e) {
             throw new ProcessingException(e.getMessage());
         }
         return methods;
     }
 
-    private void parseCompilationUnitTree(Iterable<? extends CompilationUnitTree> compilationUnitTrees, Trees trees, List<Method> outMethods, Commit commit, String path) {
+    private void parseCompilationUnitTree(Iterable<? extends CompilationUnitTree> compilationUnitTrees, Trees trees, List<Method> outMethods, String path) {
         for (CompilationUnitTree compilationUnitTree : compilationUnitTrees) {
-            parseTrees(compilationUnitTree, trees, outMethods, commit, path);
+            parseTrees(compilationUnitTree, trees, outMethods, path);
         }
     }
 
-    private void parseTrees(CompilationUnitTree compilationUnitTree, Trees trees, List<Method> methods, Commit commit, String path) {
+    private void parseTrees(CompilationUnitTree compilationUnitTree, Trees trees, List<Method> methods, String path) {
         for (Tree tree : compilationUnitTree.getTypeDecls()) {
             tree.accept(new TreeScanner<Object, String>() {
                 @Override
@@ -94,6 +91,8 @@ public class JavaMetricParser implements Controller<ParserContext, List<Method>>
                     Method method = new Method();
                     method.setClassName(currentClassName);
                     method.setSignature(getReturnValue(methodTree) + " " + getMethodName(methodTree) + "(" + getMethodParameters(methodTree) + ")");
+                    String cleanPath = path.startsWith("/") ? path.substring(1) : path;
+                    method.setPath(cleanPath);
 
                     long startPosition = trees.getSourcePositions().getStartPosition(compilationUnitTree, methodTree);
                     long endPosition = trees.getSourcePositions().getEndPosition(compilationUnitTree, methodTree);
@@ -110,8 +109,6 @@ public class JavaMetricParser implements Controller<ParserContext, List<Method>>
                     method.getMetrics().setNestingDepth(ret.nestingDepth());
                     method.getMetrics().setNumberOfBranchesAndDecisionPoint(ret.cyclomaticComplexity() - 1);
                     method.getMetrics().setParameterCount(getParametersCounter(methodTree));
-
-                    methodIsToucheBy(method, commit, path);
 
                     methods.add(method);
                     return super.visitMethod(methodTree, currentClassName);
@@ -152,28 +149,6 @@ public class JavaMetricParser implements Controller<ParserContext, List<Method>>
 
     private int getParametersCounter(MethodTree methodTree) {
         return methodTree.getParameters().size();
-    }
-
-    private void methodIsToucheBy(Method method, Commit commit, String classPath) {
-        List<Change> changes = commit.changes();
-        if (changes == null) return;
-        for (Change change : changes) {
-            for (MyEdit edit : change.getEdits()) {
-                if (change.getNewPath().equals(classPath) && isOverlapping(method.getStartLine(), method.getEndLine(), edit)) {
-                    if (method.getTouchedBy() == null) {
-                        method.setTouchedBy(new ArrayList<>());
-                    }
-                    method.getTouchedBy().add(commit);
-                    break;
-                }
-            }
-        }
-    }
-
-    private boolean isOverlapping(int methodStart, int methodEnd, MyEdit edit) {
-        int editStart = edit.getNewStart() + 1;
-        int editEnd = edit.getNewEnd();
-        return (editStart <= methodEnd) && (editEnd >= methodStart);
     }
 
 }

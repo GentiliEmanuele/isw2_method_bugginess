@@ -5,6 +5,7 @@ import org.isw2.git.model.Author;
 import org.isw2.metrics.model.ChangesMetrics;
 import org.isw2.git.model.Commit;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,6 +13,7 @@ import java.util.Set;
 public class Method {
     private String className;
     private String signature;
+    private String path;
     private final ComplexityMetrics metrics;
     private final ChangesMetrics changesMetrics;
     private int startLine;
@@ -24,6 +26,7 @@ public class Method {
         metrics = new ComplexityMetrics();
         changesMetrics = new ChangesMetrics();
         authors = new HashSet<>();
+        touchedBy = new ArrayList<>();
     }
 
     public String getClassName() {
@@ -40,6 +43,14 @@ public class Method {
 
     public void setSignature(String signature) {
         this.signature = signature;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public ComplexityMetrics getMetrics() {
