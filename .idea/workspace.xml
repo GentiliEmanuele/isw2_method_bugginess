@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Added the mechanism for the linkage between commits and tickets.">
+    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Modified labeling mechanism.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/boundary/Outcome.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/boundary/Outcome.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/Labeling.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/Labeling.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/model/Method.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/model/Method.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -170,7 +172,7 @@
       <workItem from="1764101230205" duration="2640000" />
       <workItem from="1764153342420" duration="4283000" />
       <workItem from="1764167231826" duration="2289000" />
-      <workItem from="1764324514068" duration="1686000" />
+      <workItem from="1764324514068" duration="3116000" />
     </task>
     <task id="LOCAL-00001" summary="Optimized the code and added the mechanism that save computed metrics in CSV.">
       <option name="closed" value="true" />
@@ -284,7 +286,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764255347908</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Modified labeling mechanism.">
+      <option name="closed" value="true" />
+      <created>1764326391569</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1764326391569</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -305,7 +315,8 @@
     <MESSAGE value="General refactoring and changed factory implementation" />
     <MESSAGE value="Modified mechanism that get commit from Git. Modified Author and Commit models." />
     <MESSAGE value="Added the mechanism for the linkage between commits and tickets." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added the mechanism for the linkage between commits and tickets." />
+    <MESSAGE value="Modified labeling mechanism." />
+    <option name="LAST_COMMIT_MESSAGE" value="Modified labeling mechanism." />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>

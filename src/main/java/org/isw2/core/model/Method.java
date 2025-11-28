@@ -18,7 +18,7 @@ public class Method {
     private int endLine;
     private List<Commit> touchedBy;
     private Set<Author> authors;
-    private int buggy = 0;
+    private boolean buggy = false;
 
     public Method() {
         metrics = new ComplexityMetrics();
@@ -87,11 +87,11 @@ public class Method {
         return authors.size();
     }
 
-    public int getBuggy() {
+    public boolean getBuggy() {
         return buggy;
     }
 
-    public void setBuggy(int buggy) {
+    public void setBuggy(boolean buggy) {
         this.buggy = buggy;
     }
 }

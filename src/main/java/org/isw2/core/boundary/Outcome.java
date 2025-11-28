@@ -25,7 +25,7 @@ public class Outcome {
     private int maxStmtAdded;
     private int stmtDeleted;
     private int maxStmtDeleted;
-    private int buggy = 0;
+    private boolean buggy = false;
 
     public String getClassName() {
         return className;
@@ -213,11 +213,11 @@ public class Outcome {
         this.maxStmtDeleted = maxStmtDeleted;
     }
 
-    public int getBuggy() {
+    public boolean getBuggy() {
         return buggy;
     }
 
-    public void setBuggy(int buggy) {
+    public void setBuggy(boolean buggy) {
         this.buggy = buggy;
     }
 }

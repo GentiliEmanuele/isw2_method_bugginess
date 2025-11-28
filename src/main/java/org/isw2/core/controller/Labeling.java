@@ -59,7 +59,7 @@ public class Labeling implements Controller<LabelingContext, Void> {
                 for (Method method : methodsInAffectedVersion) {
                     // Check if the method intersects with the change
                     if (isMethodTouchedByFix(method, fixChange)) {
-                        method.setBuggy(1);
+                        method.setBuggy(true);
                     }
                 }
             }
