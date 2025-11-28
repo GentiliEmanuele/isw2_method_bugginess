@@ -4,15 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Modified mechanism that get commit from Git. Modified Author and Commit models.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/LinkCommitsAndTickets.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/context/LinkCommitsAndTicketsContext.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/LinkCommitsAndTicketsFactory.java" afterDir="false" />
+    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Added the mechanism for the linkage between commits and tickets.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/EntryPointController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/EntryPointController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/MergeVersionAndCommit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/LinkVersionAndCommit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/factory/MergeVersionAndCommitFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/MergeVersionAndCommitFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/jira/model/Ticket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/jira/model/Ticket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/Labeling.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/Labeling.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,12 +32,12 @@
     &quot;assignee&quot;: &quot;GentiliEmanuele&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/GentiliEmanuele/isw2_method_bugginess.git&quot;,
-    &quot;accountId&quot;: &quot;e3869a61-8b15-451a-90d8-c51955ff8dae&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/GentiliEmanuele/isw2_method_bugginess.git",
+    "accountId": "28c91a8c-7d1c-45de-9d42-ed8461a03f35"
   }
-}</component>
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
 }</component>
@@ -56,7 +50,7 @@
   "keyToString": {
     "Application.JiraBoundary.executor": "Run",
     "Application.JiraTempMain.executor": "Run",
-    "Application.Main.executor": "Debug",
+    "Application.Main.executor": "Run",
     "Maven.isw2_method_bugginess [pmd:pmd].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
@@ -112,8 +106,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
-        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.27397.103" />
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.27397.103" />
       </set>
     </attachedChunks>
   </component>
@@ -176,6 +170,7 @@
       <workItem from="1764101230205" duration="2640000" />
       <workItem from="1764153342420" duration="4283000" />
       <workItem from="1764167231826" duration="2289000" />
+      <workItem from="1764324514068" duration="1686000" />
     </task>
     <task id="LOCAL-00001" summary="Optimized the code and added the mechanism that save computed metrics in CSV.">
       <option name="closed" value="true" />
@@ -281,7 +276,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764251434986</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Added the mechanism for the linkage between commits and tickets.">
+      <option name="closed" value="true" />
+      <created>1764255347908</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1764255347908</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -301,7 +304,8 @@
     <MESSAGE value="Changed the calculation of some complexity metrics (pt2)" />
     <MESSAGE value="General refactoring and changed factory implementation" />
     <MESSAGE value="Modified mechanism that get commit from Git. Modified Author and Commit models." />
-    <option name="LAST_COMMIT_MESSAGE" value="Modified mechanism that get commit from Git. Modified Author and Commit models." />
+    <MESSAGE value="Added the mechanism for the linkage between commits and tickets." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added the mechanism for the linkage between commits and tickets." />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>
