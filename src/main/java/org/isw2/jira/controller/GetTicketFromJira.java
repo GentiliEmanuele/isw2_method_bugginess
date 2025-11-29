@@ -3,6 +3,7 @@ package org.isw2.jira.controller;
 import org.isw2.jira.controller.context.GetTicketFromJiraContext;
 import org.isw2.exceptions.ProcessingException;
 import org.isw2.factory.Controller;
+import org.isw2.jira.model.ReturnTickets;
 import org.isw2.jira.model.Ticket;
 import org.isw2.jira.model.Version;
 import org.json.JSONArray;
@@ -18,9 +19,8 @@ import java.util.List;
 
 import static org.isw2.jira.controller.GetVersionsFromJira.readJsonFromUrl;
 
-public class GetTicketFromJira implements Controller<GetTicketFromJiraContext, List<Ticket>> {
+public class GetTicketFromJira implements Controller<GetTicketFromJiraContext, ReturnTickets> {
 
-    private static final String FIX_VERSIONS = "fixVersions";
     private static final String FIELDS = "fields";
     private static final String RELEASE_DATE = "releaseDate";
     private static final String NAME = "name";
@@ -28,29 +28,25 @@ public class GetTicketFromJira implements Controller<GetTicketFromJiraContext, L
     private static final String AFFECTED_VERSIONS = "versions";
     private static final String ISSUES = "issues";
     private static final String KEY = "key";
-    private static final String DATE = "created";
-
-    private final List<Ticket> tickets = new ArrayList<>();
+    private static final String CREATED = "created";
+    private static final String RESOLUTION_DATE = "resolutiondate";
 
     @Override
-    public List<Ticket> execute(GetTicketFromJiraContext context) throws ProcessingException {
+    public ReturnTickets execute(GetTicketFromJiraContext context) throws ProcessingException {
         try {
-            getTicketFromJira(context.projectName(), context.allVersions());
-            return tickets;
+            return getTicketFromJira(context.projectName(), context.allVersions());
         } catch (IOException e) {
             throw new ProcessingException(e.getMessage());
         }
     }
 
-    public List<Ticket> getJiraTickets() {
-        return tickets;
-    }
-
-    private void getTicketFromJira(String projectName, List<Version> allVersions) throws IOException {
+    private ReturnTickets getTicketFromJira(String projectName, List<Version> allVersions) throws IOException {
         int i =  0;
         int j;
         int total;
         String url;
+        List<Ticket> tickets = new ArrayList<>();
+        List<Ticket> toBeCorrected = new ArrayList<>();
         do {
             j = i + 1000;
             url = formatUrl(projectName, i, j);
@@ -59,26 +55,51 @@ public class GetTicketFromJira implements Controller<GetTicketFromJiraContext, L
             total = json.getInt(TOTAL);
             // Iterate through each bug
             for (; i < total && i < j; i++) {
-                // Extract fixedVersions from json
-                JSONArray jsonFixedVersions = issues.getJSONObject(i % 1000).getJSONObject(FIELDS).getJSONArray(FIX_VERSIONS);
-                List<Version> fixedVersions = extractVersions(jsonFixedVersions, allVersions);
-
                 // Extract affectedVersions from json
                 JSONArray jsonAffectedVersions = issues.getJSONObject(i % 1000).getJSONObject(FIELDS).getJSONArray(AFFECTED_VERSIONS);
                 List<Version> affectedVersions = extractVersions(jsonAffectedVersions, allVersions);
 
                 // Get key and date from json
                 String key = issues.getJSONObject(i % 1000).getString(KEY);
-                String date = issues.getJSONObject(i % 1000).getJSONObject(FIELDS).getString(DATE);
+                String openingDate = issues.getJSONObject(i % 1000).getJSONObject(FIELDS).getString(CREATED);
 
-                // Consider only ticket with FV and AV
-                if (!fixedVersions.isEmpty() && !affectedVersions.isEmpty()) {
-                    Ticket ticket = new Ticket(key, affectedVersions, affectedVersions.getLast(), affectedVersions.getFirst(), getOpeningVersionFromDate(date, allVersions));
-                    tickets.add(ticket);
-                }
+                // Get resolution date and correspondent fixedVersion
+                String resolutionDate = issues.getJSONObject(i % 1000).getJSONObject(FIELDS).getString(RESOLUTION_DATE);
+                Version fixedVersion = getVersionByDate(resolutionDate, allVersions);
+
+                // Before use first affected versions as injected version, check if the first affected is before then opening version
+                Version openingVersion = getVersionByDate(openingDate, allVersions);
+
+                manageTickets(key, openingVersion, affectedVersions, fixedVersion, toBeCorrected, tickets);
             }
         } while (i < total);
         tickets.sort(Comparator.comparing(ticket -> ticket.getFixedVersion().getReleaseDate()));
+        return new ReturnTickets(tickets, toBeCorrected);
+    }
+
+    private void manageTickets(String ticketKey, Version openingVersion, List<Version> affectedVersions, Version fixedVersion, List<Ticket> toBeCorrected, List<Ticket> tickets) {
+        // If ticket has FV, AV, OV
+        if (fixedVersion != null && openingVersion != null) {
+
+            // OV < FV
+            boolean isOpenBeforeFix = versionIsBefore(openingVersion, fixedVersion);
+
+            if (!affectedVersions.isEmpty()) {
+                // Candidate for IV is the first AV
+                Version injectedVersion = affectedVersions.getFirst();
+
+                // IV <= OV
+                boolean isInjectedBeforeOpen = versionIsBeforeOrEqual(injectedVersion, openingVersion);
+
+                if (isOpenBeforeFix && isInjectedBeforeOpen) {
+                    Ticket ticket = new Ticket(ticketKey, affectedVersions, fixedVersion, injectedVersion, openingVersion);
+                    tickets.add(ticket);
+                }
+            } else if (isOpenBeforeFix) {
+                Ticket ticket = new Ticket(ticketKey, affectedVersions, fixedVersion, null, openingVersion);
+                toBeCorrected.add(ticket);
+            }
+        }
     }
 
     private List<Version> extractVersions(JSONArray jsonVersions, List<Version> allVersions) {
@@ -88,7 +109,7 @@ public class GetTicketFromJira implements Controller<GetTicketFromJiraContext, L
             // Consider only the released fixVersions
             if (!current.has(RELEASE_DATE) || !current.has(NAME)) continue;
             for (Version version : allVersions) {
-                if (version.getReleaseDate().equals(current.getString(RELEASE_DATE)) && version.getName().equals(current.getString("name"))) {
+                if (version.getReleaseDate().equals(current.getString(RELEASE_DATE)) && version.getName().equals(current.getString(NAME))) {
                     versions.add(version);
                 }
             }
@@ -96,30 +117,37 @@ public class GetTicketFromJira implements Controller<GetTicketFromJiraContext, L
         return versions;
     }
 
-    private Version getOpeningVersionFromDate(String date, List<Version> allVersions) {
-        Version openingVersion = allVersions.getFirst();
+    private Version getVersionByDate(String date, List<Version> allVersions) {
         LocalDate openingLocalDate = string2LocalDate(date);
-        for (int i = 0; i < allVersions.size() - 1; i++) {
-            // Get current and next version date
-            LocalDate currentReleaseDate = LocalDate.parse(allVersions.get(i).getReleaseDate());
-            LocalDate nextReleaseDate = LocalDate.parse(allVersions.get(i + 1).getReleaseDate());
+        for (Version version : allVersions) {
+            LocalDate releaseDate = LocalDate.parse(version.getReleaseDate());
 
-            // If the opening date is after the first version date make null the opening version
-            if (openingVersion != null && openingLocalDate.isAfter(LocalDate.parse(openingVersion.getReleaseDate()))) {
-                openingVersion = null;
-            // else if the opening date is between two version set as opening version the more recently version
-            } else if (openingLocalDate.isAfter(currentReleaseDate) && openingLocalDate.isBefore(nextReleaseDate) || openingLocalDate.isEqual(nextReleaseDate)) {
-                openingVersion = allVersions.get(i + 1);
-                break;
+            // If the passed date is before or equals to the release data, the tickets "belongs" this version
+            if (openingLocalDate.isBefore(releaseDate) || openingLocalDate.isEqual(releaseDate)) {
+                return version;
             }
         }
-        return openingVersion;
+        // Date is after the most recent version released
+        return null;
+    }
+
+    private boolean versionIsBeforeOrEqual(Version v1, Version v2) {
+        LocalDate v1Date = LocalDate.parse(v1.getReleaseDate());
+        LocalDate v2Date = LocalDate.parse(v2.getReleaseDate());
+
+        return versionIsBefore(v1, v2) || v1Date.isEqual(v2Date);
+    }
+
+    private boolean versionIsBefore(Version v1, Version v2) {
+        LocalDate v1Date = LocalDate.parse(v1.getReleaseDate());
+        LocalDate v2Date = LocalDate.parse(v2.getReleaseDate());
+        return v1Date.isBefore(v2Date);
     }
 
     private String formatUrl(String projectName, Integer i, Integer j) {
         return "https://issues.apache.org/jira/rest/api/2/search?jql=project=%22"
                 + projectName + "%22AND%22issueType%22=%22Bug%22AND(%22status%22=%22closed%22OR"
-                + "%22status%22=%22resolved%22)AND%22resolution%22=%22fixed%22&fields=key,resolutiondate,versions,fixVersions,created&startAt="
+                + "%22status%22=%22resolved%22)AND%22resolution%22=%22fixed%22&fields=key,resolutiondate,versions,created&startAt="
                 + i.toString() + "&maxResults=" + j.toString();
     }
 

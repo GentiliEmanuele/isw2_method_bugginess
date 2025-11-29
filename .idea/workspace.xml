@@ -4,17 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Change bugginess type from int to boolean">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/GitHistoriesControllerFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/git/controller/GitHistoriesController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/git/controller/GitHistoriesControllerContext.java" afterDir="false" />
+    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Modified mechanism that computes changes metrics">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/jira/model/ReturnTickets.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/EntryPointController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/EntryPointController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/model/Method.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/model/Method.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/factory/ComputeChangesMetricsFactory.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/git/model/MyEdit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/git/model/MyEdit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/ComputeChangesMetrics.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/JavaMetricParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/JavaMetricParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/Proportion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/Proportion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/context/ProportionContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/context/ProportionContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/factory/GetTicketFromJiraFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/GetTicketFromJiraFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/jira/controller/GetTicketFromJira.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/jira/controller/GetTicketFromJira.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,12 +37,12 @@
     &quot;assignee&quot;: &quot;GentiliEmanuele&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/GentiliEmanuele/isw2_method_bugginess.git",
-    "accountId": "28c91a8c-7d1c-45de-9d42-ed8461a03f35"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/GentiliEmanuele/isw2_method_bugginess.git&quot;,
+    &quot;accountId&quot;: &quot;28c91a8c-7d1c-45de-9d42-ed8461a03f35&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
 }</component>
@@ -178,7 +175,8 @@
       <workItem from="1764101230205" duration="2640000" />
       <workItem from="1764153342420" duration="4283000" />
       <workItem from="1764167231826" duration="2289000" />
-      <workItem from="1764324514068" duration="13748000" />
+      <workItem from="1764324514068" duration="15975000" />
+      <workItem from="1764408016406" duration="12307000" />
     </task>
     <task id="LOCAL-00001" summary="Optimized the code and added the mechanism that save computed metrics in CSV.">
       <option name="closed" value="true" />
@@ -308,7 +306,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764327706794</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Modified mechanism that computes changes metrics">
+      <option name="closed" value="true" />
+      <created>1764345307671</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1764345307671</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -331,7 +337,8 @@
     <MESSAGE value="Added the mechanism for the linkage between commits and tickets." />
     <MESSAGE value="Modified labeling mechanism." />
     <MESSAGE value="Change bugginess type from int to boolean" />
-    <option name="LAST_COMMIT_MESSAGE" value="Change bugginess type from int to boolean" />
+    <MESSAGE value="Modified mechanism that computes changes metrics" />
+    <option name="LAST_COMMIT_MESSAGE" value="Modified mechanism that computes changes metrics" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -354,6 +361,7 @@
         <watch expression="((HashMap.Node)((HashMap)this.methodCache).entrySet().toArray()[1]).getKey()" custom="org.isw2.changes.controller.MapCommitsAndMethods,java.util.HashMap.Node,java.util.HashMap" />
         <watch expression="((ParametricRuleViolation)report.violations.get(0)).rule" custom="net.sourceforge.pmd.reporting.ParametricRuleViolation" />
         <watch expression="ticket" />
+        <watch expression="tickets.get(94)" />
       </configuration>
     </watches-manager>
   </component>

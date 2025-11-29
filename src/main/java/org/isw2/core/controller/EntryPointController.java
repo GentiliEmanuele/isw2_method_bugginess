@@ -9,6 +9,7 @@ import org.isw2.git.controller.GitHistoriesControllerContext;
 import org.isw2.jira.controller.context.GetTicketFromJiraContext;
 import org.isw2.exceptions.ProcessingException;
 import org.isw2.git.model.Commit;
+import org.isw2.jira.model.ReturnTickets;
 import org.isw2.jira.model.Ticket;
 import org.isw2.jira.model.Version;
 
@@ -38,13 +39,14 @@ public class EntryPointController implements Controller<String, Void> {
 
         // Get ticket from Jira
         logger.info("Get tickets from Jira");
-        AbstractControllerFactory<GetTicketFromJiraContext, List<Ticket>> getTicketFromJiraFactory= new GetTicketFromJiraFactory();
-        tickets = getTicketFromJiraFactory.process(new GetTicketFromJiraContext(projectName, versions));
+        AbstractControllerFactory<GetTicketFromJiraContext, ReturnTickets> getTicketFromJiraFactory= new GetTicketFromJiraFactory();
+        ReturnTickets returnTickets = getTicketFromJiraFactory.process(new GetTicketFromJiraContext(projectName, versions));
 
         // Create proportion controller and apply proportion
         logger.info("Execute proportion algorithm");
         AbstractControllerFactory<ProportionContext, Void> proportionFactory = new ProportionFactory();
-        proportionFactory.process(new ProportionContext(versions, tickets));
+        proportionFactory.process(new ProportionContext(versions, returnTickets));
+        tickets = returnTickets.tickets();
 
         // Create gitController and GetCommitFromGit
         logger.info("Get commits from git");
