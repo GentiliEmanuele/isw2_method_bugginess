@@ -74,11 +74,26 @@ public class JavaMetricParser implements Controller<ParserContext, List<Method>>
             tree.accept(new TreeScanner<Object, String>() {
                 @Override
                 public Object visitClass(ClassTree classTree, String parentName) {
-                    String simpleName = sanitize(classTree.getSimpleName().toString());
+                    String simpleName;
                     String currentClassName;
 
+                    long startPosition = trees.getSourcePositions().getStartPosition(compilationUnitTree, classTree);
+                    long lineNum = compilationUnitTree.getLineMap().getLineNumber(startPosition);
+
+                    // Check if the class is anonymous
+                    if (classTree.getSimpleName().isEmpty()) {
+
+                        // Generate a new name row-based
+                        simpleName = "Anonymous_Line" + lineNum;
+                    } else {
+                        // In this case is a normal class
+                        simpleName = sanitize(classTree.getSimpleName().toString());
+                    }
+
+                    // Build the whole name (Parent.Child)
                     if (parentName != null && !parentName.isEmpty()) {
-                        currentClassName = parentName + "." + simpleName;
+                        String separator = classTree.getSimpleName().isEmpty() ? "$" : ".";
+                        currentClassName = parentName + separator + simpleName;
                     } else {
                         currentClassName = simpleName;
                     }

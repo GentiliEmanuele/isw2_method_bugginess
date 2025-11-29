@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Implemented a filter for the outliers.">
+    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Modified mechanism that get versions from Jira.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/AnalyzeFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/AnalyzeFile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/EntryPointController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/EntryPointController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/jira/controller/GetVersionsFromJira.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/jira/controller/GetVersionsFromJira.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/JavaMetricParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/metrics/controller/JavaMetricParser.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,7 +50,7 @@
   "keyToString": {
     "Application.JiraBoundary.executor": "Run",
     "Application.JiraTempMain.executor": "Run",
-    "Application.Main.executor": "Run",
+    "Application.Main.executor": "Debug",
     "Maven.isw2_method_bugginess [pmd:pmd].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
@@ -173,7 +171,7 @@
       <workItem from="1764153342420" duration="4283000" />
       <workItem from="1764167231826" duration="2289000" />
       <workItem from="1764324514068" duration="15975000" />
-      <workItem from="1764408016406" duration="18191000" />
+      <workItem from="1764408016406" duration="24159000" />
     </task>
     <task id="LOCAL-00001" summary="Optimized the code and added the mechanism that save computed metrics in CSV.">
       <option name="closed" value="true" />
@@ -327,7 +325,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764426461951</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Modified mechanism that get versions from Jira.">
+      <option name="closed" value="true" />
+      <created>1764431518605</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1764431518605</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -353,7 +359,8 @@
     <MESSAGE value="Modified mechanism that computes changes metrics" />
     <MESSAGE value="Modified mechanism that get the tickets from Jira and the implementation of Proportion algorithm." />
     <MESSAGE value="Implemented a filter for the outliers." />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented a filter for the outliers." />
+    <MESSAGE value="Modified mechanism that get versions from Jira." />
+    <option name="LAST_COMMIT_MESSAGE" value="Modified mechanism that get versions from Jira." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -366,8 +373,11 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/isw2/core/controller/EntryPointController.java</url>
-          <line>65</line>
-          <option name="timeStamp" value="23" />
+          <line>37</line>
+          <properties>
+            <option name="lambda-ordinal" value="-1" />
+          </properties>
+          <option name="timeStamp" value="26" />
         </line-breakpoint>
         <breakpoint enabled="true" type="java-exception">
           <properties class="org.isw2.exceptions.ProcessingException" package="org.isw2.exceptions" />
