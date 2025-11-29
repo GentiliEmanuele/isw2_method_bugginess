@@ -56,7 +56,10 @@ public class AnalyzeFile implements Controller<AnalyzeFileContext, Map<String, L
                 Version current = versions.get(i);
                 List<Commit> commits = current.getCommits();
                 for (Commit commit : commits) {
-                    pmdAnalysis = analyzeCommit(repo, commit, current, previous);
+                    PmdAnalysis result = analyzeCommit(repo, commit, current, previous);
+                    if (result != null) {
+                        pmdAnalysis = result;
+                    }
                 }
             }
             if (pmdAnalysis != null) {

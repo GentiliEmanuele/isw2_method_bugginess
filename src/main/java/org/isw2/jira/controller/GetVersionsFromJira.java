@@ -53,12 +53,14 @@ public class GetVersionsFromJira implements Controller<String, List<Version>> {
                 if (jsonVersions.getJSONObject(i).has(RELEASE_DATE))
                     releaseDate = jsonVersions.getJSONObject(i).get(RELEASE_DATE).toString();
             }
-            Version version = new Version();
-            version.setName(name);
-            version.setId(id);
-            version.setReleaseDate(releaseDate);
-            version.setDescription(description);
-            jiraVersions.add(version);
+            if (jsonVersions.getJSONObject(i).has("released") && jsonVersions.getJSONObject(i).get("released").toString().equals("true")) {
+                Version version = new Version();
+                version.setName(name);
+                version.setId(id);
+                version.setReleaseDate(releaseDate);
+                version.setDescription(description);
+                jiraVersions.add(version);
+            }
         }
     }
 

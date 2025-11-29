@@ -48,19 +48,6 @@ public class EntryPointController implements Controller<String, Void> {
         proportionFactory.process(new ProportionContext(versions, returnTickets));
         tickets = returnTickets.tickets();
 
-        int sum = 0;
-        int max = 0;
-
-        for (Ticket ticket : tickets) {
-            int size = ticket.getAffectedVersions().size();
-            sum += size;
-            if (size > max) max = size;
-        }
-        double mean = (double) sum / tickets.size();
-
-        System.out.println("Mean AV size: " + mean);
-        System.out.println("Max AV size: " + max);
-
         // Create gitController and GetCommitFromGit
         logger.info("Get commits from git");
         AbstractControllerFactory<String, List<Commit>> getCommitFactory = new GetCommitFactory();
