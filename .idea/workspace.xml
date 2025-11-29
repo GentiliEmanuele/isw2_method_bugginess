@@ -4,14 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Modified mechanism that computes changes metrics">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/jira/model/ReturnTickets.java" afterDir="false" />
+    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Modified mechanism that get the tickets from Jira and the implementation of Proportion algorithm.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/EntryPointController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/EntryPointController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/Proportion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/Proportion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/context/ProportionContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/core/controller/context/ProportionContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/factory/GetTicketFromJiraFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/factory/GetTicketFromJiraFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/jira/controller/GetTicketFromJira.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/jira/controller/GetTicketFromJira.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -176,7 +172,7 @@
       <workItem from="1764153342420" duration="4283000" />
       <workItem from="1764167231826" duration="2289000" />
       <workItem from="1764324514068" duration="15975000" />
-      <workItem from="1764408016406" duration="12307000" />
+      <workItem from="1764408016406" duration="13935000" />
     </task>
     <task id="LOCAL-00001" summary="Optimized the code and added the mechanism that save computed metrics in CSV.">
       <option name="closed" value="true" />
@@ -314,7 +310,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764345307671</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Modified mechanism that get the tickets from Jira and the implementation of Proportion algorithm.">
+      <option name="closed" value="true" />
+      <created>1764424834592</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1764424834592</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -338,7 +342,8 @@
     <MESSAGE value="Modified labeling mechanism." />
     <MESSAGE value="Change bugginess type from int to boolean" />
     <MESSAGE value="Modified mechanism that computes changes metrics" />
-    <option name="LAST_COMMIT_MESSAGE" value="Modified mechanism that computes changes metrics" />
+    <MESSAGE value="Modified mechanism that get the tickets from Jira and the implementation of Proportion algorithm." />
+    <option name="LAST_COMMIT_MESSAGE" value="Modified mechanism that get the tickets from Jira and the implementation of Proportion algorithm." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -348,6 +353,11 @@
           <url>file://$PROJECT_DIR$/src/main/java/org/isw2/git/controller/GitHistoriesController.java</url>
           <line>71</line>
           <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/isw2/core/controller/EntryPointController.java</url>
+          <line>73</line>
+          <option name="timeStamp" value="16" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
