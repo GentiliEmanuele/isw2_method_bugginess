@@ -13,6 +13,7 @@ public class ExitPointBoundary {
 
     private static final String [] HEADER = {
             "ProjectName",
+            "Path",
             "ClassName",
             "Signature",
             "ReleaseID",
@@ -46,6 +47,7 @@ public class ExitPointBoundary {
             outcomes.forEach(outcome -> {
                 String[] row = {
                         projectName,
+                        outcome.getPath(),
                         outcome.getClassName(),
                         outcome.getSignature(),
                         outcome.getVersion(),

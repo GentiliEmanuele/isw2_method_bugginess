@@ -87,7 +87,7 @@ public class AnalyzeFile implements Controller<AnalyzeFileContext, Map<String, L
                     String path = treeWalk.getPathString();
                     boolean touched;
                     List<Method> methods;
-                    if (path.endsWith(".java") && !path.endsWith("package-info.java") && commit.changes() != null) {
+                    if (!path.startsWith("branch") && (path.endsWith(".java") && !path.endsWith("package-info.java") && commit.changes() != null)) {
                         touched = fileIsTouchedBy(commit, path);
                         if (!touched) {
                             manageUntouched(previous, current, path);
@@ -106,6 +106,9 @@ public class AnalyzeFile implements Controller<AnalyzeFileContext, Map<String, L
     }
 
     private void manageUntouched(Version previous, Version current, String path) {
+        if (methodsByFileAndVersion.containsKey(current.getName() + "_" + path)) {
+            return;
+        }
         List<Method> methods = previous != null ? methodsByFileAndVersion.get(previous.getName() + "_" + path) : new ArrayList<>();
         if (methods!= null && !methods.isEmpty()) {
             methodsByFileAndVersion.put(current.getName() + "_" + path, methods);

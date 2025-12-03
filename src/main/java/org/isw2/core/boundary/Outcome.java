@@ -3,6 +3,7 @@ package org.isw2.core.boundary;
 public class Outcome {
 
     private String className;
+    private String path;
     private String signature;
     private String version;
     private int linesOfCode;
@@ -219,5 +220,17 @@ public class Outcome {
 
     public void setBuggy(boolean buggy) {
         this.buggy = buggy;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public boolean isBuggy() {
+        return buggy;
     }
 }

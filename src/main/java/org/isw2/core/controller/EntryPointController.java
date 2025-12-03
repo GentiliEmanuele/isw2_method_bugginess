@@ -52,6 +52,7 @@ public class EntryPointController implements Controller<String, Void> {
         logger.info("Get commits from git");
         AbstractControllerFactory<String, List<Commit>> getCommitFactory = new GetCommitFactory();
         commits = getCommitFactory.process(projectName);
+        commits.sort(Comparator.comparing(commit -> LocalDate.parse(commit.commitTime())));
 
         logger.info("Link commits and tickets");
         AbstractControllerFactory<LinkCommitsAndTicketsContext, Void> linkCommitsAndTicketsFactory = new LinkCommitsAndTicketsFactory();
@@ -100,6 +101,7 @@ public class EntryPointController implements Controller<String, Void> {
     private Outcome createOutcome(String version, Method method) {
         Outcome outcome = new Outcome();
         outcome.setClassName(method.getClassName());
+        outcome.setPath(method.getPath());
         outcome.setSignature(method.getSignature());
         outcome.setVersion(version);
         outcome.setLinesOfCode(method.getMetrics().getLinesOfCode());
