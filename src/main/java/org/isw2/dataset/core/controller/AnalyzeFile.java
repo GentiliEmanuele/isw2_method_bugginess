@@ -12,6 +12,7 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.isw2.dataset.core.controller.context.AnalyzeFileContext;
 import org.isw2.dataset.core.model.Method;
+import org.isw2.dataset.core.model.MethodsKey;
 import org.isw2.dataset.exceptions.ProcessingException;
 import org.isw2.dataset.factory.*;
 import org.isw2.dataset.git.controller.GetCommitFromGit;
@@ -26,16 +27,16 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-public class AnalyzeFile implements Controller<AnalyzeFileContext, Map<String, List<Method>>> {
+public class AnalyzeFile implements Controller<AnalyzeFileContext, Map<MethodsKey, List<Method>>> {
 
-    private final Map<String, List<Method>> methodsByFileAndVersion;
+    private final Map<MethodsKey, List<Method>> methodsByFileAndVersion;
 
     public AnalyzeFile() {
         methodsByFileAndVersion = new HashMap<>();
     }
 
     @Override
-    public Map<String, List<Method>> execute(AnalyzeFileContext context) throws ProcessingException {
+    public Map<MethodsKey, List<Method>> execute(AnalyzeFileContext context) throws ProcessingException {
         try {
             walkVersions(
                     GetCommitFromGit.cloneRepository(context.projectName()),
@@ -96,7 +97,7 @@ public class AnalyzeFile implements Controller<AnalyzeFileContext, Map<String, L
 
                         String content = getClassContent(repository, treeWalk);
                         methods = computeMetrics(path, content, commit);
-                        methodsByFileAndVersion.put(current.getName() + "_" + path, methods);
+                        methodsByFileAndVersion.put(new MethodsKey(current, path), methods);
                         pmdAnalysis = collectContentForSmellComputation(current, path, content);
                     }
                 }
@@ -106,12 +107,12 @@ public class AnalyzeFile implements Controller<AnalyzeFileContext, Map<String, L
     }
 
     private void manageUntouched(Version previous, Version current, String path) {
-        if (methodsByFileAndVersion.containsKey(current.getName() + "_" + path)) {
+        if (methodsByFileAndVersion.containsKey(new MethodsKey(current, path))) {
             return;
         }
-        List<Method> methods = previous != null ? methodsByFileAndVersion.get(previous.getName() + "_" + path) : new ArrayList<>();
+        List<Method> methods = previous != null ? methodsByFileAndVersion.get(new MethodsKey(previous, path)) : new ArrayList<>();
         if (methods!= null && !methods.isEmpty()) {
-            methodsByFileAndVersion.put(current.getName() + "_" + path, methods);
+            methodsByFileAndVersion.put(new MethodsKey(current, path), methods);
         }
     }
 
@@ -126,8 +127,8 @@ public class AnalyzeFile implements Controller<AnalyzeFileContext, Map<String, L
     }
 
     private void computeMethodCodeSmell(Map<String, List<CodeSmell>> smells) {
-        methodsByFileAndVersion.forEach((file, methods) -> {
-            List<CodeSmell> codeSmells = smells.get(file);
+        methodsByFileAndVersion.forEach((key, methods) -> {
+            List<CodeSmell> codeSmells = smells.get(key.path());
             if (codeSmells != null && !codeSmells.isEmpty()) {
                 mapMethodsAndSmells(codeSmells, methods);
             }

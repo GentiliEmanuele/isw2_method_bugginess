@@ -50,6 +50,12 @@
             <artifactId>pmd-java</artifactId>
             <version>LATEST</version>
         </dependency>
+
+        <dependency>
+            <groupId>nz.ac.waikato.cms.weka</groupId>
+            <artifactId>weka-stable</artifactId>
+            <version>LATEST</version>
+        </dependency>
     </dependencies>
 
 </project>

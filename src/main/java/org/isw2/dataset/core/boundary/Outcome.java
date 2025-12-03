@@ -6,6 +6,7 @@ public class Outcome {
     private String path;
     private String signature;
     private String version;
+    private String releaseDate;
     private int linesOfCode;
     private int statementsCount;
     private int cyclomaticComplexity;
@@ -36,6 +37,14 @@ public class Outcome {
         this.className = className;
     }
 
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
     public String getSignature() {
         return signature;
     }
@@ -60,7 +69,13 @@ public class Outcome {
         this.version = version;
     }
 
+    public String getReleaseDate() {
+        return releaseDate;
+    }
 
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
 
     public int getStatementsCount() {
         return statementsCount;
@@ -222,15 +237,4 @@ public class Outcome {
         this.buggy = buggy;
     }
 
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public boolean isBuggy() {
-        return buggy;
-    }
 }

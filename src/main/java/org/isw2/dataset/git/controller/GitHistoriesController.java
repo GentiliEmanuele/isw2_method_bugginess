@@ -29,8 +29,8 @@ public class GitHistoriesController implements Controller<GitHistoriesController
         context.methodsByVersionAndPath().forEach((key, methods) -> {
             if (methods.isEmpty()) return;
 
-            String versionName = extractVersionFromKey(key);
-            String filePath = extractPathFromKey(key);
+            String versionName = key.version().getName();
+            String filePath = key.path();
 
             LocalDate releaseDate = releaseDates.get(versionName);
             if (releaseDate == null) return;
@@ -137,14 +137,6 @@ public class GitHistoriesController implements Controller<GitHistoriesController
                 }
             }
         }
-    }
-
-    private String extractVersionFromKey(String key) {
-        return key.split("_")[0];
-    }
-
-    private String extractPathFromKey(String key) {
-        return key.split("_")[1];
     }
 
     private boolean isOverlapping(Method method, MyEdit edit) {

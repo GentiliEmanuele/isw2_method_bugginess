@@ -4,6 +4,7 @@ import org.isw2.dataset.core.boundary.ExitPointBoundary;
 import org.isw2.dataset.core.boundary.Outcome;
 import org.isw2.dataset.core.controller.context.*;
 import org.isw2.dataset.core.model.Method;
+import org.isw2.dataset.core.model.MethodsKey;
 import org.isw2.dataset.factory.*;
 import org.isw2.dataset.git.controller.GitHistoriesControllerContext;
 import org.isw2.dataset.jira.controller.context.GetTicketFromJiraContext;
@@ -65,8 +66,8 @@ public class EntryPointController implements Controller<String, Void> {
 
         // Analyze files
         logger.info("Analyze files");
-        AbstractControllerFactory<AnalyzeFileContext, Map<String, List<Method>>> analyzeFileFactory = new AnalyzeFileFactory();
-        Map<String, List<Method>> methodByVersionAndPath = analyzeFileFactory.process(new AnalyzeFileContext(projectName, versions));
+        AbstractControllerFactory<AnalyzeFileContext, Map<MethodsKey, List<Method>>> analyzeFileFactory = new AnalyzeFileFactory();
+        Map<MethodsKey, List<Method>> methodByVersionAndPath = analyzeFileFactory.process(new AnalyzeFileContext(projectName, versions));
 
         // Compute GitHistories
         logger.info("Compute git histories");
@@ -87,23 +88,25 @@ public class EntryPointController implements Controller<String, Void> {
         return null;
     }
 
-    private void writeOutcome(String projectName, Map<String, List<Method>> methodByVersionAndPath) throws IOException {
+    private void writeOutcome(String projectName, Map<MethodsKey, List<Method>> methodByVersionAndPath) throws IOException {
         List<Outcome> outcomes = new ArrayList<>();
         methodByVersionAndPath.forEach((key, methods) ->
             methods.forEach(method ->
-                outcomes.add(createOutcome(key.split("_")[0], method))
+                outcomes.add(createOutcome(key.version(), method))
             )
         );
+        outcomes.sort(Comparator.comparing(o -> LocalDate.parse(o.getReleaseDate())));
         ExitPointBoundary.toCsv(projectName, outcomes);
 
     }
 
-    private Outcome createOutcome(String version, Method method) {
+    private Outcome createOutcome(Version version, Method method) {
         Outcome outcome = new Outcome();
         outcome.setClassName(method.getClassName());
         outcome.setPath(method.getPath());
         outcome.setSignature(method.getSignature());
-        outcome.setVersion(version);
+        outcome.setVersion(version.getName());
+        outcome.setReleaseDate(version.getReleaseDate());
         outcome.setLinesOfCode(method.getMetrics().getLinesOfCode());
         outcome.setStatementsCount(method.getMetrics().getStatementsCount());
         outcome.setCyclomaticComplexity(method.getMetrics().getCyclomaticComplexity());

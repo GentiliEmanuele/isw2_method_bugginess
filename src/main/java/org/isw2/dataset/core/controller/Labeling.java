@@ -2,6 +2,7 @@ package org.isw2.dataset.core.controller;
 
 import org.isw2.dataset.core.controller.context.LabelingContext;
 import org.isw2.dataset.core.model.Method;
+import org.isw2.dataset.core.model.MethodsKey;
 import org.isw2.dataset.exceptions.ProcessingException;
 import org.isw2.dataset.factory.Controller;
 import org.isw2.dataset.git.model.Change;
@@ -34,7 +35,7 @@ public class Labeling implements Controller<LabelingContext, Void> {
         return null;
     }
 
-    private void iterateFixedCommits(List<Commit> fixCommits, List<Version> affectedVersions, Map<String, List<Method>> methodsByVersionAndPath) {
+    private void iterateFixedCommits(List<Commit> fixCommits, List<Version> affectedVersions, Map<MethodsKey, List<Method>> methodsByVersionAndPath) {
         // For all fixed commit: problem is solved
         for (Commit fixCommit : fixCommits) {
             // What code was changed to resolve the error?
@@ -47,13 +48,12 @@ public class Labeling implements Controller<LabelingContext, Void> {
         }
     }
 
-    private void labelBuggyMethodsInVersion(Version version, Change fixChange, Map<String, List<Method>> methodsByVersionAndPath) {
+    private void labelBuggyMethodsInVersion(Version version, Change fixChange, Map<MethodsKey, List<Method>> methodsByVersionAndPath) {
         // A bug is fixed by MODIFY or DELETE changes
         if (fixChange.getType().equals("MODIFY") || fixChange.getType().equals("DELETE")) {
 
             // Get methods in the touched file
-            String key = version.getName() + "_" + fixChange.getOldPath();
-            List<Method> methodsInAffectedVersion = methodsByVersionAndPath.get(key);
+            List<Method> methodsInAffectedVersion = methodsByVersionAndPath.get(new MethodsKey(version, fixChange.getOldPath()));
 
             if (methodsInAffectedVersion != null) {
                 for (Method method : methodsInAffectedVersion) {
