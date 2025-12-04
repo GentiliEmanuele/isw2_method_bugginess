@@ -3,7 +3,7 @@ package org.isw2.dataset.metrics.controller;
 import net.sourceforge.pmd.PmdAnalysis;
 import net.sourceforge.pmd.reporting.Report;
 import org.isw2.dataset.exceptions.ProcessingException;
-import org.isw2.dataset.factory.Controller;
+import org.isw2.absfactory.Controller;
 import net.sourceforge.pmd.reporting.RuleViolation;
 import org.isw2.dataset.metrics.model.CodeSmell;
 

@@ -12,7 +12,7 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 import org.isw2.dataset.exceptions.ProcessingException;
-import org.isw2.dataset.factory.Controller;
+import org.isw2.absfactory.Controller;
 import org.isw2.dataset.git.model.Author;
 import org.isw2.dataset.git.model.Change;
 import org.isw2.dataset.git.model.Commit;

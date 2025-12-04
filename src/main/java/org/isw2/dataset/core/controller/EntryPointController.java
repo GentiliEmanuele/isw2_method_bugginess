@@ -1,5 +1,7 @@
 package org.isw2.dataset.core.controller;
 
+import org.isw2.absfactory.AbstractControllerFactory;
+import org.isw2.absfactory.Controller;
 import org.isw2.dataset.core.boundary.ExitPointBoundary;
 import org.isw2.dataset.core.boundary.Outcome;
 import org.isw2.dataset.core.controller.context.*;

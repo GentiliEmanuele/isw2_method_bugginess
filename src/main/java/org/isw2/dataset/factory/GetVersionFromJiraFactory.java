@@ -1,5 +1,7 @@
 package org.isw2.dataset.factory;
 
+import org.isw2.absfactory.AbstractControllerFactory;
+import org.isw2.absfactory.Controller;
 import org.isw2.dataset.jira.controller.GetVersionsFromJira;
 import org.isw2.dataset.jira.model.Version;
 

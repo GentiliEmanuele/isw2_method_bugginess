@@ -9,7 +9,7 @@ import com.sun.source.util.TreeScanner;
 import com.sun.source.util.Trees;
 import org.isw2.dataset.core.model.Method;
 import org.isw2.dataset.exceptions.ProcessingException;
-import org.isw2.dataset.factory.Controller;
+import org.isw2.absfactory.Controller;
 import org.isw2.dataset.metrics.controller.context.ParserContext;
 import org.isw2.dataset.metrics.controller.context.VisitReturn;
 

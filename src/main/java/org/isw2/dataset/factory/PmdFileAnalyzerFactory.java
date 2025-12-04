@@ -1,6 +1,8 @@
 package org.isw2.dataset.factory;
 
 import net.sourceforge.pmd.PmdAnalysis;
+import org.isw2.absfactory.AbstractControllerFactory;
+import org.isw2.absfactory.Controller;
 import org.isw2.dataset.metrics.controller.PmdFileAnalyzer;
 import org.isw2.dataset.metrics.model.CodeSmell;
 

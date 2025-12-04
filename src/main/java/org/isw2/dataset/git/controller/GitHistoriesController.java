@@ -2,7 +2,7 @@ package org.isw2.dataset.git.controller;
 
 import org.isw2.dataset.core.model.Method;
 import org.isw2.dataset.exceptions.ProcessingException;
-import org.isw2.dataset.factory.Controller;
+import org.isw2.absfactory.Controller;
 import org.isw2.dataset.git.model.Change;
 import org.isw2.dataset.git.model.Commit;
 import org.isw2.dataset.git.model.MyEdit;

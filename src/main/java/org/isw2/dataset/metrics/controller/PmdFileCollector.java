@@ -8,7 +8,7 @@ import net.sourceforge.pmd.lang.LanguageVersion;
 import net.sourceforge.pmd.lang.document.FileId;
 import net.sourceforge.pmd.lang.document.TextFile;
 import org.isw2.dataset.exceptions.ProcessingException;
-import org.isw2.dataset.factory.Controller;
+import org.isw2.absfactory.Controller;
 import org.isw2.dataset.metrics.controller.context.PmdFileCollectorContext;
 
 import java.io.IOException;

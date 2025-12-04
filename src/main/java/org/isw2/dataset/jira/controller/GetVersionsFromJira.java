@@ -1,7 +1,7 @@
 package org.isw2.dataset.jira.controller;
 
 import org.isw2.dataset.exceptions.ProcessingException;
-import org.isw2.dataset.factory.Controller;
+import org.isw2.absfactory.Controller;
 import org.isw2.dataset.jira.model.Version;
 import org.json.JSONArray;
 import org.json.JSONException;
