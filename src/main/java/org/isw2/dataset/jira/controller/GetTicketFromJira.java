@@ -81,21 +81,30 @@ public class GetTicketFromJira implements Controller<GetTicketFromJiraContext, R
         // If ticket has FV, AV, OV
         if (fixedVersion != null && openingVersion != null) {
 
-            // OV < FV
-            boolean isOpenBeforeFix = versionIsBefore(openingVersion, fixedVersion);
+            // OV <= FV
+            boolean isOpenBeforeOrEqualFix = versionIsBeforeOrEqual(openingVersion, fixedVersion);
 
             if (!affectedVersions.isEmpty()) {
                 // Candidate for IV is the first AV
                 Version injectedVersion = affectedVersions.getFirst();
 
                 // IV <= OV
-                boolean isInjectedBeforeOpen = versionIsBeforeOrEqual(injectedVersion, openingVersion);
+                boolean isInjectedBeforeOrEqualOpen = versionIsBeforeOrEqual(injectedVersion, openingVersion);
+                // IV < FV
+                boolean isInjectedBeforeFixed = versionIsBefore(injectedVersion, fixedVersion);
 
-                if (isOpenBeforeFix && isInjectedBeforeOpen) {
+                // All AVs are consistent
+                boolean allAvConsistent = allAffectedAreConsistent(affectedVersions, fixedVersion);
+
+                if (isOpenBeforeOrEqualFix && isInjectedBeforeOrEqualOpen && isInjectedBeforeFixed && allAvConsistent) {
                     Ticket ticket = new Ticket(ticketKey, affectedVersions, fixedVersion, injectedVersion, openingVersion);
                     tickets.add(ticket);
                 }
-            } else if (isOpenBeforeFix) {
+                return;
+            }
+
+            // If affectedVersion is empty but OV <= FV the ticket can be corrected
+            if (isOpenBeforeOrEqualFix) {
                 Ticket ticket = new Ticket(ticketKey, affectedVersions, fixedVersion, null, openingVersion);
                 toBeCorrected.add(ticket);
             }
@@ -115,6 +124,15 @@ public class GetTicketFromJira implements Controller<GetTicketFromJiraContext, R
             }
         }
         return versions;
+    }
+
+    private boolean allAffectedAreConsistent(List<Version> affects, Version fixedVersion) {
+        for (Version affected : affects) {
+            if (!versionIsBefore(affected, fixedVersion)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private Version getVersionByDate(String date, List<Version> allVersions) {

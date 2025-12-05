@@ -5,50 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Added MethodsKey as key for the methods' hashmap. Added an implementation for ordered holdout.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/factory/CostSensitiveClassifierBuilderFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/factory/EvaluatorFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/factory/OrderedHoldoutFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/factory/SplitterFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/model/Statistics.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/procedure/OrderedHoldout.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/procedure/OrderedHoldoutContext.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/utils/CostSensitiveClassifierBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/utils/Evaluator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/utils/Splitter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/utils/context/CostSensitiveClassifierBuilderContext.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/utils/context/EvaluatorContext.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/utils/context/SplitterContext.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/boundary/EntryPointBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/boundary/EntryPointBoundary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/AnalyzeFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/AnalyzeFile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/EntryPointController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/EntryPointController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/Labeling.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/Labeling.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/LinkCommitsAndTickets.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/LinkCommitsAndTickets.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/LinkVersionAndCommit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/LinkVersionAndCommit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/Proportion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/Proportion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/AbstractControllerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/absfactory/AbstractControllerFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/AnalyzeFileFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/AnalyzeFileFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/absfactory/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/EntryPointControllerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/EntryPointControllerFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/GetCommitFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/GetCommitFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/GetTicketFromJiraFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/GetTicketFromJiraFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/GetVersionFromJiraFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/GetVersionFromJiraFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/GitHistoriesControllerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/GitHistoriesControllerFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/JavaMetricParserFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/JavaMetricParserFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/LabelingFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/LabelingFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/LinkCommitsAndTicketsFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/LinkCommitsAndTicketsFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/MergeVersionAndCommitFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/MergeVersionAndCommitFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/PmdFileAnalyzerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/PmdFileAnalyzerFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/PmdFileCollectorFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/PmdFileCollectorFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/ProportionFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/ProportionFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/git/controller/GetCommitFromGit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/git/controller/GetCommitFromGit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/git/controller/GitHistoriesController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/git/controller/GitHistoriesController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/jira/controller/GetTicketFromJira.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/jira/controller/GetTicketFromJira.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/jira/controller/GetVersionsFromJira.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/jira/controller/GetVersionsFromJira.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/JavaMetricParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/JavaMetricParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/PmdFileAnalyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/PmdFileAnalyzer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/PmdFileCollector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/PmdFileCollector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,31 +46,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.JiraBoundary.executor&quot;: &quot;Run&quot;,
-    &quot;Application.JiraTempMain.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Unnamed.executor&quot;: &quot;Run&quot;,
-    &quot;Application.org.isw2.weka.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.isw2_method_bugginess [pmd:pmd].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/emanuele/IdeaProjects/isw2_method_bugginess&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.JiraBoundary.executor": "Run",
+    "Application.JiraTempMain.executor": "Run",
+    "Application.Main.executor": "Run",
+    "Application.Unnamed.executor": "Run",
+    "Application.org.isw2.weka.Main.executor": "Debug",
+    "Maven.isw2_method_bugginess [pmd:pmd].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/emanuele/IdeaProjects/isw2_method_bugginess",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Application.org.isw2.weka.Main">
     <configuration name="Main" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.isw2.dataset.Main" />
@@ -443,6 +401,11 @@
           <properties class="org.isw2.exceptions.ProcessingException" package="org.isw2.exceptions" />
           <option name="timeStamp" value="24" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/EntryPointController.java</url>
+          <line>48</line>
+          <option name="timeStamp" value="38" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <pin-to-top-manager>
@@ -456,6 +419,7 @@
         <watch expression="((ParametricRuleViolation)report.violations.get(0)).rule" custom="net.sourceforge.pmd.reporting.ParametricRuleViolation" />
         <watch expression="ticket" />
         <watch expression="tickets.get(94)" />
+        <watch expression="returnTickets.toBeCorrected.get(100)" />
       </configuration>
     </watches-manager>
   </component>
