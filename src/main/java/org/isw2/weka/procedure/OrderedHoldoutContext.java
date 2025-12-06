@@ -3,5 +3,5 @@ package org.isw2.weka.procedure;
 import weka.classifiers.Classifier;
 import weka.core.Instances;
 
-public record OrderedHoldoutContext(Instances trainData, double splittingPercentage, Classifier classifier) {
+public record OrderedHoldoutContext(Instances trainData, double splittingPercentage, Classifier classifier, Instances testData) {
 }

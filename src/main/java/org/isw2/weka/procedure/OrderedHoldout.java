@@ -23,24 +23,46 @@ public class OrderedHoldout implements Controller<OrderedHoldoutContext, Statist
     @Override
     public Statistics execute(OrderedHoldoutContext context) throws ProcessingException {
         try {
-            // Set buggy as class index
+            // Set buggy as class index for training data
             if (context.trainData().classIndex() == -1)
                 context.trainData().setClassIndex(context.trainData().numAttributes() - 1);
 
-            // Remove identification columns
-            Instances cleaned = removeIdColumns(context.trainData());
+            // Set buggy as class index for test data
+            if (context.testData().classIndex() == -1)
+                context.testData().setClassIndex(context.testData().numAttributes() - 1);
+
+            // Remove identification columns for training and test set
+            Instances cleanedTraining = removeIdColumns(context.trainData());
+            Instances cleanedTest = removeIdColumns(context.testData());
 
             // Splitting data in training and validation (assuming that test set is already removed)
-            List<Instances> datasets = splitData(cleaned, context.splittingPercentage());
+            List<Instances> datasets = splitData(cleanedTraining, context.splittingPercentage());
             Instances training = datasets.get(0);
             Instances validation = datasets.get(1);
 
-            // Build classifier
-            CostSensitiveClassifier csc = createCostSensitiveClassifier(context.classifier());
-            csc.buildClassifier(training);
+            double bestCfn = 1.0;
+            double bestScore = -1.0;
 
-            // Evaluate classifier
-            return evaluateClassifier(csc, training, validation);
+            double[] costsToTry = {1.0, 2.0, 3.0, 4.0};
+
+            for (double cost : costsToTry) {
+                // Build classifier
+                CostSensitiveClassifier csc = createCostSensitiveClassifier(context.classifier(), cost);
+                csc.buildClassifier(training);
+
+                // Evaluate classifier
+                Statistics currentStats = evaluateClassifier(csc, training, validation, cost);
+
+                // Get current f1 score
+                double currentScore = currentStats.f1Score();
+
+                if (currentScore > bestScore) {
+                    bestCfn = cost;
+                }
+                System.out.println("Try " +  cost + " score = " +  currentScore);
+            }
+
+            return applyTestSet(bestCfn, cleanedTraining, cleanedTest, context.classifier());
 
         } catch (Exception e) {
             throw new ProcessingException(e.getMessage());
@@ -63,13 +85,13 @@ public class OrderedHoldout implements Controller<OrderedHoldoutContext, Statist
         return splitterFactory.process(new SplitterContext(splittingPercentage, data));
     }
 
-    private CostSensitiveClassifier createCostSensitiveClassifier(Classifier classifier) throws ProcessingException {
-        CostMatrix costMatrix = createCostMatrix();
+    private CostSensitiveClassifier createCostSensitiveClassifier(Classifier classifier, double falseNegativeCost) throws ProcessingException {
+        CostMatrix costMatrix = createCostMatrix(falseNegativeCost);
         AbstractControllerFactory<CostSensitiveClassifierBuilderContext, CostSensitiveClassifier> costSensitiveClassifierBuilderFactory = new CostSensitiveClassifierBuilderFactory();
         return costSensitiveClassifierBuilderFactory.process(new CostSensitiveClassifierBuilderContext(costMatrix, classifier));
     }
 
-    private CostMatrix createCostMatrix() {
+    private CostMatrix createCostMatrix(double falseNegativeCost) {
         // Create cost matrix and set weight
         CostMatrix costMatrix = new CostMatrix(2);
         // True negative
@@ -77,16 +99,22 @@ public class OrderedHoldout implements Controller<OrderedHoldoutContext, Statist
         // False positive
         costMatrix.setElement(0, 1, 1.0);
         // False negative
-        costMatrix.setElement(1, 0, 5.0);
+        costMatrix.setElement(1, 0, falseNegativeCost);
         // True positive
         costMatrix.setElement(1, 1, 0.0);
         return costMatrix;
     }
 
-    private Statistics evaluateClassifier(CostSensitiveClassifier csc, Instances training, Instances validation) throws Exception {
+    private Statistics evaluateClassifier(CostSensitiveClassifier csc, Instances training, Instances validation, double cost) throws Exception {
         Evaluation eval = new Evaluation(training);
         eval.evaluateModel(csc, validation);
-        return new Statistics(eval.precision(1), eval.recall(1), eval.kappa(), eval.areaUnderROC(1), eval.toMatrixString());
+        return new Statistics(eval.precision(1), eval.recall(1), eval.kappa(), eval.areaUnderROC(1), eval.toMatrixString(), eval.fMeasure(1), cost);
+    }
+
+    private Statistics applyTestSet(double bestCost, Instances training, Instances test, Classifier classifier) throws Exception {
+        CostSensitiveClassifier csc = createCostSensitiveClassifier(classifier, bestCost);
+        csc.buildClassifier(training);
+        return evaluateClassifier(csc, training, test, bestCost);
     }
 
 }

@@ -4,9 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Added MethodsKey as key for the methods' hashmap. Added an implementation for ordered holdout.">
+    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Modified mechanism that get tickets from Jira.">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/factory/SplitDataByVersionFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/factory/WalkForwardFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/procedure/WalkForward.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/procedure/WalkForwardContext.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/utils/SplitDataByVersion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/utils/StatsToCsv.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/utils/context/SplitDataByVersionContext.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/jira/controller/GetTicketFromJira.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/jira/controller/GetTicketFromJira.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/model/Statistics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/model/Statistics.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/procedure/OrderedHoldout.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/procedure/OrderedHoldout.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/procedure/OrderedHoldoutContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/procedure/OrderedHoldoutContext.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,12 +42,12 @@
     &quot;assignee&quot;: &quot;GentiliEmanuele&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/GentiliEmanuele/isw2_method_bugginess.git&quot;,
-    &quot;accountId&quot;: &quot;9ae56295-9d74-420e-9d35-70f610963671&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/GentiliEmanuele/isw2_method_bugginess.git",
+    "accountId": "28c91a8c-7d1c-45de-9d42-ed8461a03f35"
   }
-}</component>
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
 }</component>
@@ -52,7 +62,7 @@
     "Application.JiraTempMain.executor": "Run",
     "Application.Main.executor": "Run",
     "Application.Unnamed.executor": "Run",
-    "Application.org.isw2.weka.Main.executor": "Debug",
+    "Application.org.isw2.weka.Main.executor": "Run",
     "Maven.isw2_method_bugginess [pmd:pmd].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
@@ -101,7 +111,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.28238.7" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.27397.103" />
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.27397.103" />
       </set>
     </attachedChunks>
   </component>
@@ -166,6 +177,7 @@
       <workItem from="1764167231826" duration="2289000" />
       <workItem from="1764324514068" duration="15975000" />
       <workItem from="1764408016406" duration="24159000" />
+      <workItem from="1765021067804" duration="14553000" />
     </task>
     <task id="LOCAL-00001" summary="Optimized the code and added the mechanism that save computed metrics in CSV.">
       <option name="closed" value="true" />
@@ -351,7 +363,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764794008967</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Modified mechanism that get tickets from Jira.">
+      <option name="closed" value="true" />
+      <created>1764948981675</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1764948981675</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -392,7 +412,8 @@
     <MESSAGE value="Modified mechanism that analyze the files." />
     <MESSAGE value="Moved all files in a new package. Modified mechanism that get commit from git." />
     <MESSAGE value="Added MethodsKey as key for the methods' hashmap. Added an implementation for ordered holdout." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added MethodsKey as key for the methods' hashmap. Added an implementation for ordered holdout." />
+    <MESSAGE value="Modified mechanism that get tickets from Jira." />
+    <option name="LAST_COMMIT_MESSAGE" value="Modified mechanism that get tickets from Jira." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -401,11 +422,6 @@
           <properties class="org.isw2.exceptions.ProcessingException" package="org.isw2.exceptions" />
           <option name="timeStamp" value="24" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/EntryPointController.java</url>
-          <line>48</line>
-          <option name="timeStamp" value="38" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <pin-to-top-manager>
