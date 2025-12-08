@@ -6,6 +6,9 @@ import org.isw2.weka.factory.SplitDataByVersionFactory;
 import org.isw2.weka.factory.WalkForwardFactory;
 import org.isw2.weka.model.Statistics;
 import org.isw2.weka.procedure.WalkForwardContext;
+import org.isw2.weka.tuning.CostSensitiveTuner;
+import org.isw2.weka.tuning.DummyTuner;
+import org.isw2.weka.tuning.Tuner;
 import org.isw2.weka.utils.StatsToCsv;
 import org.isw2.weka.utils.context.SplitDataByVersionContext;
 import weka.classifiers.trees.RandomForest;
@@ -36,7 +39,7 @@ public class Main {
 
         // Call walk forward procedure
         AbstractControllerFactory<WalkForwardContext, Map<Integer, Statistics>> walkForwardFactory = new WalkForwardFactory();
-        Map<Integer, Statistics> statsByRun = walkForwardFactory.process(new WalkForwardContext(dataByVersion, 0.8, new RandomForest()));
+        Map<Integer, Statistics> statsByRun = walkForwardFactory.process(new WalkForwardContext(dataByVersion, 0.8, new RandomForest(), new DummyTuner()));
 
         StatsToCsv.writeStatsToCsv(projectName, statsByRun);
 

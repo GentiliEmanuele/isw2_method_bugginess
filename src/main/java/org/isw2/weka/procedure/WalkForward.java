@@ -5,6 +5,7 @@ import org.isw2.absfactory.Controller;
 import org.isw2.dataset.exceptions.ProcessingException;
 import org.isw2.weka.factory.OrderedHoldoutFactory;
 import org.isw2.weka.model.Statistics;
+import org.isw2.weka.tuning.Tuner;
 import weka.classifiers.Classifier;
 import weka.core.Instances;
 
@@ -32,7 +33,7 @@ public class WalkForward implements Controller<WalkForwardContext, Map<Integer, 
 
             // Apply ordered holdout for walk forward iteration
             LOGGER.log(Level.INFO, "Use as testing the version {0}", currentTestingIndex);
-            Statistics currentStats = callOrderedHoldout(currentTrainingData, currentTestingData, context.trainingPercentage(), context.classifier());
+            Statistics currentStats = callOrderedHoldout(currentTrainingData, currentTestingData, context.trainingPercentage(), context.classifier(), context.tuner());
             statsByRun.put(currentTestingIndex, currentStats);
         }
         return statsByRun;
@@ -44,8 +45,8 @@ public class WalkForward implements Controller<WalkForwardContext, Map<Integer, 
         }
     }
 
-    private Statistics callOrderedHoldout(Instances training, Instances testing, double trainingPercentage, Classifier classifier) throws ProcessingException {
+    private Statistics callOrderedHoldout(Instances training, Instances testing, double trainingPercentage, Classifier classifier, Tuner tuner) throws ProcessingException {
         AbstractControllerFactory<OrderedHoldoutContext, Statistics> orderedHoldoutFactory = new OrderedHoldoutFactory();
-        return orderedHoldoutFactory.process(new OrderedHoldoutContext(training, trainingPercentage, classifier, testing));
+        return orderedHoldoutFactory.process(new OrderedHoldoutContext(training, trainingPercentage, classifier, testing, tuner));
     }
 }
