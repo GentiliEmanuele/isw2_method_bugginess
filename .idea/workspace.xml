@@ -4,16 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Implemented a configuration loader. Added ClassifierType and ClassifierFactory for execute experiments.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/WekaBoundary.java" afterDir="false" />
+    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Modified EntryPointController, EntryPointBoundary and EntryPointContext to support the versions discard in function of configuration file. Modified ConfigLoader to support project specific configuration params.">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/WekaCorrelation.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/boundary/EntryPointBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/boundary/EntryPointBoundary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/EntryPointController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/EntryPointController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/context/EntryPointContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/context/EntryPointContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/EntryPointControllerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/EntryPointControllerFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/experiment/ConfigLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/experiment/ConfigLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/experiment/Experiments.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/experiment/Experiments.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/model/FileClass.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,33 +47,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Experiments.executor": "Run",
-    "Application.JiraBoundary.executor": "Run",
-    "Application.JiraTempMain.executor": "Run",
-    "Application.Main.executor": "Run",
-    "Application.Unnamed.executor": "Run",
-    "Application.org.isw2.weka.Main.executor": "Run",
-    "Maven.isw2_method_bugginess [pmd:pmd].executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/emanuele/IdeaProjects/isw2_method_bugginess",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Experiments.executor&quot;: &quot;Run&quot;,
+    &quot;Application.JiraBoundary.executor&quot;: &quot;Run&quot;,
+    &quot;Application.JiraTempMain.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Unnamed.executor&quot;: &quot;Run&quot;,
+    &quot;Application.WekaCorrelation.executor&quot;: &quot;Run&quot;,
+    &quot;Application.org.isw2.weka.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.isw2_method_bugginess [pmd:pmd].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/emanuele/IdeaProjects/isw2_method_bugginess&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
-  <component name="RunManager" selected="Application.Experiments">
+}</component>
+  <component name="RunManager" selected="Application.WekaCorrelation">
     <configuration name="Experiments" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="org.isw2.experiment.Experiments" />
       <module name="isw2_method_bugginess" />
@@ -94,10 +89,29 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="WekaCorrelation" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.isw2.weka.WekaCorrelation" />
+      <module name="isw2_method_bugginess" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.isw2.weka.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
-      <item itemvalue="Application.Main" />
       <item itemvalue="Application.Experiments" />
+      <item itemvalue="Application.Main" />
+      <item itemvalue="Application.WekaCorrelation" />
     </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.WekaCorrelation" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -170,7 +184,8 @@
       <workItem from="1764408016406" duration="24159000" />
       <workItem from="1765021067804" duration="14553000" />
       <workItem from="1765205373299" duration="159000" />
-      <workItem from="1765287682278" duration="10177000" />
+      <workItem from="1765287682278" duration="12162000" />
+      <workItem from="1765311950997" duration="28000" />
     </task>
     <task id="LOCAL-00001" summary="Optimized the code and added the mechanism that save computed metrics in CSV.">
       <option name="closed" value="true" />
@@ -380,7 +395,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765295589831</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="Modified EntryPointController, EntryPointBoundary and EntryPointContext to support the versions discard in function of configuration file. Modified ConfigLoader to support project specific configuration params.">
+      <option name="closed" value="true" />
+      <created>1765299370397</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1765299370397</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -398,7 +421,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Modified the mechanism that save the results in CSV, now only one file is produced. Modified the mechanism that compute the change metrics." />
     <MESSAGE value="Added mechanism that computes code smell." />
     <MESSAGE value="Added mechanism that computes stmtAdded, maxStmtAdded, stmtDeleted and maxStmtDeleted." />
     <MESSAGE value="Added mechanism that read ticket information by Jira. Removed some code smells." />
@@ -423,7 +445,8 @@
     <MESSAGE value="Modified mechanism that get tickets from Jira." />
     <MESSAGE value="Extrapolated tuning logic from evaluation logic." />
     <MESSAGE value="Implemented a configuration loader. Added ClassifierType and ClassifierFactory for execute experiments." />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented a configuration loader. Added ClassifierType and ClassifierFactory for execute experiments." />
+    <MESSAGE value="Modified EntryPointController, EntryPointBoundary and EntryPointContext to support the versions discard in function of configuration file. Modified ConfigLoader to support project specific configuration params." />
+    <option name="LAST_COMMIT_MESSAGE" value="Modified EntryPointController, EntryPointBoundary and EntryPointContext to support the versions discard in function of configuration file. Modified ConfigLoader to support project specific configuration params." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
