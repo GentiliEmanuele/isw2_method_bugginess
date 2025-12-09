@@ -4,16 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Extrapolated tuning logic from evaluation logic.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/experiment/ConfigLoader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/experiment/Experiments.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/classifier/ClassifierFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/classifier/ClassifierType.java" afterDir="false" />
+    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Implemented a configuration loader. Added ClassifierType and ClassifierFactory for execute experiments.">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/WekaBoundary.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/procedure/WalkForward.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/procedure/WalkForward.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/procedure/WalkForwardContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/procedure/WalkForwardContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/utils/StatsToCsv.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/utils/StatsToCsv.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/boundary/EntryPointBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/boundary/EntryPointBoundary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/EntryPointController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/EntryPointController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/context/EntryPointContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/context/EntryPointContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/EntryPointControllerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/EntryPointControllerFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/experiment/ConfigLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/experiment/ConfigLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/experiment/Experiments.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/experiment/Experiments.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -170,7 +170,7 @@
       <workItem from="1764408016406" duration="24159000" />
       <workItem from="1765021067804" duration="14553000" />
       <workItem from="1765205373299" duration="159000" />
-      <workItem from="1765287682278" duration="6325000" />
+      <workItem from="1765287682278" duration="10177000" />
     </task>
     <task id="LOCAL-00001" summary="Optimized the code and added the mechanism that save computed metrics in CSV.">
       <option name="closed" value="true" />
@@ -372,7 +372,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765205435138</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Implemented a configuration loader. Added ClassifierType and ClassifierFactory for execute experiments.">
+      <option name="closed" value="true" />
+      <created>1765295589831</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1765295589831</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -390,7 +398,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Optimized the code and added the mechanism that save computed metrics in CSV." />
     <MESSAGE value="Modified the mechanism that save the results in CSV, now only one file is produced. Modified the mechanism that compute the change metrics." />
     <MESSAGE value="Added mechanism that computes code smell." />
     <MESSAGE value="Added mechanism that computes stmtAdded, maxStmtAdded, stmtDeleted and maxStmtDeleted." />
@@ -415,7 +422,8 @@
     <MESSAGE value="Added MethodsKey as key for the methods' hashmap. Added an implementation for ordered holdout." />
     <MESSAGE value="Modified mechanism that get tickets from Jira." />
     <MESSAGE value="Extrapolated tuning logic from evaluation logic." />
-    <option name="LAST_COMMIT_MESSAGE" value="Extrapolated tuning logic from evaluation logic." />
+    <MESSAGE value="Implemented a configuration loader. Added ClassifierType and ClassifierFactory for execute experiments." />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented a configuration loader. Added ClassifierType and ClassifierFactory for execute experiments." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

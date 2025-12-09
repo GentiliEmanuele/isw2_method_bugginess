@@ -1,4 +1,4 @@
 package org.isw2.dataset.core.controller.context;
 
-public record EntryPointContext(String projectName) {
+public record EntryPointContext(String projectName, double versionDiscardPercentage) {
 }

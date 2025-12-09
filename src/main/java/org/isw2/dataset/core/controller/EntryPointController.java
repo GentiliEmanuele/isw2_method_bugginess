@@ -22,12 +22,12 @@ import java.util.*;
 import java.util.logging.Logger;
 
 
-public class EntryPointController implements Controller<String, Void> {
+public class EntryPointController implements Controller<EntryPointContext, Void> {
 
     private static final Logger logger = Logger.getLogger(EntryPointController.class.getName());
 
     @Override
-    public Void execute(String projectName) throws ProcessingException {
+    public Void execute(EntryPointContext context) throws ProcessingException {
         List<Commit> commits;
         List<Ticket> tickets;
         List<Version> versions;
@@ -35,15 +35,20 @@ public class EntryPointController implements Controller<String, Void> {
         // Get version from Jira
         logger.info("Get versions from Jira");
         AbstractControllerFactory<String, List<Version>> getVersionFromJiraFactory = new GetVersionFromJiraFactory();
-        versions = getVersionFromJiraFactory.process(projectName);
+        versions = getVersionFromJiraFactory.process(context.projectName());
 
         // Sort version list
         versions.sort(Comparator.comparing(o -> LocalDate.parse(o.getReleaseDate())));
 
+        // Remove a percentage of versions for avoid snoring
+        int total = versions.size();
+        int toBeRemoved = (int)(total * context.versionDiscardPercentage());
+        versions.subList(total - toBeRemoved, total).clear();
+
         // Get ticket from Jira
         logger.info("Get tickets from Jira");
         AbstractControllerFactory<GetTicketFromJiraContext, ReturnTickets> getTicketFromJiraFactory= new GetTicketFromJiraFactory();
-        ReturnTickets returnTickets = getTicketFromJiraFactory.process(new GetTicketFromJiraContext(projectName, versions));
+        ReturnTickets returnTickets = getTicketFromJiraFactory.process(new GetTicketFromJiraContext(context.projectName(), versions));
 
         // Create proportion controller and apply proportion
         logger.info("Execute proportion algorithm");
@@ -54,12 +59,12 @@ public class EntryPointController implements Controller<String, Void> {
         // Create gitController and GetCommitFromGit
         logger.info("Get commits from git");
         AbstractControllerFactory<String, List<Commit>> getCommitFactory = new GetCommitFactory();
-        commits = getCommitFactory.process(projectName);
+        commits = getCommitFactory.process(context.projectName());
         commits.sort(Comparator.comparing(commit -> LocalDate.parse(commit.commitTime())));
 
         logger.info("Link commits and tickets");
         AbstractControllerFactory<LinkCommitsAndTicketsContext, Void> linkCommitsAndTicketsFactory = new LinkCommitsAndTicketsFactory();
-        linkCommitsAndTicketsFactory.process(new LinkCommitsAndTicketsContext(projectName, commits, tickets));
+        linkCommitsAndTicketsFactory.process(new LinkCommitsAndTicketsContext(context.projectName(), commits, tickets));
 
         // Merge versions and commits
         logger.info("Merge versions and commits");
@@ -69,7 +74,7 @@ public class EntryPointController implements Controller<String, Void> {
         // Analyze files
         logger.info("Analyze files");
         AbstractControllerFactory<AnalyzeFileContext, Map<MethodsKey, List<Method>>> analyzeFileFactory = new AnalyzeFileFactory();
-        Map<MethodsKey, List<Method>> methodByVersionAndPath = analyzeFileFactory.process(new AnalyzeFileContext(projectName, versions));
+        Map<MethodsKey, List<Method>> methodByVersionAndPath = analyzeFileFactory.process(new AnalyzeFileContext(context.projectName(), versions));
 
         // Compute GitHistories
         logger.info("Compute git histories");
@@ -82,7 +87,7 @@ public class EntryPointController implements Controller<String, Void> {
 
         // Write result on CSV
         try {
-            writeOutcome(projectName, methodByVersionAndPath);
+            writeOutcome(context.projectName(), methodByVersionAndPath);
         } catch (IOException e) {
             throw new ProcessingException(e.getMessage());
         }

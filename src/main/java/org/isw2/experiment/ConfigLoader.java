@@ -2,7 +2,6 @@ package org.isw2.experiment;
 
 import org.isw2.weka.classifier.ClassifierType;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -67,6 +66,25 @@ public class ConfigLoader {
             }
         }
         return projectList;
+    }
+
+    private static String getProperty(String projectName, String key) {
+        Properties props = loadProperties();
+
+        // Search if there is a specific value for the specific project
+        String specificKey = projectName.toUpperCase() + "." + key;
+        String value = props.getProperty(specificKey);
+
+        // If there isn't use the default value
+        if (value == null) {
+            value = props.getProperty(key);
+        }
+
+        return value;
+    }
+
+    public static double getVersionDiscardPercentage(String projectName) {
+        return Double.parseDouble(getProperty(projectName, "version.discard.percentage"));
     }
 
 }
