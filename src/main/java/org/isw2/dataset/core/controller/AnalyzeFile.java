@@ -130,7 +130,8 @@ public class AnalyzeFile implements Controller<AnalyzeFileContext, Map<MethodsKe
 
     private void computeMethodCodeSmell(Map<String, List<CodeSmell>> smells) {
         methodsByFileAndVersion.forEach((key, methods) -> {
-            List<CodeSmell> codeSmells = smells.get(key.path());
+            String pmdKey = key.version().getName() + "_" + key.path();
+            List<CodeSmell> codeSmells = smells.get(pmdKey);
             if (codeSmells != null && !codeSmells.isEmpty()) {
                 mapMethodsAndSmells(codeSmells, methods);
             }

@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Modified EntryPointController, EntryPointBoundary and EntryPointContext to support the versions discard in function of configuration file. Modified ConfigLoader to support project specific configuration params.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/WekaCorrelation.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/model/FileClass.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/AnalyzeFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/AnalyzeFile.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,13 +81,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Main" type="Application" factoryName="Application" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.isw2.dataset.Main" />
-      <module name="isw2_method_bugginess" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="WekaCorrelation" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.isw2.weka.WekaCorrelation" />
       <module name="isw2_method_bugginess" />
@@ -104,7 +96,6 @@
     </configuration>
     <list>
       <item itemvalue="Application.Experiments" />
-      <item itemvalue="Application.Main" />
       <item itemvalue="Application.WekaCorrelation" />
     </list>
     <recent_temporary>
