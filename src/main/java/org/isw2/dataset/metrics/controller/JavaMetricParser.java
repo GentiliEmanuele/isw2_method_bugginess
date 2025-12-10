@@ -103,9 +103,13 @@ public class JavaMetricParser implements Controller<ParserContext, List<Method>>
 
                 @Override
                 public Object visitMethod(MethodTree methodTree, String currentClassName) {
+                    if (methodTree.getBody() == null) {
+                        return super.visitMethod(methodTree, currentClassName);
+                    }
                     Method method = new Method();
                     method.setClassName(currentClassName);
-                    method.setSignature(getReturnValue(methodTree) + " " + getMethodName(methodTree) + "(" + getMethodParameters(methodTree) + ")");
+                    String modifiers = getModifiers(methodTree).isEmpty() ? "" : getModifiers(methodTree) + " ";
+                    method.setSignature(modifiers + getReturnValue(methodTree) + " " + getMethodName(methodTree) + "(" + getMethodParameters(methodTree) + ")");
                     String cleanPath = path.startsWith("/") ? path.substring(1) : path;
                     method.setPath(cleanPath);
 
@@ -115,7 +119,7 @@ public class JavaMetricParser implements Controller<ParserContext, List<Method>>
                     int endLine = (int) compilationUnitTree.getLineMap().getLineNumber(endPosition);
                     method.setStartLine(startLine);
                     method.setEndLine(endLine);
-                    method.getMetrics().setLinesOfCode(endLine - startLine);
+                    method.getMetrics().setLinesOfCode((endLine - startLine) + 1);
                     VisitReturn ret = VisitMethod.execute(methodTree);
                     method.getMetrics().setCyclomaticComplexity(ret.cyclomaticComplexity());
                     method.getMetrics().setStatementsCount(ret.statementCount());
@@ -164,6 +168,15 @@ public class JavaMetricParser implements Controller<ParserContext, List<Method>>
 
     private int getParametersCounter(MethodTree methodTree) {
         return methodTree.getParameters().size();
+    }
+
+    private String getModifiers(MethodTree methodTree) {
+        if (methodTree.getModifiers() == null) {
+            return "";
+        }
+        return sanitize(methodTree.getModifiers().getFlags().toString()).replace("[", "")
+                .replace("]", "")
+                .replace(",", "");
     }
 
 }

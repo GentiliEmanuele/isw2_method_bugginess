@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Modified EntryPointController, EntryPointBoundary and EntryPointContext to support the versions discard in function of configuration file. Modified ConfigLoader to support project specific configuration params.">
+    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Fix a bug in code smell computation.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/AnalyzeFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/AnalyzeFile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/JavaMetricParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/JavaMetricParser.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,12 +32,12 @@
     &quot;assignee&quot;: &quot;GentiliEmanuele&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/GentiliEmanuele/isw2_method_bugginess.git&quot;,
-    &quot;accountId&quot;: &quot;28c91a8c-7d1c-45de-9d42-ed8461a03f35&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/GentiliEmanuele/isw2_method_bugginess.git",
+    "accountId": "9ae56295-9d74-420e-9d35-70f610963671"
   }
-}</component>
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
 }</component>
@@ -46,34 +46,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Experiments.executor&quot;: &quot;Run&quot;,
-    &quot;Application.JiraBoundary.executor&quot;: &quot;Run&quot;,
-    &quot;Application.JiraTempMain.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Unnamed.executor&quot;: &quot;Run&quot;,
-    &quot;Application.WekaCorrelation.executor&quot;: &quot;Run&quot;,
-    &quot;Application.org.isw2.weka.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.isw2_method_bugginess [pmd:pmd].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/emanuele/IdeaProjects/isw2_method_bugginess&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Experiments.executor": "Debug",
+    "Application.JiraBoundary.executor": "Run",
+    "Application.JiraTempMain.executor": "Run",
+    "Application.Main.executor": "Run",
+    "Application.Unnamed.executor": "Run",
+    "Application.WekaCorrelation.executor": "Run",
+    "Application.org.isw2.weka.Main.executor": "Run",
+    "Maven.isw2_method_bugginess [pmd:pmd].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/emanuele/IdeaProjects/isw2_method_bugginess",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
-  <component name="RunManager" selected="Application.WekaCorrelation">
+}]]></component>
+  <component name="RunManager" selected="Application.Experiments">
     <configuration name="Experiments" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="org.isw2.experiment.Experiments" />
       <module name="isw2_method_bugginess" />
@@ -107,8 +107,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.27397.103" />
-        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.27397.103" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.28238.7" />
       </set>
     </attachedChunks>
   </component>
@@ -394,7 +393,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765299370397</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="Fix a bug in code smell computation.">
+      <option name="closed" value="true" />
+      <created>1765364428386</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1765364428386</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -412,7 +419,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added mechanism that computes code smell." />
     <MESSAGE value="Added mechanism that computes stmtAdded, maxStmtAdded, stmtDeleted and maxStmtDeleted." />
     <MESSAGE value="Added mechanism that read ticket information by Jira. Removed some code smells." />
     <MESSAGE value="General refactoring" />
@@ -437,7 +443,8 @@
     <MESSAGE value="Extrapolated tuning logic from evaluation logic." />
     <MESSAGE value="Implemented a configuration loader. Added ClassifierType and ClassifierFactory for execute experiments." />
     <MESSAGE value="Modified EntryPointController, EntryPointBoundary and EntryPointContext to support the versions discard in function of configuration file. Modified ConfigLoader to support project specific configuration params." />
-    <option name="LAST_COMMIT_MESSAGE" value="Modified EntryPointController, EntryPointBoundary and EntryPointContext to support the versions discard in function of configuration file. Modified ConfigLoader to support project specific configuration params." />
+    <MESSAGE value="Fix a bug in code smell computation." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix a bug in code smell computation." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -446,6 +453,12 @@
           <properties class="org.isw2.exceptions.ProcessingException" package="org.isw2.exceptions" />
           <option name="timeStamp" value="24" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <condition expression="endLine - startLine == 0" language="JAVA" />
+          <url>file://$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/JavaMetricParser.java</url>
+          <line>119</line>
+          <option name="timeStamp" value="28" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <pin-to-top-manager>
