@@ -141,7 +141,9 @@ public class AnalyzeFile implements Controller<AnalyzeFileContext, Map<MethodsKe
     private void mapMethodsAndSmells(List<CodeSmell> smells, List<Method> methods) {
         for (Method method : methods) {
             for (CodeSmell smell : smells) {
-                if (smell.getStartLine() >= method.getStartLine() && smell.getStartLine() <= method.getEndLine() &&  smell.getEndLine() >= method.getStartLine() && smell.getEndLine() <= method.getEndLine()) {
+                boolean isInside = smell.getStartLine() >= method.getStartLine()
+                        && smell.getEndLine() <= method.getEndLine();
+                if (isInside) {
                     method.getMetrics().setCodeSmellCounter(method.getMetrics().getCodeSmellCounter() + 1);
                 }
             }

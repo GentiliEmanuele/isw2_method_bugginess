@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Fix a bug in code smell computation.">
+    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Fix an error on LOC computation.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/AnalyzeFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/AnalyzeFile.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/JavaMetricParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/JavaMetricParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/WekaCorrelation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/WekaCorrelation.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,12 +34,12 @@
     &quot;assignee&quot;: &quot;GentiliEmanuele&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/GentiliEmanuele/isw2_method_bugginess.git",
-    "accountId": "9ae56295-9d74-420e-9d35-70f610963671"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/GentiliEmanuele/isw2_method_bugginess.git&quot;,
+    &quot;accountId&quot;: &quot;9ae56295-9d74-420e-9d35-70f610963671&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
 }</component>
@@ -48,7 +50,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.Experiments.executor": "Debug",
+    "Application.Experiments.executor": "Run",
     "Application.JiraBoundary.executor": "Run",
     "Application.JiraTempMain.executor": "Run",
     "Application.Main.executor": "Run",
@@ -401,7 +403,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765364428386</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="Fix an error on LOC computation.">
+      <option name="closed" value="true" />
+      <created>1765374288747</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1765374288747</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -419,7 +429,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added mechanism that computes stmtAdded, maxStmtAdded, stmtDeleted and maxStmtDeleted." />
     <MESSAGE value="Added mechanism that read ticket information by Jira. Removed some code smells." />
     <MESSAGE value="General refactoring" />
     <MESSAGE value="Implemented proportion" />
@@ -444,7 +453,8 @@
     <MESSAGE value="Implemented a configuration loader. Added ClassifierType and ClassifierFactory for execute experiments." />
     <MESSAGE value="Modified EntryPointController, EntryPointBoundary and EntryPointContext to support the versions discard in function of configuration file. Modified ConfigLoader to support project specific configuration params." />
     <MESSAGE value="Fix a bug in code smell computation." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix a bug in code smell computation." />
+    <MESSAGE value="Fix an error on LOC computation." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix an error on LOC computation." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -453,12 +463,6 @@
           <properties class="org.isw2.exceptions.ProcessingException" package="org.isw2.exceptions" />
           <option name="timeStamp" value="24" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <condition expression="endLine - startLine == 0" language="JAVA" />
-          <url>file://$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/JavaMetricParser.java</url>
-          <line>119</line>
-          <option name="timeStamp" value="28" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <pin-to-top-manager>
@@ -473,6 +477,9 @@
         <watch expression="ticket" />
         <watch expression="tickets.get(94)" />
         <watch expression="returnTickets.toBeCorrected.get(100)" />
+        <watch expression="compilationUnitTree" />
+        <watch expression="codeSmells.get(104)" />
+        <watch expression="codeSmells" />
       </configuration>
     </watches-manager>
   </component>
