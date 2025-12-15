@@ -66,9 +66,9 @@ public class AnalyzeFile implements Controller<AnalyzeFileContext, Map<MethodsKe
                 }
             }
             if (pmdAnalysis != null) {
-                AbstractControllerFactory<PmdAnalysis, Map<String, List<CodeSmell>>> pmdFileAnalyzerFactory = new PmdFileAnalyzerFactory();
-                Map<String, List<CodeSmell>> smells = pmdFileAnalyzerFactory.process(pmdAnalysis);
-                computeMethodCodeSmell(smells);
+                // AbstractControllerFactory<PmdAnalysis, Map<String, List<CodeSmell>>> pmdFileAnalyzerFactory = new PmdFileAnalyzerFactory();
+                // Map<String, List<CodeSmell>> smells = pmdFileAnalyzerFactory.process(pmdAnalysis);
+                // computeMethodCodeSmell(smells);
             } else {
                 throw new ProcessingException("An error occurred while walking versions");
             }
@@ -98,6 +98,7 @@ public class AnalyzeFile implements Controller<AnalyzeFileContext, Map<MethodsKe
                         }
 
                         String content = getClassContent(repository, treeWalk);
+                        // Compute complexity metrics
                         methods = computeMetrics(path, content, commit);
                         methodsByFileAndVersion.put(new MethodsKey(current, path), methods);
                         pmdAnalysis = collectContentForSmellComputation(current, path, content);
@@ -114,13 +115,17 @@ public class AnalyzeFile implements Controller<AnalyzeFileContext, Map<MethodsKe
         }
         List<Method> methods = previous != null ? methodsByFileAndVersion.get(new MethodsKey(previous, path)) : new ArrayList<>();
         if (methods!= null && !methods.isEmpty()) {
-            methodsByFileAndVersion.put(new MethodsKey(current, path), methods);
+            List<Method> copyMethods = new ArrayList<>();
+            for (Method method : methods) {
+                copyMethods.add(new Method(method));
+            }
+            methodsByFileAndVersion.put(new MethodsKey(current, path), copyMethods);
         }
     }
 
     private List<Method> computeMetrics(String path, String content, Commit commit) throws ProcessingException {
         AbstractControllerFactory<ParserContext, List<Method>> parserFactory = new JavaMetricParserFactory();
-         return parserFactory.process(new ParserContext(content, path, commit));
+        return parserFactory.process(new ParserContext(content, path, commit));
     }
 
     private PmdAnalysis collectContentForSmellComputation(Version version, String path, String content) throws ProcessingException {
@@ -166,20 +171,17 @@ public class AnalyzeFile implements Controller<AnalyzeFileContext, Map<MethodsKe
     }
 
     private boolean fileIsTouchedBy(Commit commit, String classPath) {
-        for (Change c : commit.changes()) {
-            if (fileIsTouchedByAdd(c, classPath) || fileIsTouchedByModify(c, classPath)) {
+        if (commit.changes() == null) return false;
+
+        for (Change change : commit.changes()) {
+            // Ignore deletes because there are not in the current tree walk
+            if (change.getType().equals("DELETE")) continue;
+
+            // Compare the new path
+            if (change.getNewPath().equals(classPath)) {
                 return true;
             }
         }
         return false;
     }
-
-    private boolean fileIsTouchedByModify(Change change, String classPath) {
-        return change.getType().equals("MODIFY") && change.getOldPath().equals(classPath);
-    }
-
-    private boolean fileIsTouchedByAdd(Change change, String classPath) {
-        return change.getType().equals("ADD") && change.getNewPath().equals(classPath);
-    }
-
 }

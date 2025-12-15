@@ -26,7 +26,7 @@ public class WekaCorrelation {
             Resample resample = new Resample();
             resample.setInputFormat(data);
 
-            resample.setSampleSizePercent(60.0);
+            resample.setSampleSizePercent(35.0);
             resample.setNoReplacement(false);
             Instances sampledData = Filter.useFilter(data, resample);
 

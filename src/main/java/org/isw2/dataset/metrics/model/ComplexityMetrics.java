@@ -11,6 +11,20 @@ public class ComplexityMetrics {
     private int parameterCount;
     private int codeSmellCounter = 0;
 
+    public  ComplexityMetrics() {}
+
+    public ComplexityMetrics(ComplexityMetrics other) {
+        this.linesOfCode = other.linesOfCode;
+        this.statementsCount = other.statementsCount;
+        this.cyclomaticComplexity = other.cyclomaticComplexity;
+        this.cognitiveComplexity = other.cognitiveComplexity;
+        this.halsteadComplexity = new HalsteadComplexity(other.halsteadComplexity);
+        this.nestingDepth = other.nestingDepth;
+        this.numberOfBranchesAndDecisionPoint = other.numberOfBranchesAndDecisionPoint;
+        this.parameterCount = other.parameterCount;
+        this.codeSmellCounter = other.codeSmellCounter;
+    }
+
     public int getLinesOfCode() {
         return linesOfCode;
     }

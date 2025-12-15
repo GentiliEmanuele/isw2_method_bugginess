@@ -4,10 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Fix an error on LOC computation.">
+    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Added a filter for automated generated files (by protocol buffer compiler).">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/ComputeChangesMetricsByMethodFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/ComputeChangesMetrics.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/context/ComputeChangesContext.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/AnalyzeFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/AnalyzeFile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/JavaMetricParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/JavaMetricParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/EntryPointController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/EntryPointController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/context/AnalyzeFileContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/context/AnalyzeFileContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/model/Method.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/model/Method.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/GitHistoriesControllerFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/git/controller/GetCommitFromGit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/git/controller/GetCommitFromGit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/git/controller/GitHistoriesController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/model/ChangesMetrics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/model/ChangesMetrics.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/model/ComplexityMetrics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/model/ComplexityMetrics.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/model/HalsteadComplexity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/model/HalsteadComplexity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/WekaCorrelation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/WekaCorrelation.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -18,9 +29,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Record" />
         <option value="Interface" />
         <option value="Enum" />
+        <option value="Record" />
         <option value="Class" />
       </list>
     </option>
@@ -50,7 +61,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.Experiments.executor": "Run",
+    "Application.Experiments.executor": "Debug",
     "Application.JiraBoundary.executor": "Run",
     "Application.JiraTempMain.executor": "Run",
     "Application.Main.executor": "Run",
@@ -411,7 +422,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765374288747</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="Added a filter for automated generated files (by protocol buffer compiler).">
+      <option name="closed" value="true" />
+      <created>1765393716112</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1765393716112</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -429,7 +448,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added mechanism that read ticket information by Jira. Removed some code smells." />
     <MESSAGE value="General refactoring" />
     <MESSAGE value="Implemented proportion" />
     <MESSAGE value="Implemented labeling" />
@@ -454,7 +472,8 @@
     <MESSAGE value="Modified EntryPointController, EntryPointBoundary and EntryPointContext to support the versions discard in function of configuration file. Modified ConfigLoader to support project specific configuration params." />
     <MESSAGE value="Fix a bug in code smell computation." />
     <MESSAGE value="Fix an error on LOC computation." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix an error on LOC computation." />
+    <MESSAGE value="Added a filter for automated generated files (by protocol buffer compiler)." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added a filter for automated generated files (by protocol buffer compiler)." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -463,6 +482,12 @@
           <properties class="org.isw2.exceptions.ProcessingException" package="org.isw2.exceptions" />
           <option name="timeStamp" value="24" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <condition expression="version.getName().equals(&quot;4.2.0&quot;)" language="JAVA" />
+          <url>file://$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/ComputeChangesMetrics.java</url>
+          <line>22</line>
+          <option name="timeStamp" value="43" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <pin-to-top-manager>
@@ -480,6 +505,9 @@
         <watch expression="compilationUnitTree" />
         <watch expression="codeSmells.get(104)" />
         <watch expression="codeSmells" />
+        <watch expression="change.edits" />
+        <watch expression="change.edits" />
+        <watch expression="context.versions.get(10)" />
       </configuration>
     </watches-manager>
   </component>

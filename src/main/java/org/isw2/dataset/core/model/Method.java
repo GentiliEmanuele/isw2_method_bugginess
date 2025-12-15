@@ -29,6 +29,19 @@ public class Method {
         touchedBy = new ArrayList<>();
     }
 
+    public Method(Method other) {
+        this.className = other.className;
+        this.signature = other.signature;
+        this.path = other.path;
+        this.startLine = other.startLine;
+        this.endLine = other.endLine;
+        this.buggy = other.buggy;
+        this.touchedBy = new ArrayList<>(other.touchedBy);
+        this.authors = new HashSet<>(other.authors);
+        this.metrics = new ComplexityMetrics(other.metrics);
+        this.changesMetrics = new ChangesMetrics(other.changesMetrics);
+    }
+
     public String getClassName() {
         return className;
     }

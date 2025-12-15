@@ -90,27 +90,26 @@ public class GetCommitFromGit implements Controller<String, List<Commit>> {
 
     private List<Change> getFileDiffBetweenCommit(Git git, RevCommit startCommit, RevCommit endCommit) throws IOException, GitAPIException {
         Repository repository = git.getRepository();
-        ObjectId oldHead = startCommit.getTree().getId();
-        ObjectId head =  endCommit.getTree().getId();
+        ObjectId oldTree = startCommit.getTree();
+        ObjectId newTree =  endCommit.getTree();
         List<Change> changes = new ArrayList<>();
-        DiffFormatter formatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
-        formatter.setRepository(repository);
-        formatter.setDiffComparator(RawTextComparator.DEFAULT);
-        formatter.setDetectRenames(true);
-        // Prepare the two iterator to compute the diff between commit
-        try (ObjectReader reader = repository.newObjectReader()) {
-            CanonicalTreeParser oldTreeIter = new CanonicalTreeParser();
-            oldTreeIter.reset(reader, oldHead);
-            CanonicalTreeParser newTreeIter = new CanonicalTreeParser();
-            newTreeIter.reset(reader, head);
-            List<DiffEntry> diffs = git.diff().setOldTree(oldTreeIter).setNewTree(newTreeIter).call();
+
+        try (DiffFormatter formatter = new DiffFormatter(DisabledOutputStream.INSTANCE)) {
+            formatter.setRepository(repository);
+            formatter.setDiffComparator(RawTextComparator.DEFAULT);
+            formatter.setDetectRenames(true);
+
+            List<DiffEntry> diffs = formatter.scan(oldTree, newTree);
             for (DiffEntry entry : diffs) {
-                if ((entry.getOldPath() != null && entry.getOldPath().endsWith(".java"))  || (entry.getNewPath() != null && entry.getNewPath().endsWith(".java"))) {
+                boolean isJava = (entry.getOldPath() != null && entry.getOldPath().endsWith(".java")) ||
+                        (entry.getNewPath() != null && entry.getNewPath().endsWith(".java"));
+
+                if (isJava) {
                     Change change = new Change();
                     change.setType(entry.getChangeType().name());
                     change.setOldPath(entry.getOldPath());
                     change.setNewPath(entry.getNewPath());
-                    // This is for capture touched method in a class
+
                     FileHeader fileHeader = formatter.toFileHeader(entry);
                     List<HunkHeader> hunks = new ArrayList<>(fileHeader.getHunks());
                     for (HunkHeader hunk : hunks) {
@@ -127,7 +126,7 @@ public class GetCommitFromGit implements Controller<String, List<Commit>> {
                     changes.add(change);
                 }
             }
-            return changes;
         }
+        return changes;
     }
 }

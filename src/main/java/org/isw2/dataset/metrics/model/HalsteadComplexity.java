@@ -8,6 +8,17 @@ public class HalsteadComplexity {
     private double difficulty = 0;
     private double effort = 0;
 
+    public HalsteadComplexity() {}
+
+    public HalsteadComplexity(HalsteadComplexity other) {
+        this.vocabulary = other.vocabulary;
+        this.programLength = other.programLength;
+        this.estimatedProgramLength = other.estimatedProgramLength;
+        this.volume = other.volume;
+        this.difficulty = other.difficulty;
+        this.effort = other.effort;
+    }
+
     public double getEffort() {
         return effort;
     }

@@ -8,13 +8,14 @@ import org.isw2.dataset.core.controller.context.*;
 import org.isw2.dataset.core.model.Method;
 import org.isw2.dataset.core.model.MethodsKey;
 import org.isw2.dataset.factory.*;
-import org.isw2.dataset.git.controller.GitHistoriesControllerContext;
 import org.isw2.dataset.jira.controller.context.GetTicketFromJiraContext;
 import org.isw2.dataset.exceptions.ProcessingException;
 import org.isw2.dataset.git.model.Commit;
 import org.isw2.dataset.jira.model.ReturnTickets;
 import org.isw2.dataset.jira.model.Ticket;
 import org.isw2.dataset.jira.model.Version;
+import org.isw2.dataset.metrics.controller.context.ComputeChangesContext;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -25,6 +26,7 @@ import java.util.logging.Logger;
 public class EntryPointController implements Controller<EntryPointContext, Void> {
 
     private static final Logger logger = Logger.getLogger(EntryPointController.class.getName());
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(EntryPointController.class);
 
     @Override
     public Void execute(EntryPointContext context) throws ProcessingException {
@@ -76,10 +78,10 @@ public class EntryPointController implements Controller<EntryPointContext, Void>
         AbstractControllerFactory<AnalyzeFileContext, Map<MethodsKey, List<Method>>> analyzeFileFactory = new AnalyzeFileFactory();
         Map<MethodsKey, List<Method>> methodByVersionAndPath = analyzeFileFactory.process(new AnalyzeFileContext(context.projectName(), versions));
 
-        // Compute GitHistories
-        logger.info("Compute git histories");
-        AbstractControllerFactory<GitHistoriesControllerContext, Void> gitHistoriesControllerFactory = new GitHistoriesControllerFactory();
-        gitHistoriesControllerFactory.process(new GitHistoriesControllerContext(methodByVersionAndPath, commits, versions));
+        // Compute changes metrics
+        logger.info("Compute changes metrics");
+        AbstractControllerFactory<ComputeChangesContext, Void> computeChangesFactory = new ComputeChangesMetricsByMethodFactory();
+        computeChangesFactory.process(new ComputeChangesContext(versions, methodByVersionAndPath));
 
         // Methods labeling
         AbstractControllerFactory<LabelingContext, Void> labelingController = new LabelingFactory();

@@ -8,6 +8,17 @@ public class ChangesMetrics {
     private int stmtDeleted = 0;
     private int maxStmtDeleted = 0;
 
+    public ChangesMetrics() {}
+
+    public ChangesMetrics(ChangesMetrics other) {
+        this.methodHistories = other.methodHistories;
+        this.authors = other.authors;
+        this.stmtAdded = other.stmtAdded;
+        this.maxStmtAdded = other.maxStmtAdded;
+        this.stmtDeleted = other.stmtDeleted;
+        this.maxStmtDeleted = other.maxStmtDeleted;
+    }
+
     public long getMethodHistories() {
         return methodHistories;
     }
