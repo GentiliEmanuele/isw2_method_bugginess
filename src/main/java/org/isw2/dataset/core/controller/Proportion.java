@@ -1,8 +1,11 @@
 package org.isw2.dataset.core.controller;
 
+import org.isw2.absfactory.AbstractControllerFactory;
+import org.isw2.dataset.core.controller.context.LinkCommitsAndTicketsContext;
 import org.isw2.dataset.core.controller.context.ProportionContext;
 import org.isw2.dataset.exceptions.ProcessingException;
 import org.isw2.absfactory.Controller;
+import org.isw2.dataset.factory.LinkCommitsAndTicketsFactory;
 import org.isw2.dataset.jira.model.Ticket;
 import org.isw2.dataset.jira.model.Version;
 
@@ -20,10 +23,6 @@ public class Proportion implements Controller<ProportionContext, Void> {
         float p = computeWithComplete(context.returnTickets().tickets(), context.versions());
 
         correct(context.returnTickets().toBeCorrected(), context.versions(), p);
-
-        context.returnTickets().tickets().addAll(context.returnTickets().toBeCorrected());
-
-        removeOutliers(context.returnTickets().tickets());
 
         return null;
     }

@@ -5,20 +5,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Added a filter for automated generated files (by protocol buffer compiler).">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/ComputeChangesMetricsByMethodFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/ComputeChangesMetrics.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/context/ComputeChangesContext.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/FileIsTouchedBy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/WalkVersions.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/context/TouchedByContext.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/context/WalkVersionsContext.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/model/IsBuggy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/model/MethodKey.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/FileIsTouchedByFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/WalkVersionsFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/AnalyzeFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/AnalyzeFile.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/EntryPointController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/EntryPointController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/context/AnalyzeFileContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/context/AnalyzeFileContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/Labeling.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/Labeling.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/LinkCommitsAndTickets.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/LinkCommitsAndTickets.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/Proportion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/Proportion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/context/LabelingContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/context/LabelingContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/context/LinkCommitsAndTicketsContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/context/LinkCommitsAndTicketsContext.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/model/Method.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/model/Method.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/GitHistoriesControllerFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/AnalyzeFileFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/AnalyzeFileFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/ComputeChangesMetricsByMethodFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/JavaMetricParserFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/JavaMetricParserFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/git/controller/GetCommitFromGit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/git/controller/GetCommitFromGit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/git/controller/GitHistoriesController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/model/ChangesMetrics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/model/ChangesMetrics.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/model/ComplexityMetrics.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/model/ComplexityMetrics.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/model/HalsteadComplexity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/model/HalsteadComplexity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/jira/model/Ticket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/jira/model/Ticket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/ComputeChangesMetrics.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/JavaMetricParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/JavaMetricParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/context/ParserContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/context/ParserContext.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/WekaCorrelation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/WekaCorrelation.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -61,7 +72,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.Experiments.executor": "Debug",
+    "Application.Experiments.executor": "Run",
     "Application.JiraBoundary.executor": "Run",
     "Application.JiraTempMain.executor": "Run",
     "Application.Main.executor": "Run",
@@ -75,6 +86,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "SONARLINT_PRECOMMIT_ANALYSIS": "true",
     "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/home/emanuele/IdeaProjects/isw2_method_bugginess",
     "node.js.detected.package.eslint": "true",
@@ -82,7 +94,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "Debugger_Data_Views_Java",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -482,12 +494,6 @@
           <properties class="org.isw2.exceptions.ProcessingException" package="org.isw2.exceptions" />
           <option name="timeStamp" value="24" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <condition expression="version.getName().equals(&quot;4.2.0&quot;)" language="JAVA" />
-          <url>file://$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/ComputeChangesMetrics.java</url>
-          <line>22</line>
-          <option name="timeStamp" value="43" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <pin-to-top-manager>
@@ -508,6 +514,25 @@
         <watch expression="change.edits" />
         <watch expression="change.edits" />
         <watch expression="context.versions.get(10)" />
+        <watch expression="currentMethods" />
+        <watch expression="((java.util.ArrayList)((HashMap.Node)((HashMap)methodsByVersion).entrySet().toArray()[0]).getValue()).get(0)" custom="java.util.HashMap.Node,java.util.HashMap,java.util.ArrayList" />
+        <watch expression="tickets" />
+        <watch expression="tickets" language="JAVA" />
+        <watch expression="tickets" language="JAVA" />
+        <watch expression="tickets" language="JAVA" />
+        <watch expression="affectedVersion.commits" />
+        <watch expression="affectedVersion" />
+        <watch expression="context" />
+        <watch expression="context" language="JAVA" />
+        <watch expression="ticket.fixedCommits.get(0).changes.get(1).edits" />
+        <watch expression="ticket.fixedCommits.get(0).changes.get(1).edits" />
+        <watch expression="returnTickets.tickets.get(1)" />
+        <watch expression="((java.util.ArrayList)((HashMap.Node)((HashMap)methodsByVersion).entrySet().toArray()[0]).getValue()).get(4)" custom="java.util.HashMap.Node,java.util.HashMap,java.util.ArrayList" />
+        <watch expression="((HashMap)methodsByCommit).entrySet().toArray()[31]" custom="java.util.HashMap" />
+        <watch expression="((HashMap)methodsByCommit).entrySet().toArray()[31]" language="JAVA" custom="java.util.HashMap" />
+        <watch expression="((HashMap)methodsByCommit).entrySet().toArray()[31]" language="JAVA" custom="java.util.HashMap" />
+        <watch expression="currentCommit.message" />
+        <watch expression="previousCommit.changes.get(0)" />
       </configuration>
     </watches-manager>
   </component>

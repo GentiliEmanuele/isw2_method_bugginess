@@ -6,7 +6,7 @@ import org.isw2.dataset.core.boundary.ExitPointBoundary;
 import org.isw2.dataset.core.boundary.Outcome;
 import org.isw2.dataset.core.controller.context.*;
 import org.isw2.dataset.core.model.Method;
-import org.isw2.dataset.core.model.MethodsKey;
+import org.isw2.dataset.core.model.MethodKey;
 import org.isw2.dataset.factory.*;
 import org.isw2.dataset.jira.controller.context.GetTicketFromJiraContext;
 import org.isw2.dataset.exceptions.ProcessingException;
@@ -14,7 +14,6 @@ import org.isw2.dataset.git.model.Commit;
 import org.isw2.dataset.jira.model.ReturnTickets;
 import org.isw2.dataset.jira.model.Ticket;
 import org.isw2.dataset.jira.model.Version;
-import org.isw2.dataset.metrics.controller.context.ComputeChangesContext;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
@@ -52,21 +51,27 @@ public class EntryPointController implements Controller<EntryPointContext, Void>
         AbstractControllerFactory<GetTicketFromJiraContext, ReturnTickets> getTicketFromJiraFactory= new GetTicketFromJiraFactory();
         ReturnTickets returnTickets = getTicketFromJiraFactory.process(new GetTicketFromJiraContext(context.projectName(), versions));
 
-        // Create proportion controller and apply proportion
-        logger.info("Execute proportion algorithm");
-        AbstractControllerFactory<ProportionContext, Void> proportionFactory = new ProportionFactory();
-        proportionFactory.process(new ProportionContext(versions, returnTickets));
-        tickets = returnTickets.tickets();
-
         // Create gitController and GetCommitFromGit
         logger.info("Get commits from git");
         AbstractControllerFactory<String, List<Commit>> getCommitFactory = new GetCommitFactory();
         commits = getCommitFactory.process(context.projectName());
         commits.sort(Comparator.comparing(commit -> LocalDate.parse(commit.commitTime())));
 
-        logger.info("Link commits and tickets");
+        logger.info("Link commits and consistent tickets");
         AbstractControllerFactory<LinkCommitsAndTicketsContext, Void> linkCommitsAndTicketsFactory = new LinkCommitsAndTicketsFactory();
-        linkCommitsAndTicketsFactory.process(new LinkCommitsAndTicketsContext(context.projectName(), commits, tickets));
+        linkCommitsAndTicketsFactory.process(new LinkCommitsAndTicketsContext(context.projectName(), commits, returnTickets.tickets(), versions));
+        returnTickets.tickets().removeIf(ticket -> ticket.getFixedCommits() == null || ticket.getFixedCommits().size() != 1);
+
+        // Create proportion controller and apply proportion
+        logger.info("Execute proportion algorithm");
+        AbstractControllerFactory<ProportionContext, Void> proportionFactory = new ProportionFactory();
+        proportionFactory.process(new ProportionContext(versions, returnTickets));
+        tickets = returnTickets.tickets();
+
+        logger.info("Link commits and corrected tickets");
+        linkCommitsAndTicketsFactory.process(new LinkCommitsAndTicketsContext(context.projectName(), commits, returnTickets.toBeCorrected(), versions));
+        returnTickets.tickets().removeIf(ticket -> ticket.getFixedCommits() == null || ticket.getFixedCommits().size() != 1);
+        returnTickets.tickets().addAll(returnTickets.toBeCorrected());
 
         // Merge versions and commits
         logger.info("Merge versions and commits");
@@ -75,33 +80,32 @@ public class EntryPointController implements Controller<EntryPointContext, Void>
 
         // Analyze files
         logger.info("Analyze files");
-        AbstractControllerFactory<AnalyzeFileContext, Map<MethodsKey, List<Method>>> analyzeFileFactory = new AnalyzeFileFactory();
-        Map<MethodsKey, List<Method>> methodByVersionAndPath = analyzeFileFactory.process(new AnalyzeFileContext(context.projectName(), versions));
+        AbstractControllerFactory<AnalyzeFileContext, Map<Commit, Map<MethodKey, Method>>> analyzeFileFactory = new AnalyzeFileFactory();
+        Map<Commit, Map<MethodKey, Method>> methodsByCommit = analyzeFileFactory.process(new AnalyzeFileContext(context.projectName(), versions));
 
-        // Compute changes metrics
-        logger.info("Compute changes metrics");
-        AbstractControllerFactory<ComputeChangesContext, Void> computeChangesFactory = new ComputeChangesMetricsByMethodFactory();
-        computeChangesFactory.process(new ComputeChangesContext(versions, methodByVersionAndPath));
+        // Link methodsByCommit and versions
+        logger.info("Link methodByCommit and versions");
+        AbstractControllerFactory<WalkVersionsContext, Map<Version, Map<MethodKey, Method>>> walkVersionsFactory = new WalkVersionsFactory();
+        Map<Version, Map<MethodKey, Method>> methodsByVersion = walkVersionsFactory.process(new WalkVersionsContext(methodsByCommit, versions));
 
-        // Methods labeling
-        AbstractControllerFactory<LabelingContext, Void> labelingController = new LabelingFactory();
-        labelingController.process(new LabelingContext(methodByVersionAndPath, tickets));
+        logger.info("Label methods");
+        AbstractControllerFactory<LabelingContext, Void> labelingFactory = new LabelingFactory();
+        labelingFactory.process(new LabelingContext(methodsByVersion, tickets, methodsByCommit));
 
-        // Write result on CSV
         try {
-            writeOutcome(context.projectName(), methodByVersionAndPath);
+            writeOutcome(context.projectName(), methodsByVersion);
         } catch (IOException e) {
-            throw new ProcessingException(e.getMessage());
+            throw new RuntimeException(e);
         }
 
         return null;
     }
 
-    private void writeOutcome(String projectName, Map<MethodsKey, List<Method>> methodByVersionAndPath) throws IOException {
+    private void writeOutcome(String projectName, Map<Version, Map<MethodKey, Method>> methodByVersionAndPath) throws IOException {
         List<Outcome> outcomes = new ArrayList<>();
-        methodByVersionAndPath.forEach((key, methods) ->
-            methods.forEach(method ->
-                outcomes.add(createOutcome(key.version(), method))
+        methodByVersionAndPath.forEach((version, methods) ->
+            methods.forEach((methodKey, method) ->
+                outcomes.add(createOutcome(version, method))
             )
         );
         outcomes.sort(Comparator.comparing(o -> LocalDate.parse(o.getReleaseDate())));
@@ -111,9 +115,9 @@ public class EntryPointController implements Controller<EntryPointContext, Void>
 
     private Outcome createOutcome(Version version, Method method) {
         Outcome outcome = new Outcome();
-        outcome.setClassName(method.getClassName());
-        outcome.setPath(method.getPath());
-        outcome.setSignature(method.getSignature());
+        outcome.setClassName(method.getMethodKey().className());
+        outcome.setPath(method.getMethodKey().path());
+        outcome.setSignature(method.getMethodKey().signature());
         outcome.setVersion(version.getName());
         outcome.setReleaseDate(version.getReleaseDate());
         outcome.setLinesOfCode(method.getMetrics().getLinesOfCode());
@@ -136,7 +140,7 @@ public class EntryPointController implements Controller<EntryPointContext, Void>
         outcome.setMaxStmtAdded(method.getChangesMetrics().getMaxStmtAdded());
         outcome.setStmtDeleted(method.getChangesMetrics().getStmtDeleted());
         outcome.setMaxStmtDeleted(method.getChangesMetrics().getMaxStmtDeleted());
-        outcome.setBuggy(method.getBuggy());
+        outcome.setBuggy(method.getBuggy().isBuggy());
         return outcome;
     }
 

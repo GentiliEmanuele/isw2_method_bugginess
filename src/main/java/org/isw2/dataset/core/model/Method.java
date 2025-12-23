@@ -11,28 +11,25 @@ import java.util.List;
 import java.util.Set;
 
 public class Method {
-    private String className;
-    private String signature;
-    private String path;
-    private final ComplexityMetrics metrics;
+    private MethodKey methodKey;
+    private ComplexityMetrics metrics;
     private final ChangesMetrics changesMetrics;
     private int startLine;
     private int endLine;
     private List<Commit> touchedBy;
     private Set<Author> authors;
-    private boolean buggy = false;
+    private final IsBuggy buggy;
 
     public Method() {
         metrics = new ComplexityMetrics();
         changesMetrics = new ChangesMetrics();
         authors = new HashSet<>();
         touchedBy = new ArrayList<>();
+        buggy = new IsBuggy();
     }
 
     public Method(Method other) {
-        this.className = other.className;
-        this.signature = other.signature;
-        this.path = other.path;
+        this.methodKey = other.methodKey;
         this.startLine = other.startLine;
         this.endLine = other.endLine;
         this.buggy = other.buggy;
@@ -42,32 +39,20 @@ public class Method {
         this.changesMetrics = new ChangesMetrics(other.changesMetrics);
     }
 
-    public String getClassName() {
-        return className;
+    public MethodKey getMethodKey() {
+        return methodKey;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
-    }
-
-    public String getSignature() {
-        return signature;
-    }
-
-    public void setSignature(String signature) {
-        this.signature = signature;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
+    public void setMethodKey(MethodKey methodKey) {
+        this.methodKey = methodKey;
     }
 
     public ComplexityMetrics getMetrics() {
         return metrics;
+    }
+
+    public void setMetrics(ComplexityMetrics metrics) {
+        this.metrics = metrics;
     }
 
     public int getStartLine() {
@@ -111,11 +96,11 @@ public class Method {
         return authors.size();
     }
 
-    public boolean getBuggy() {
+    public IsBuggy getBuggy() {
         return buggy;
     }
 
     public void setBuggy(boolean buggy) {
-        this.buggy = buggy;
+        this.buggy.setBuggy(buggy);
     }
 }

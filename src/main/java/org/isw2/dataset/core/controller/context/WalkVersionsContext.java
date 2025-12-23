@@ -3,11 +3,10 @@ package org.isw2.dataset.core.controller.context;
 import org.isw2.dataset.core.model.Method;
 import org.isw2.dataset.core.model.MethodKey;
 import org.isw2.dataset.git.model.Commit;
-import org.isw2.dataset.jira.model.Ticket;
 import org.isw2.dataset.jira.model.Version;
 
 import java.util.List;
 import java.util.Map;
 
-public record LabelingContext(Map<Version, Map<MethodKey, Method>> methodsByVersion, List<Ticket> tickets, Map<Commit, Map<MethodKey, Method>> methodsByCommit) {
+public record WalkVersionsContext(Map<Commit, Map<MethodKey, Method>> methodsByCommit, List<Version> versions) {
 }

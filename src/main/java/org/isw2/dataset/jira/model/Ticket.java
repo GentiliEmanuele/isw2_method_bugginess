@@ -7,7 +7,7 @@ import java.util.List;
 public class Ticket {
     private final String key;
     private List<Version> affectedVersions;
-    private final Version fixedVersion;
+    private Version fixedVersion;
     private Version injectedVersion;
     private Version openingVersion;
     private List<Commit> fixedCommits;
@@ -34,6 +34,10 @@ public class Ticket {
 
     public Version getFixedVersion() {
         return fixedVersion;
+    }
+
+    public void setFixedVersion(Version fixedVersion) {
+        this.fixedVersion = fixedVersion;
     }
 
     public Version getInjectedVersion() {

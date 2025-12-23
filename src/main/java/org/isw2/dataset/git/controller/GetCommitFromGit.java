@@ -20,9 +20,11 @@ import org.isw2.dataset.git.model.MyEdit;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class GetCommitFromGit implements Controller<String, List<Commit>> {
@@ -69,17 +71,20 @@ public class GetCommitFromGit implements Controller<String, List<Commit>> {
         for (RevCommit commit : commits) {
             Author author = new Author(commit.getAuthorIdent().getName(), commit.getAuthorIdent().getEmailAddress());
             if (commit.getParents().length != 0) {
-                if (commit.getParentCount() > 1 || commit.getParentCount() == 0) {
+                if (commit.getParentCount() > 1) {
                     continue;
                 }
-                RevCommit prevCommit = commit.getParent(0);
+                RevCommit prevCommit = (commit.getParentCount() > 0) ? commit.getParent(0) : null;
                 Commit newCommit = new Commit(
                         commit.getId().getName(),
                         author, formatDate(commit.getAuthorIdent().getWhenAsInstant().toString()), commit.getFullMessage(),
                         getFileDiffBetweenCommit(git, prevCommit, commit));
-                cleanedCommits.add(newCommit);
+                if (!newCommit.changes().isEmpty()) {
+                    cleanedCommits.add(newCommit);
+                }
             }
         }
+        cleanedCommits.sort(Comparator.comparing(commit -> LocalDate.parse(commit.commitTime())));
     }
 
 
@@ -101,8 +106,8 @@ public class GetCommitFromGit implements Controller<String, List<Commit>> {
 
             List<DiffEntry> diffs = formatter.scan(oldTree, newTree);
             for (DiffEntry entry : diffs) {
-                boolean isJava = (entry.getOldPath() != null && entry.getOldPath().endsWith(".java")) ||
-                        (entry.getNewPath() != null && entry.getNewPath().endsWith(".java"));
+                boolean isJava = (entry.getOldPath() != null && isAJavaFile(entry.getOldPath())) ||
+                        (entry.getNewPath() != null && isAJavaFile(entry.getNewPath()));
 
                 if (isJava) {
                     Change change = new Change();
@@ -128,5 +133,9 @@ public class GetCommitFromGit implements Controller<String, List<Commit>> {
             }
         }
         return changes;
+    }
+
+    private boolean isAJavaFile(String path) {
+        return path.endsWith(".java") && !path.endsWith("package-info.java");
     }
 }
