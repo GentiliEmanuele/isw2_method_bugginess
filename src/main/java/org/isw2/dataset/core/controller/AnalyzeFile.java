@@ -65,9 +65,7 @@ public class AnalyzeFile implements Controller<AnalyzeFileContext, Map<Commit, M
             String newPath = change.getNewPath();
             String oldPath = change.getOldPath();
             switch (type) {
-                case "ADD":
-                case "MODIFY":
-                case "COPY":
+                case "ADD", "MODIFY", "COPY":
                     // Parse the new content and update the map
                     updateFileMetrics(repo, commitId, newPath);
                     break;
@@ -83,6 +81,8 @@ public class AnalyzeFile implements Controller<AnalyzeFileContext, Map<Commit, M
                     // Add the new entry
                     updateFileMetrics(repo, commitId, newPath);
                     break;
+                default:
+                    throw new ProcessingException("Unknown change type: " + type);
             }
         }
     }

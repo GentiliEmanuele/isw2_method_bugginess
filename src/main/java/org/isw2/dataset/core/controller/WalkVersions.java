@@ -125,57 +125,10 @@ public class WalkVersions implements Controller<WalkVersionsContext, Map<Version
         }
     }
 
-    private void checkAndManageDelete(Map<MethodKey, Method> registry, Change change) {
-        if (change.getType().equals("DELETE")) {
-            String oldPath = change.getOldPath();
-            // Remove all method associated with the deleted file
-            registry.keySet().removeIf(key -> key.path().equals(oldPath));
-        }
-    }
-
-    private void mergeMethodInformation(Method currentMethod, Method pastMethod, Commit currentCommit) {
-        manageChangesCurrentCommit(currentMethod, currentCommit);
-        mergeComplexityCurrentCommit(currentMethod, pastMethod);
-        mergeChangesMetrics(currentMethod, pastMethod);
-    }
-
     private void mergeComplexityCurrentCommit(Method currentMethod, Method pastMethod) {
         pastMethod.setMetrics(new ComplexityMetrics(currentMethod.getMetrics()));
-    }
-
-    private void mergeChangesMetrics(Method currentMethod, Method pastMethod) {
-        long currentMethodHistories = currentMethod.getChangesMetrics().getMethodHistories();
-        mergeMethodHistories(pastMethod, currentMethodHistories);
-
-        int currentStmtAdded = currentMethod.getChangesMetrics().getStmtAdded();
-        int currentMaxStmtAdded = currentMethod.getChangesMetrics().getMaxStmtAdded();
-        mergeStmtAdded(pastMethod, currentStmtAdded, currentMaxStmtAdded);
-
-        int currentStmtDeleted = currentMethod.getChangesMetrics().getStmtDeleted();
-        int currentMaxStmtDeleted = currentMethod.getChangesMetrics().getMaxStmtDeleted();
-        mergeStmtDeleted(pastMethod, currentStmtDeleted, currentMaxStmtDeleted);
-
-        pastMethod.getTouchedBy().addAll(currentMethod.getTouchedBy());
-
-        pastMethod.getAuthors().addAll(currentMethod.getAuthors());
-    }
-
-    private void mergeMethodHistories(Method method, long newMethodHistories) {
-        method.getChangesMetrics().setMethodHistories(method.getChangesMetrics().getMethodHistories() + newMethodHistories);
-    }
-
-    private void mergeStmtAdded(Method method, int newStmtAdded, int newMaxStmtAdded) {
-        method.getChangesMetrics().setStmtAdded(method.getChangesMetrics().getStmtAdded() + newStmtAdded);
-        if (method.getChangesMetrics().getMaxStmtAdded() < newMaxStmtAdded) {
-            method.getChangesMetrics().setMaxStmtAdded(newMaxStmtAdded);
-        }
-    }
-
-    private void mergeStmtDeleted(Method method, int newStmtDeleted, int newMaxStmtDeleted) {
-        method.getChangesMetrics().setStmtDeleted(method.getChangesMetrics().getStmtDeleted() + newStmtDeleted);
-        if (method.getChangesMetrics().getMaxStmtDeleted() < newMaxStmtDeleted) {
-            method.getChangesMetrics().setMaxStmtDeleted(newMaxStmtDeleted);
-        }
+        pastMethod.setStartLine(currentMethod.getStartLine());
+        pastMethod.setEndLine(currentMethod.getEndLine());
     }
 
     private void manageChangesCurrentCommit(Method currentMethod, Commit currentCommit) {
@@ -282,7 +235,7 @@ public class WalkVersions implements Controller<WalkVersionsContext, Map<Version
     private boolean changeIsOverlappedWithMethod(MyEdit edit, Method method) {
         // Compute where common part start
         int methodStart = method.getStartLine() - 1; // Jgit is 0-based
-        int methodEnd = method.getEndLine() - 1;
+        int methodEnd = method.getEndLine();
         int overlapStart = Math.max(methodStart, edit.getNewStart());
         // Compute where common part end
         int overlapEnd = Math.min(methodEnd, edit.getNewEnd());

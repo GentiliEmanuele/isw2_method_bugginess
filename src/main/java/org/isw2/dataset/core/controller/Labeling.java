@@ -91,7 +91,7 @@ public class Labeling implements Controller<LabelingContext, Void> {
     private boolean changeIsOverlappedWithMethod(MyEdit edit, Method method) {
         // Compute where common part start
         int methodStart = method.getStartLine() - 1; // Jgit is 0-based
-        int methodEnd = method.getEndLine() - 1;
+        int methodEnd = method.getEndLine();
         int overlapStart = Math.max(methodStart, edit.getNewStart());
         // Compute where common part end
         int overlapEnd = Math.min(methodEnd, edit.getNewEnd());
