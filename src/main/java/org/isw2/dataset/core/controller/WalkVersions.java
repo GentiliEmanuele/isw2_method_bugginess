@@ -34,6 +34,8 @@ public class WalkVersions implements Controller<WalkVersionsContext, Map<Version
             }
             methodsByVersion.put(currentVersion, versionAccumulator);
         }
+
+
         return methodsByVersion;
     }
 
@@ -64,11 +66,11 @@ public class WalkVersions implements Controller<WalkVersionsContext, Map<Version
                 // If method exists: update static info and compute process metrics
                 Method registryMethod = globalRegistry.get(key);
 
+                // Compute process metrics
+                manageChangesCurrentCommit(registryMethod, snapshotMethod, currentCommit);
+
                 // Merge static info of the snapshot
                 mergeComplexityCurrentCommit(snapshotMethod, registryMethod);
-
-                // Compute process metrics
-                manageChangesCurrentCommit(registryMethod, currentCommit);
 
             } else {
                 // If the method is new, add it
@@ -79,16 +81,13 @@ public class WalkVersions implements Controller<WalkVersionsContext, Map<Version
                 newMethod.getChangesMetrics().setMethodHistories(0);
 
                 // Compute process metrics
-                manageChangesCurrentCommit(newMethod, currentCommit);
+                manageChangesCurrentCommit(newMethod, newMethod, currentCommit);
 
                 // Add to registry and accumulator
                 globalRegistry.put(key, newMethod);
                 accumulator.put(key, newMethod);
             }
         }
-
-        // If a delete occur remove the method from global registry
-        globalRegistry.keySet().removeIf(key -> !snapshot.containsKey(key));
     }
 
 
@@ -131,14 +130,14 @@ public class WalkVersions implements Controller<WalkVersionsContext, Map<Version
         pastMethod.setEndLine(currentMethod.getEndLine());
     }
 
-    private void manageChangesCurrentCommit(Method currentMethod, Commit currentCommit) {
+    private void manageChangesCurrentCommit(Method oldMethod, Method newMethod, Commit currentCommit) {
         for (Change change : currentCommit.changes()) {
 
-            boolean touched = checkAndManageAddChange(currentMethod, change, currentCommit.author()) ||
-                    checkAndManageModifyChange(currentMethod, change, currentCommit.author());
+            boolean touched = checkAndManageAddChange(newMethod, change, currentCommit.author()) ||
+                    checkAndManageModifyChange(oldMethod, newMethod, change, currentCommit.author());
 
             if (touched) {
-                currentMethod.getTouchedBy().add(currentCommit);
+                oldMethod.getTouchedBy().add(currentCommit);
             }
         }
     }
@@ -151,38 +150,39 @@ public class WalkVersions implements Controller<WalkVersionsContext, Map<Version
         return false;
     }
 
-    private boolean checkAndManageModifyChange(Method currentMethod, Change change, Author author) {
-        if (change.getType().equals("MODIFY") && change.getNewPath().equals(currentMethod.getMethodKey().path())) {
-            return updateForModifyChange(currentMethod, change, author);
+    private boolean checkAndManageModifyChange(Method oldMethod, Method newMethod, Change change, Author author) {
+        if (change.getType().equals("MODIFY") && change.getNewPath().equals(newMethod.getMethodKey().path())) {
+            return updateForModifyChange(oldMethod, newMethod, change, author);
         }
         return false;
     }
 
-    private boolean updateForModifyChange(Method method, Change change, Author author) {
+    private boolean updateForModifyChange(Method oldMethod, Method newMethod, Change change, Author author) {
         boolean isTouched = false;
         for (MyEdit edit :  change.getEdits()) {
+            int addedOverlap = computeOverlap(edit.getNewStart(), edit.getNewEnd(),
+                    newMethod.getStartLine() - 1, newMethod.getEndLine());
+
+            int deletedOverlap = computeOverlap(edit.getOldStart(), edit.getOldEnd(),
+                    oldMethod.getStartLine() - 1, oldMethod.getEndLine());
+
             // If method is not touched by edit skip it
-            if (!changeIsOverlappedWithMethod(edit, method)) continue;
-
+            if (addedOverlap == 0 && deletedOverlap == 0) continue;
             isTouched = true;
-
-            int methodStart = method.getStartLine() - 1;
-            int overlapStart = Math.max(methodStart, edit.getNewStart());
-            int overlapEnd = Math.min(method.getEndLine(), edit.getNewEnd());
 
             // Is an add edit
             if (isAnAddEdit(edit)) {
-                updateChangesMetrics(method, overlapEnd - overlapStart, 0, author);
+                updateChangesMetrics(oldMethod, addedOverlap, 0, author);
             }
 
             // Is a delete edit
             if (isADeleteEdit(edit)) {
-                updateChangesMetrics(method, 0, overlapEnd - overlapStart, author);
+                updateChangesMetrics(oldMethod, 0, deletedOverlap, author);
             }
 
             // Is a replacement edit
             if (isReplaceEdit(edit)) {
-                updateChangesMetrics(method, overlapEnd - overlapStart, overlapEnd - overlapStart, author);
+                updateChangesMetrics(oldMethod, addedOverlap, deletedOverlap, author);
             }
         }
         return isTouched;
@@ -232,15 +232,14 @@ public class WalkVersions implements Controller<WalkVersionsContext, Map<Version
         method.getChangesMetrics().setAuthors(nrAuthors);
     }
 
-    private boolean changeIsOverlappedWithMethod(MyEdit edit, Method method) {
-        // Compute where common part start
-        int methodStart = method.getStartLine() - 1; // Jgit is 0-based
-        int methodEnd = method.getEndLine();
-        int overlapStart = Math.max(methodStart, edit.getNewStart());
-        // Compute where common part end
-        int overlapEnd = Math.min(methodEnd, edit.getNewEnd());
-        // There is a common part only if overlapStart < overlapEnd
-        return overlapStart < overlapEnd;
+    private int computeOverlap(int editStart, int editEnd, int methodStart, int methodEnd) {
+        int overlapStart = Math.max(methodStart, editStart);
+        int overlapEnd = Math.min(methodEnd, editEnd);
+
+        if (overlapStart < overlapEnd) {
+            return overlapEnd - overlapStart;
+        }
+        return 0;
     }
 
 }
