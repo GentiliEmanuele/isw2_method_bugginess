@@ -1,5 +1,6 @@
 package org.isw2.dataset.core.controller;
 
+import net.sourceforge.pmd.PmdAnalysis;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.ObjectId;
@@ -18,6 +19,7 @@ import org.isw2.dataset.git.model.Change;
 import org.isw2.dataset.git.model.Commit;
 import org.isw2.dataset.jira.model.Version;
 import org.isw2.dataset.metrics.controller.context.ParserContext;
+import org.isw2.dataset.metrics.controller.context.PmdFileCollectorContext;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -51,14 +53,22 @@ public class AnalyzeFile implements Controller<AnalyzeFileContext, Map<Commit, M
         for (Version version : versions) {
             for (Commit commit : version.getCommits()) {
                 // Apply change to state based on commit changes
-                applyChangeToState(repo, commit);
+                applyChangeToState(repo, commit, version);
                 // Save the current snapshot
                 saveSnapshot(commit);
             }
         }
     }
 
-    private void applyChangeToState(Repository repo, Commit commit) throws IOException, ProcessingException {
+    private void addFileToPmd(Repository repo, Commit commit, Version version, String path) throws IOException, ProcessingException {
+        // Get the content of the file
+        ObjectId commitId = repo.resolve(commit.id());
+        String content = getFileContent(repo, commitId, path);
+        AbstractControllerFactory<PmdFileCollectorContext, Void> factory = new PmdFileCollectorFactory();
+        factory.process(new PmdFileCollectorContext(version, path, content));
+    }
+
+    private void applyChangeToState(Repository repo, Commit commit, Version version) throws IOException, ProcessingException {
         ObjectId commitId = repo.resolve(commit.id());
         for (Change change : commit.changes()) {
             String type = change.getType(); // "ADD", "MODIFY", "DELETE", "RENAME"
@@ -68,6 +78,7 @@ public class AnalyzeFile implements Controller<AnalyzeFileContext, Map<Commit, M
                 case "ADD", "MODIFY", "COPY":
                     // Parse the new content and update the map
                     updateFileMetrics(repo, commitId, newPath);
+                    addFileToPmd(repo, commit, version, newPath);
                     break;
 
                 case "DELETE":
@@ -80,6 +91,7 @@ public class AnalyzeFile implements Controller<AnalyzeFileContext, Map<Commit, M
                     currentSystemState.remove(oldPath);
                     // Add the new entry
                     updateFileMetrics(repo, commitId, newPath);
+                    addFileToPmd(repo, commit, version, newPath);
                     break;
                 default:
                     throw new ProcessingException("Unknown change type: " + type);

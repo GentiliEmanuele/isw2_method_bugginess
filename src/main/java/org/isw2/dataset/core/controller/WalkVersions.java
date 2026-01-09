@@ -34,8 +34,6 @@ public class WalkVersions implements Controller<WalkVersionsContext, Map<Version
             }
             methodsByVersion.put(currentVersion, versionAccumulator);
         }
-
-
         return methodsByVersion;
     }
 
@@ -88,6 +86,8 @@ public class WalkVersions implements Controller<WalkVersionsContext, Map<Version
                 accumulator.put(key, newMethod);
             }
         }
+        // If a delete occur remove the method from global registry
+        globalRegistry.keySet().removeIf(key -> !snapshot.containsKey(key));
     }
 
 

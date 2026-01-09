@@ -4,9 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Modified mechanism that compute changes metrics">
+    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Modified (again) mechanism that compute changes metrics">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/LinkMethodAndSmellFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/LinkMethodAndSmell.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/context/LinkMethodAndSmellContext.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/AnalyzeFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/AnalyzeFile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/EntryPointController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/EntryPointController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/WalkVersions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/WalkVersions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/context/AnalyzeFileContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/context/AnalyzeFileContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/PmdFileAnalyzerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/PmdFileAnalyzerFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/PmdFileCollectorFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/PmdFileCollectorFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/PmdFileAnalyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/PmdFileAnalyzer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/PmdFileCollector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/PmdFileCollector.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,34 +56,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Experiments.executor&quot;: &quot;Run&quot;,
-    &quot;Application.JiraBoundary.executor&quot;: &quot;Run&quot;,
-    &quot;Application.JiraTempMain.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Unnamed.executor&quot;: &quot;Run&quot;,
-    &quot;Application.WekaCorrelation.executor&quot;: &quot;Run&quot;,
-    &quot;Application.org.isw2.weka.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.isw2_method_bugginess [pmd:pmd].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/emanuele/IdeaProjects/isw2_method_bugginess&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;Debugger_Data_Views_Java&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Experiments.executor": "Run",
+    "Application.JiraBoundary.executor": "Run",
+    "Application.JiraTempMain.executor": "Run",
+    "Application.Main.executor": "Run",
+    "Application.Unnamed.executor": "Run",
+    "Application.WekaCorrelation.executor": "Run",
+    "Application.org.isw2.weka.Main.executor": "Run",
+    "Maven.isw2_method_bugginess [pmd:pmd].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/emanuele/IdeaProjects/isw2_method_bugginess",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "Debugger_Data_Views_Java",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Application.Experiments">
     <configuration name="Experiments" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="org.isw2.experiment.Experiments" />
@@ -180,7 +190,12 @@
       <workItem from="1765311950997" duration="28000" />
       <workItem from="1766521106017" duration="605000" />
       <workItem from="1766564140174" duration="11639000" />
-      <workItem from="1766842410398" duration="4511000" />
+      <workItem from="1766842410398" duration="6903000" />
+      <workItem from="1767030199163" duration="241000" />
+      <workItem from="1767799504403" duration="47000" />
+      <workItem from="1767950581395" duration="65000" />
+      <workItem from="1767951810341" duration="608000" />
+      <workItem from="1767965862211" duration="10444000" />
     </task>
     <task id="LOCAL-00001" summary="Optimized the code and added the mechanism that save computed metrics in CSV.">
       <option name="closed" value="true" />
@@ -430,7 +445,15 @@
       <option name="project" value="LOCAL" />
       <updated>1766575407977</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="Modified (again) mechanism that compute changes metrics">
+      <option name="closed" value="true" />
+      <created>1766847013078</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1766847013078</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -448,7 +471,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Implemented proportion" />
     <MESSAGE value="Implemented labeling" />
     <MESSAGE value="Changed the way code smells are calculated" />
     <MESSAGE value="Changed the calculation of some complexity metrics" />
@@ -473,7 +495,8 @@
     <MESSAGE value="Fix an error on LOC computation." />
     <MESSAGE value="Added a filter for automated generated files (by protocol buffer compiler)." />
     <MESSAGE value="Modified mechanism that compute changes metrics" />
-    <option name="LAST_COMMIT_MESSAGE" value="Modified mechanism that compute changes metrics" />
+    <MESSAGE value="Modified (again) mechanism that compute changes metrics" />
+    <option name="LAST_COMMIT_MESSAGE" value="Modified (again) mechanism that compute changes metrics" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -521,6 +544,7 @@
         <watch expression="((HashMap)methodsByCommit).entrySet().toArray()[31]" language="JAVA" custom="java.util.HashMap" />
         <watch expression="currentCommit.message" />
         <watch expression="previousCommit.changes.get(0)" />
+        <watch expression="change.edits" />
       </configuration>
     </watches-manager>
   </component>

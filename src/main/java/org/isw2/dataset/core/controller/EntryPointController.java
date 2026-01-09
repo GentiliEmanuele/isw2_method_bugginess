@@ -14,6 +14,9 @@ import org.isw2.dataset.git.model.Commit;
 import org.isw2.dataset.jira.model.ReturnTickets;
 import org.isw2.dataset.jira.model.Ticket;
 import org.isw2.dataset.jira.model.Version;
+import org.isw2.dataset.metrics.controller.LinkMethodAndSmell;
+import org.isw2.dataset.metrics.controller.context.LinkMethodAndSmellContext;
+import org.isw2.dataset.metrics.model.CodeSmell;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
@@ -87,6 +90,16 @@ public class EntryPointController implements Controller<EntryPointContext, Void>
         logger.info("Link methodByCommit and versions");
         AbstractControllerFactory<WalkVersionsContext, Map<Version, Map<MethodKey, Method>>> walkVersionsFactory = new WalkVersionsFactory();
         Map<Version, Map<MethodKey, Method>> methodsByVersion = walkVersionsFactory.process(new WalkVersionsContext(methodsByCommit, versions));
+
+        // Compute code smell
+        logger.info("Compute code smell");
+        AbstractControllerFactory<Void, Map<String, List<CodeSmell>>> codeSmellComputationFactory = new PmdFileAnalyzerFactory();
+        Map<String, List<CodeSmell>> smellsByPathAndVersion = codeSmellComputationFactory.process(null);
+
+        // Link method and smell
+        logger.info("Link code smell and methods");
+        AbstractControllerFactory<LinkMethodAndSmellContext, Void> linkMethodAndSmellFactory = new LinkMethodAndSmellFactory();
+        linkMethodAndSmellFactory.process(new LinkMethodAndSmellContext(smellsByPathAndVersion, methodsByVersion));
 
         logger.info("Label methods");
         AbstractControllerFactory<LabelingContext, Void> labelingFactory = new LabelingFactory();
