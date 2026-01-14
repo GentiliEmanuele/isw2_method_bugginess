@@ -4,19 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Modified (again) mechanism that compute changes metrics">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/LinkMethodAndSmellFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/LinkMethodAndSmell.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/context/LinkMethodAndSmellContext.java" afterDir="false" />
+    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Reinserted the mechanism that compute the code smells foreach method. Modified the mechanism that compute changes metrics.">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/procedure/BackWardSearch.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/procedure/FeatureSelection.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/procedure/WekaBackWardSearchWrapper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/AnalyzeFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/AnalyzeFile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/EntryPointController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/EntryPointController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/WalkVersions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/WalkVersions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/context/AnalyzeFileContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/context/AnalyzeFileContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/PmdFileAnalyzerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/PmdFileAnalyzerFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/PmdFileCollectorFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/PmdFileCollectorFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/PmdFileAnalyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/PmdFileAnalyzer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/PmdFileCollector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/PmdFileCollector.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/experiment/ConfigLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/experiment/ConfigLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/experiment/Experiments.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/experiment/Experiments.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/WekaBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/WekaBoundary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/tuning/CostSensitiveTuner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/tuning/CostSensitiveTuner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/tuning/Tuner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/tuning/Tuner.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,9 +24,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Interface" />
         <option value="Enum" />
         <option value="Record" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -195,7 +193,16 @@
       <workItem from="1767799504403" duration="47000" />
       <workItem from="1767950581395" duration="65000" />
       <workItem from="1767951810341" duration="608000" />
-      <workItem from="1767965862211" duration="10444000" />
+      <workItem from="1767965862211" duration="10797000" />
+      <workItem from="1767977730919" duration="436000" />
+      <workItem from="1768042520765" duration="32000" />
+      <workItem from="1768052615693" duration="7058000" />
+      <workItem from="1768211229874" duration="178000" />
+      <workItem from="1768224604012" duration="10531000" />
+      <workItem from="1768301720521" duration="34000" />
+      <workItem from="1768312806390" duration="7208000" />
+      <workItem from="1768387565505" duration="403000" />
+      <workItem from="1768397609709" duration="10199000" />
     </task>
     <task id="LOCAL-00001" summary="Optimized the code and added the mechanism that save computed metrics in CSV.">
       <option name="closed" value="true" />
@@ -453,7 +460,15 @@
       <option name="project" value="LOCAL" />
       <updated>1766847013078</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="Reinserted the mechanism that compute the code smells foreach method. Modified the mechanism that compute changes metrics.">
+      <option name="closed" value="true" />
+      <created>1767977516815</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1767977516815</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -471,7 +486,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Implemented labeling" />
     <MESSAGE value="Changed the way code smells are calculated" />
     <MESSAGE value="Changed the calculation of some complexity metrics" />
     <MESSAGE value="Changed the calculation of some complexity metrics (pt2)" />
@@ -496,7 +510,8 @@
     <MESSAGE value="Added a filter for automated generated files (by protocol buffer compiler)." />
     <MESSAGE value="Modified mechanism that compute changes metrics" />
     <MESSAGE value="Modified (again) mechanism that compute changes metrics" />
-    <option name="LAST_COMMIT_MESSAGE" value="Modified (again) mechanism that compute changes metrics" />
+    <MESSAGE value="Reinserted the mechanism that compute the code smells foreach method. Modified the mechanism that compute changes metrics." />
+    <option name="LAST_COMMIT_MESSAGE" value="Reinserted the mechanism that compute the code smells foreach method. Modified the mechanism that compute changes metrics." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

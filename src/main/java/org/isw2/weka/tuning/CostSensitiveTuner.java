@@ -3,10 +3,9 @@ package org.isw2.weka.tuning;
 import org.isw2.absfactory.AbstractControllerFactory;
 import org.isw2.dataset.exceptions.ProcessingException;
 import org.isw2.weka.factory.CostSensitiveClassifierBuilderFactory;
-import org.isw2.weka.factory.SplitterFactory;
 import org.isw2.weka.model.Statistics;
+import org.isw2.weka.procedure.FeatureSelection;
 import org.isw2.weka.utils.context.CostSensitiveClassifierBuilderContext;
-import org.isw2.weka.utils.context.SplitterContext;
 import weka.classifiers.Classifier;
 import weka.classifiers.CostMatrix;
 import weka.classifiers.Evaluation;
@@ -20,7 +19,7 @@ public class CostSensitiveTuner implements Tuner{
     @Override
     public Classifier tune(Classifier classifier, Instances training, double splittingPercentage) throws ProcessingException {
         // Splitting data in training and validation (assuming that test set is already removed)
-        List<Instances> datasets = splitData(training, splittingPercentage);
+        List<Instances> datasets = FeatureSelection.splitData(training, splittingPercentage);
         Instances trainingSplit = datasets.get(0);
         Instances validationSplit = datasets.get(1);
 
@@ -49,11 +48,6 @@ public class CostSensitiveTuner implements Tuner{
         } catch (Exception e) {
             throw new ProcessingException(e.getMessage());
         }
-    }
-
-    private List<Instances> splitData(Instances data, double splittingPercentage) throws ProcessingException {
-        AbstractControllerFactory<SplitterContext, List<Instances>> splitterFactory = new SplitterFactory();
-        return splitterFactory.process(new SplitterContext(splittingPercentage, data));
     }
 
     private CostSensitiveClassifier createCostSensitiveClassifier(Classifier classifier, double falseNegativeCost) throws ProcessingException {

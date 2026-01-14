@@ -26,6 +26,11 @@ public class ConfigLoader {
         return prop;
     }
 
+    public static boolean loadRebuildDataset() {
+        Properties prop = loadProperties();
+        return Boolean.parseBoolean(prop.getProperty("rebuildDataset"));
+    }
+
     public static List<ClassifierType> loadClassifiers() {
         List<ClassifierType> classifierList = new ArrayList<>();
         Properties prop = loadProperties();

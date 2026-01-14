@@ -18,6 +18,7 @@ public class Experiments {
         // Load configuration
         List<String> projectNames = ConfigLoader.loadProjects();
         List<ClassifierType> classifiersToTest = ConfigLoader.loadClassifiers();
+        boolean rebuildDataset = ConfigLoader.loadRebuildDataset();
 
         if (projectNames.isEmpty() || classifiersToTest.isEmpty()) {
             LOGGER.severe("Projects or Classifiers list is empty in config.properties. Exiting.");
@@ -25,8 +26,10 @@ public class Experiments {
         }
 
         for (String projectName : projectNames) {
-            // Create a dataset with the actual configuration params
-            EntryPointBoundary.startAnalysis(new EntryPointContext(projectName, ConfigLoader.getVersionDiscardPercentage(projectName)));
+            // Foreach project build the dataset only if rebuild dataset is true
+            if (rebuildDataset) {
+                EntryPointBoundary.startAnalysis(new EntryPointContext(projectName, ConfigLoader.getVersionDiscardPercentage(projectName)));
+            }
             // Build a model with Weka using the dataset
             WekaBoundary.wekaBoundaryWork(projectName, classifiersToTest);
         }

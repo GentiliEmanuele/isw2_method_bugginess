@@ -7,6 +7,8 @@ import org.isw2.weka.factory.SplitDataByVersionFactory;
 import org.isw2.weka.factory.WalkForwardFactory;
 import org.isw2.weka.model.Statistics;
 import org.isw2.weka.procedure.WalkForwardContext;
+import org.isw2.weka.procedure.BackWardSearch;
+import org.isw2.weka.procedure.WekaBackWardSearchWrapper;
 import org.isw2.weka.tuning.DummyTuner;
 import org.isw2.weka.utils.StatsToCsv;
 import org.isw2.weka.utils.context.SplitDataByVersionContext;
@@ -34,8 +36,15 @@ public class WekaBoundary {
         AbstractControllerFactory<SplitDataByVersionContext, List<Instances>> splitterFactory = new SplitDataByVersionFactory();
         AbstractControllerFactory<WalkForwardContext, Map<Integer, Statistics>> walkForwardFactory = new WalkForwardFactory();
 
+        // Apply feature selection
+        // BackWardSearch featureSelectionTuner = new BackWardSearch();
+        // Instances selectedFeatures = featureSelectionTuner.selectFeatures(dataSet);
+
+        WekaBackWardSearchWrapper featureSelection = new WekaBackWardSearchWrapper();
+        Instances selectedFeatures = featureSelection.selectFeatures(dataSet);
+
         // Split dataset by versions
-        List<Instances> dataByVersion = splitterFactory.process(new SplitDataByVersionContext(dataSet, RELEASE_ID));
+        List<Instances> dataByVersion = splitterFactory.process(new SplitDataByVersionContext(selectedFeatures, RELEASE_ID));
 
         // Call walk forward procedure foreach classifier
         Map<ClassifierType, Map<Integer, Statistics>> statsByClassifier = new EnumMap<>(ClassifierType.class);

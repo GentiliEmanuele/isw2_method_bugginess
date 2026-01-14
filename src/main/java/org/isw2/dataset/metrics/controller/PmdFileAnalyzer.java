@@ -12,10 +12,7 @@ import net.sourceforge.pmd.reporting.RuleViolation;
 import org.isw2.dataset.metrics.model.CodeSmell;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class PmdFileAnalyzer implements Controller<Void, Map<String, List<CodeSmell>>> {
@@ -24,9 +21,10 @@ public class PmdFileAnalyzer implements Controller<Void, Map<String, List<CodeSm
 
     public PmdFileAnalyzer() {
         PMDConfiguration config = new PMDConfiguration();
-        config.addRuleSet("rulesets/java/quickstart.xml");
+        config.addRuleSet("category/java/bestpractices.xml");
         config.setSourceEncoding(StandardCharsets.UTF_8);
         LanguageVersion languageVersion = LanguageRegistry.PMD.getLanguageVersionById("java", "1.8");
+        config.setThreads(Runtime.getRuntime().availableProcessors());
         config.setDefaultLanguageVersion(languageVersion);
         config.setFailOnViolation(false);
         config.setFailOnError(false);
@@ -50,8 +48,16 @@ public class PmdFileAnalyzer implements Controller<Void, Map<String, List<CodeSm
 
     private void loadFileForPmdAnalysis() {
         Map<String, TextFile> contentByVersionsAndPath = PmdFileCollector.getInstance().getContentByVersionAndPath();
-        contentByVersionsAndPath.forEach((fileId, textFiles) -> {
-            pmdAnalysis.files().addFile(textFiles);
-        });
+        Iterator<Map.Entry<String, TextFile>> iterator = contentByVersionsAndPath.entrySet().iterator();
+        while (iterator.hasNext()) {
+            // Get the next element
+            Map.Entry<String, TextFile> entry = iterator.next();
+
+            // Load the next element for pmd analysis
+            pmdAnalysis.files().addFile(entry.getValue());
+
+            // Remove the file from the map
+            iterator.remove();
+        }
     }
 }
