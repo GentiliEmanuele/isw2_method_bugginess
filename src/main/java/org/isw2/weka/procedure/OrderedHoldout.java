@@ -6,8 +6,6 @@ import org.isw2.weka.model.Statistics;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.core.Instances;
-import weka.filters.Filter;
-import weka.filters.unsupervised.attribute.Remove;
 
 
 public class OrderedHoldout implements Controller<OrderedHoldoutContext, Statistics> {
@@ -16,32 +14,15 @@ public class OrderedHoldout implements Controller<OrderedHoldoutContext, Statist
     public Statistics execute(OrderedHoldoutContext context) throws ProcessingException {
         try {
             // Set buggy as class index for training data
-            if (context.trainData().classIndex() == -1)
-                context.trainData().setClassIndex(context.trainData().numAttributes() - 1);
+            context.trainData().setClassIndex(context.trainData().numAttributes() - 1);
 
             // Set buggy as class index for test data
-            if (context.testData().classIndex() == -1)
-                context.testData().setClassIndex(context.testData().numAttributes() - 1);
+            context.testData().setClassIndex(context.testData().numAttributes() - 1);
 
-            // Remove identification columns for training and test set
-            Instances cleanedTraining = removeIdColumns(context.trainData());
-            Instances cleanedTest = removeIdColumns(context.testData());
+            Classifier classifier = context.tuner().tune(context.classifier(), context.trainData(), context.splittingPercentage());
 
-            Classifier classifier = context.tuner().tune(context.classifier(), cleanedTraining, context.splittingPercentage());
+            return applyTestSet(context.trainData(), context.testData(), classifier);
 
-            return applyTestSet(cleanedTraining, cleanedTest, classifier);
-
-        } catch (Exception e) {
-            throw new ProcessingException(e.getMessage());
-        }
-    }
-
-    private Instances removeIdColumns(Instances data) throws ProcessingException {
-        try {
-            Remove removeFilter = new Remove();
-            removeFilter.setAttributeIndices("1-5");
-            removeFilter.setInputFormat(data);
-            return Filter.useFilter(data, removeFilter);
         } catch (Exception e) {
             throw new ProcessingException(e.getMessage());
         }

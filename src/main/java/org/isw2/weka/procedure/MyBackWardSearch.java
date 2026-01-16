@@ -7,19 +7,16 @@ import org.isw2.weka.model.Statistics;
 import org.isw2.weka.tuning.DummyTuner;
 import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
-import weka.filters.Filter;
-import weka.filters.unsupervised.attribute.Remove;
 
 import java.util.List;
 import java.util.logging.Logger;
 
-public class BackWardSearch implements FeatureSelection {
+public class MyBackWardSearch {
 
-    private static final Logger LOGGER = Logger.getLogger(BackWardSearch.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(MyBackWardSearch.class.getName());
     private static final int FIRST_VALID_FEATURE_INDEX = 5;
 
-    @Override
-    public Instances selectFeatures(Instances training) throws ProcessingException {
+    public Instances selectFeatures(Instances training, boolean backward) throws ProcessingException {
 
         if (training.classIndex() == -1)
             training.setClassIndex(training.numAttributes() - 1);
@@ -85,7 +82,7 @@ public class BackWardSearch implements FeatureSelection {
 
     private Instances wrapperSetIndexToBeRemoved(int x, Instances training) throws ProcessingException {
         try {
-            return FeatureSelection.setIndexToBeRemoved(x, training);
+            return FeatureSelectionUtils.setIndexToBeRemoved(x, training);
         } catch (Exception e) {
             throw new ProcessingException(e.getMessage());
         }
@@ -93,13 +90,13 @@ public class BackWardSearch implements FeatureSelection {
 
     private Statistics evaluate(Instances training) throws ProcessingException {
         // Split training and testing set
-        List<Instances> splitTraining = FeatureSelection.splitData(training, 0.8);
+        List<Instances> splitTraining = FeatureSelectionUtils.splitData(training, 0.8);
         Instances trainSet = splitTraining.getFirst();
         Instances testSet = splitTraining.getLast();
 
         // Remove ids cols (only for the evaluation of the model)
-        Instances cleanTrain = FeatureSelection.removeIds(trainSet);
-        Instances cleanTest = FeatureSelection.removeIds(testSet);
+        Instances cleanTrain = FeatureSelectionUtils.removeIds(trainSet);
+        Instances cleanTest = FeatureSelectionUtils.removeIds(testSet);
 
         // Create a RandomForest classifier doing only 10 iteration (speeder then default configuration but sufficient for feature selection)
         RandomForest randomForest = new RandomForest();

@@ -31,6 +31,16 @@ public class ConfigLoader {
         return Boolean.parseBoolean(prop.getProperty("rebuildDataset"));
     }
 
+    public static boolean loadFeatureSelection() {
+        Properties prop = loadProperties();
+        return Boolean.parseBoolean(prop.getProperty("featureSelection.active"));
+    }
+
+    public static boolean loadFeatureSelectionType() {
+        Properties prop = loadProperties();
+        return Boolean.parseBoolean(prop.getProperty("featureSelection.backward"));
+    }
+
     public static List<ClassifierType> loadClassifiers() {
         List<ClassifierType> classifierList = new ArrayList<>();
         Properties prop = loadProperties();

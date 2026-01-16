@@ -20,6 +20,9 @@ public class Experiments {
         List<ClassifierType> classifiersToTest = ConfigLoader.loadClassifiers();
         boolean rebuildDataset = ConfigLoader.loadRebuildDataset();
 
+        boolean activeFeatureSelection = ConfigLoader.loadFeatureSelection();
+        boolean featureSelectionType = ConfigLoader.loadFeatureSelectionType();
+
         if (projectNames.isEmpty() || classifiersToTest.isEmpty()) {
             LOGGER.severe("Projects or Classifiers list is empty in config.properties. Exiting.");
             return;
@@ -31,7 +34,7 @@ public class Experiments {
                 EntryPointBoundary.startAnalysis(new EntryPointContext(projectName, ConfigLoader.getVersionDiscardPercentage(projectName)));
             }
             // Build a model with Weka using the dataset
-            WekaBoundary.wekaBoundaryWork(projectName, classifiersToTest);
+            WekaBoundary.wekaBoundaryWork(projectName, classifiersToTest, activeFeatureSelection, featureSelectionType);
         }
     }
 }
