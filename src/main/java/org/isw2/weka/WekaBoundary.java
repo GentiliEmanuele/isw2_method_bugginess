@@ -5,6 +5,8 @@ import org.isw2.dataset.exceptions.ProcessingException;
 import org.isw2.weka.classifier.ClassifierType;
 import org.isw2.weka.factory.SplitDataByVersionFactory;
 import org.isw2.weka.factory.WalkForwardFactory;
+import org.isw2.weka.factory.WekaCorrelationFactory;
+import org.isw2.weka.model.Correlation;
 import org.isw2.weka.model.Statistics;
 import org.isw2.weka.procedure.FeatureSelectionUtils;
 import org.isw2.weka.procedure.WalkForwardContext;
@@ -22,10 +24,13 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class WekaBoundary {
 
     private static final String RELEASE_ID = "ReleaseID";
+    private static final Logger LOGGER = Logger.getLogger(WekaBoundary.class.getName());
 
     private WekaBoundary() {}
 
@@ -62,6 +67,10 @@ public class WekaBoundary {
             statsByClassifier.put(classifier, statsByRun);
         }
 
+        AbstractControllerFactory<String, List<Correlation>> computeCorrelationFactory = new WekaCorrelationFactory();
+        List<Correlation> correlations = computeCorrelationFactory.process(projectName);
+
+        StatsToCsv.writeCorrelationToCsc(projectName, correlations);
         StatsToCsv.writeStatsToCsv(projectName, statsByClassifier);
     }
 }

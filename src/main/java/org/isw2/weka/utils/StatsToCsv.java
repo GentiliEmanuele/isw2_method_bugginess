@@ -2,10 +2,12 @@ package org.isw2.weka.utils;
 
 import com.opencsv.CSVWriter;
 import org.isw2.weka.classifier.ClassifierType;
+import org.isw2.weka.model.Correlation;
 import org.isw2.weka.model.Statistics;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 public class StatsToCsv {
@@ -16,6 +18,11 @@ public class StatsToCsv {
             "Precision",
             "F1Score",
             "areaUnderROC",
+    };
+
+    private static final String [] CORRELATION_HEADER = {
+            "Attribute",
+            "Correlation-value"
     };
 
     private StatsToCsv() {}
@@ -36,6 +43,19 @@ public class StatsToCsv {
                     writer.writeNext(row);
                 })
             );
+        }
+    }
+
+    public static void writeCorrelationToCsc(String projectName, List<Correlation> correlations) throws IOException {
+        try (CSVWriter writer = new CSVWriter(new FileWriter("output/weka_correlation" + projectName + ".csv"))) {
+            writer.writeNext(CORRELATION_HEADER);
+            correlations.forEach(correlation -> {
+                String[] row = {
+                        correlation.attributeName(),
+                        String.valueOf(correlation.correlation())
+                };
+                writer.writeNext(row);
+            });
         }
     }
 }
