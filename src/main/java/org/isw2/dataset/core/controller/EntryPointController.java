@@ -14,7 +14,6 @@ import org.isw2.dataset.git.model.Commit;
 import org.isw2.dataset.jira.model.ReturnTickets;
 import org.isw2.dataset.jira.model.Ticket;
 import org.isw2.dataset.jira.model.Version;
-import org.isw2.dataset.metrics.controller.LinkMethodAndSmell;
 import org.isw2.dataset.metrics.controller.context.LinkMethodAndSmellContext;
 import org.isw2.dataset.metrics.model.CodeSmell;
 import org.slf4j.LoggerFactory;

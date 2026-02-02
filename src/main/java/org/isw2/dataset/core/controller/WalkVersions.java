@@ -24,7 +24,10 @@ public class WalkVersions implements Controller<WalkVersionsContext, Map<Version
         Map<MethodKey, Method> globalRegistry = new HashMap<>();
 
         for (Version currentVersion : context.versions()) {
-            Map<MethodKey, Method> versionAccumulator = new HashMap<>(globalRegistry);
+            Map<MethodKey, Method> versionAccumulator = new HashMap<>();
+            for (Map.Entry<MethodKey, Method> entry : globalRegistry.entrySet()) {
+                versionAccumulator.put(entry.getKey(), new Method(entry.getValue()));
+            }
             for (Commit currentCommit : currentVersion.getCommits()) {
                 Map<MethodKey, Method> snapshot = context.methodsByCommit().get(currentCommit);
                 if (snapshot == null) continue;

@@ -9,8 +9,6 @@ import org.isw2.dataset.exceptions.ProcessingException;
 import org.isw2.absfactory.Controller;
 import org.isw2.dataset.metrics.controller.context.PmdFileCollectorContext;
 
-import java.io.IOException;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,12 +29,8 @@ public class PmdFileCollector implements Controller<PmdFileCollectorContext, Voi
     @Override
     public Void execute(PmdFileCollectorContext context) throws ProcessingException {
         String uniqueFileId = context.version().getName() + "_" + context.path();
-        try (TextFile textFile = TextFile.forCharSeq(context.content(), FileId.fromPathLikeString(uniqueFileId), this.languageVersion)) {
-            contentByVersionAndPath.remove(uniqueFileId);
-            contentByVersionAndPath.put(uniqueFileId, textFile);
-        } catch (IOException e) {
-            throw new ProcessingException(e.getMessage());
-        }
+        TextFile textFile = TextFile.forCharSeq(context.content(), FileId.fromPathLikeString(uniqueFileId), this.languageVersion);
+        contentByVersionAndPath.put(uniqueFileId, textFile);
         return null;
     }
 

@@ -22,7 +22,7 @@ public class ComplexityMetrics {
         this.nestingDepth = other.nestingDepth;
         this.numberOfBranchesAndDecisionPoint = other.numberOfBranchesAndDecisionPoint;
         this.parameterCount = other.parameterCount;
-        this.codeSmellCounter = other.codeSmellCounter;
+        this.codeSmellCounter = 0;
     }
 
     public int getLinesOfCode() {
