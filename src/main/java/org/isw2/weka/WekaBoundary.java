@@ -24,13 +24,10 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class WekaBoundary {
 
     private static final String RELEASE_ID = "ReleaseID";
-    private static final Logger LOGGER = Logger.getLogger(WekaBoundary.class.getName());
 
     private WekaBoundary() {}
 

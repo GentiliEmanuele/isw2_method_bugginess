@@ -26,6 +26,11 @@ public class ConfigLoader {
         return prop;
     }
 
+    public static boolean loadWhatIfEnable() {
+        Properties prop = loadProperties();
+        return Boolean.parseBoolean(prop.getProperty("what.if.enable"));
+    }
+
     public static boolean loadRebuildDataset() {
         Properties prop = loadProperties();
         return Boolean.parseBoolean(prop.getProperty("rebuildDataset"));

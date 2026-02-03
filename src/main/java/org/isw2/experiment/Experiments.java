@@ -1,13 +1,22 @@
 package org.isw2.experiment;
 
 
+import org.isw2.absfactory.AbstractControllerFactory;
 import org.isw2.dataset.core.boundary.EntryPointBoundary;
 import org.isw2.dataset.core.controller.context.EntryPointContext;
+import org.isw2.dataset.core.model.Method;
+import org.isw2.dataset.core.model.MethodKey;
 import org.isw2.dataset.exceptions.ProcessingException;
+import org.isw2.dataset.jira.model.Version;
 import org.isw2.weka.WekaBoundary;
 import org.isw2.weka.classifier.ClassifierType;
+import org.isw2.whatif.CoordinatorContext;
+import org.isw2.whatif.RefactoringStatsToCsv;
+import org.isw2.whatif.factory.CoordinatorFactory;
+
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 
@@ -22,6 +31,7 @@ public class Experiments {
 
         boolean activeFeatureSelection = ConfigLoader.loadFeatureSelection();
         boolean featureSelectionType = ConfigLoader.loadFeatureSelectionType();
+        boolean whatIfEnabled = ConfigLoader.loadWhatIfEnable();
 
         if (projectNames.isEmpty() || classifiersToTest.isEmpty()) {
             LOGGER.severe("Projects or Classifiers list is empty in config.properties. Exiting.");
@@ -29,6 +39,11 @@ public class Experiments {
         }
 
         for (String projectName : projectNames) {
+            if (whatIfEnabled) {
+                AbstractControllerFactory<CoordinatorContext,  Map<Version, Map<MethodKey, Method>>> controllerFactory = new CoordinatorFactory();
+                Map<Version, Map<MethodKey, Method>> refactoredByVersion = controllerFactory.process(new CoordinatorContext(projectName));
+                RefactoringStatsToCsv.refactoringStatsToCsv(projectName, refactoredByVersion);
+            }
             // Foreach project build the dataset only if rebuild dataset is true
             if (rebuildDataset) {
                 EntryPointBoundary.startAnalysis(new EntryPointContext(projectName, ConfigLoader.getVersionDiscardPercentage(projectName)));
