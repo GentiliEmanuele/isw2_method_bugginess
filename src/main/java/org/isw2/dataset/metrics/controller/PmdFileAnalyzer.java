@@ -40,7 +40,6 @@ public class PmdFileAnalyzer implements Controller<Void, Map<String, List<CodeSm
         // Analyze the files
         Report report = pmdAnalysis.performAnalysisAndCollectReport();
         for (RuleViolation violation : report.getViolations()) {
-            if (violation.getRule().getPriority().getPriority() > 2) continue;
             String fileId = violation.getFileId().getOriginalPath();
             smellsByPathAndVersion.computeIfAbsent(fileId, k -> new ArrayList<>());
             smellsByPathAndVersion.get(fileId).add(new CodeSmell(violation.getDescription(), violation.getBeginLine(), violation.getEndLine()));
