@@ -32,7 +32,7 @@ public class LinkMethodAndSmell implements Controller<LinkMethodAndSmellContext,
 
     private void mapMethodsAndSmells(List<CodeSmell> smells, Method method) {
         for (CodeSmell smell : smells) {
-            if (smell.getStartLine() >= method.getStartLine() && smell.getStartLine() <= method.getEndLine() &&  smell.getEndLine() >= method.getStartLine() && smell.getEndLine() <= method.getEndLine()) {
+            if (smell.startLine() >= method.getStartLine() && smell.startLine() <= method.getEndLine() &&  smell.endLine() >= method.getStartLine() && smell.endLine() <= method.getEndLine()) {
                 method.getMetrics().setCodeSmellCounter(method.getMetrics().getCodeSmellCounter() + 1);
             }
         }

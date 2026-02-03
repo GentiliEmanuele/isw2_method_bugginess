@@ -1,6 +1,5 @@
 package org.isw2.dataset.core.controller;
 
-import net.sourceforge.pmd.PmdAnalysis;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.ObjectId;

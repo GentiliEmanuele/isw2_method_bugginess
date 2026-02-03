@@ -21,7 +21,8 @@ public class PmdFileAnalyzer implements Controller<Void, Map<String, List<CodeSm
 
     public PmdFileAnalyzer() {
         PMDConfiguration config = new PMDConfiguration();
-        config.addRuleSet("category/java/bestpractices.xml");
+        config.addRuleSet("custom_ruleset.xml");
+        // config.addRuleSet("category/java/bestpractices.xml");
         config.setSourceEncoding(StandardCharsets.UTF_8);
         LanguageVersion languageVersion = LanguageRegistry.PMD.getLanguageVersionById("java", "1.8");
         config.setThreads(Runtime.getRuntime().availableProcessors());
@@ -41,7 +42,7 @@ public class PmdFileAnalyzer implements Controller<Void, Map<String, List<CodeSm
         for (RuleViolation violation : report.getViolations()) {
             String fileId = violation.getFileId().getOriginalPath();
             smellsByPathAndVersion.computeIfAbsent(fileId, k -> new ArrayList<>());
-            smellsByPathAndVersion.get(fileId).add(new CodeSmell(violation.getBeginLine(), violation.getEndLine()));
+            smellsByPathAndVersion.get(fileId).add(new CodeSmell(violation.getDescription(), violation.getBeginLine(), violation.getEndLine()));
         }
         return smellsByPathAndVersion;
     }
