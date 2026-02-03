@@ -4,13 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Fixed a bug in code smell computation">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/custom_ruleset.xml" afterDir="false" />
+    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Modified pmd ruleset">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/AnalyzeFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/AnalyzeFile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/LinkMethodAndSmell.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/LinkMethodAndSmell.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/PmdFileAnalyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/PmdFileAnalyzer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/model/CodeSmell.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/model/CodeSmell.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/custom_ruleset.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/custom_ruleset.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -186,7 +183,7 @@
       <workItem from="1768666905484" duration="3105000" />
       <workItem from="1770025044915" duration="18000" />
       <workItem from="1770045600056" duration="12077000" />
-      <workItem from="1770104648602" duration="5110000" />
+      <workItem from="1770104648602" duration="8078000" />
     </task>
     <task id="LOCAL-00001" summary="Optimized the code and added the mechanism that save computed metrics in CSV.">
       <option name="closed" value="true" />
@@ -484,7 +481,15 @@
       <option name="project" value="LOCAL" />
       <updated>1770051856647</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="Modified pmd ruleset">
+      <option name="closed" value="true" />
+      <created>1770109952278</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1770109952278</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -502,7 +507,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Modified mechanism that get commit from Git. Modified Author and Commit models." />
     <MESSAGE value="Added the mechanism for the linkage between commits and tickets." />
     <MESSAGE value="Modified labeling mechanism." />
     <MESSAGE value="Change bugginess type from int to boolean" />
@@ -527,7 +531,8 @@
     <MESSAGE value="Modified feature selection mechanism. Removed some useless file." />
     <MESSAGE value="Implemented a controller that compute the correlation using Weka API." />
     <MESSAGE value="Fixed a bug in code smell computation" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed a bug in code smell computation" />
+    <MESSAGE value="Modified pmd ruleset" />
+    <option name="LAST_COMMIT_MESSAGE" value="Modified pmd ruleset" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
