@@ -5,7 +5,7 @@ import org.isw2.absfactory.Controller;
 import org.isw2.dataset.core.model.Method;
 import org.isw2.dataset.core.model.MethodKey;
 import org.isw2.dataset.jira.model.Version;
-import org.isw2.whatif.CoordinatorContext;
+import org.isw2.whatif.context.CoordinatorContext;
 import org.isw2.whatif.WhatIfStudyCoordinator;
 
 import java.util.Map;

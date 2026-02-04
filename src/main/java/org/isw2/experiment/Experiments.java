@@ -10,7 +10,7 @@ import org.isw2.dataset.exceptions.ProcessingException;
 import org.isw2.dataset.jira.model.Version;
 import org.isw2.weka.WekaBoundary;
 import org.isw2.weka.classifier.ClassifierType;
-import org.isw2.whatif.CoordinatorContext;
+import org.isw2.whatif.context.CoordinatorContext;
 import org.isw2.whatif.RefactoringStatsToCsv;
 import org.isw2.whatif.factory.CoordinatorFactory;
 
@@ -39,15 +39,20 @@ public class Experiments {
         }
 
         for (String projectName : projectNames) {
+            double discardPercentage = ConfigLoader.getVersionDiscardPercentage(projectName);
+
+            // If what-if study is enabled do it
             if (whatIfEnabled) {
                 AbstractControllerFactory<CoordinatorContext,  Map<Version, Map<MethodKey, Method>>> controllerFactory = new CoordinatorFactory();
-                Map<Version, Map<MethodKey, Method>> refactoredByVersion = controllerFactory.process(new CoordinatorContext(projectName));
+                Map<Version, Map<MethodKey, Method>> refactoredByVersion = controllerFactory.process(new CoordinatorContext(projectName, discardPercentage, classifiersToTest));
                 RefactoringStatsToCsv.refactoringStatsToCsv(projectName, refactoredByVersion);
             }
+
             // Foreach project build the dataset only if rebuild dataset is true
             if (rebuildDataset) {
-                EntryPointBoundary.startAnalysis(new EntryPointContext(projectName, ConfigLoader.getVersionDiscardPercentage(projectName)));
+                EntryPointBoundary.startAnalysis(new EntryPointContext(projectName, discardPercentage));
             }
+
             // Build a model with Weka using the dataset
             WekaBoundary.wekaBoundaryWork(projectName, classifiersToTest, activeFeatureSelection, featureSelectionType);
         }
