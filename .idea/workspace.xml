@@ -4,28 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Try SonarQube analysis">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/EntryPointController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/EntryPointController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/Labeling.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/Labeling.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/LinkCommitsAndTickets.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/LinkCommitsAndTickets.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/Proportion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/Proportion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/AnalyzeFileFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/AnalyzeFileFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/JavaMetricParserFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/JavaMetricParserFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/PmdFileAnalyzerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/PmdFileAnalyzerFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/PmdFileCollectorFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/PmdFileCollectorFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/git/controller/GetCommitFromGit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/git/controller/GetCommitFromGit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/JavaMetricParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/JavaMetricParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/LinkMethodAndSmell.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/LinkMethodAndSmell.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/experiment/Experiments.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/experiment/Experiments.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/classifier/ClassifierFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/classifier/ClassifierFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/factory/WalkForwardFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/factory/WalkForwardFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/procedure/MyBackWardSearch.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/procedure/MyEvaluator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/procedure/MyEvaluator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/procedure/WalkForwardContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/procedure/WalkForwardContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/procedure/WekaFeatureSelection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/procedure/WekaFeatureSelection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/ChooseBClassifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/ChooseBClassifier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/WhatIfStudyCoordinator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/WhatIfStudyCoordinator.java" afterDir="false" />
+    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Removed some code smell">
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/jira/controller/GetVersionsFromJira.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/jira/controller/GetVersionsFromJira.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -209,7 +189,7 @@
       <workItem from="1770045600056" duration="12077000" />
       <workItem from="1770104648602" duration="22005000" />
       <workItem from="1770186746189" duration="18980000" />
-      <workItem from="1770304844881" duration="2852000" />
+      <workItem from="1770304844881" duration="3548000" />
     </task>
     <task id="LOCAL-00001" summary="Optimized the code and added the mechanism that save computed metrics in CSV.">
       <option name="closed" value="true" />
@@ -595,7 +575,15 @@
       <option name="project" value="LOCAL" />
       <updated>1770306453767</updated>
     </task>
-    <option name="localTasksCounter" value="49" />
+    <task id="LOCAL-00049" summary="Removed some code smell">
+      <option name="closed" value="true" />
+      <created>1770307757720</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1770307757720</updated>
+    </task>
+    <option name="localTasksCounter" value="50" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -613,7 +601,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Modified mechanism that get tickets from Jira." />
     <MESSAGE value="Extrapolated tuning logic from evaluation logic." />
     <MESSAGE value="Implemented a configuration loader. Added ClassifierType and ClassifierFactory for execute experiments." />
     <MESSAGE value="Modified EntryPointController, EntryPointBoundary and EntryPointContext to support the versions discard in function of configuration file. Modified ConfigLoader to support project specific configuration params." />
@@ -638,7 +625,8 @@
     <MESSAGE value="Change Java version in workflow" />
     <MESSAGE value="Removed a piece of commented code" />
     <MESSAGE value="Try SonarQube analysis" />
-    <option name="LAST_COMMIT_MESSAGE" value="Try SonarQube analysis" />
+    <MESSAGE value="Removed some code smell" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed some code smell" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

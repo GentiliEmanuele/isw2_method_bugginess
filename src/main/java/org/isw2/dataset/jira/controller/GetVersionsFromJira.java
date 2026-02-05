@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -44,14 +45,10 @@ public class GetVersionsFromJira implements Controller<String, List<Version>> {
             String description = "";
             String releaseDate = "";
             if(jsonVersions.getJSONObject(i).has(RELEASE_DATE)) {
-                if (jsonVersions.getJSONObject(i).has(NAME))
-                    name = jsonVersions.getJSONObject(i).get(NAME).toString();
-                if (jsonVersions.getJSONObject(i).has(ID))
-                    id = jsonVersions.getJSONObject(i).get(ID).toString();
-                if (jsonVersions.getJSONObject(i).has(DESCRIPTION))
-                    description = jsonVersions.getJSONObject(i).get(DESCRIPTION).toString();
-                if (jsonVersions.getJSONObject(i).has(RELEASE_DATE))
-                    releaseDate = jsonVersions.getJSONObject(i).get(RELEASE_DATE).toString();
+                name = getNameFromJsonArray(jsonVersions, i);
+                id = getIdFromJsonArray(jsonVersions, i);
+                description = getDescriptionFromJsonArray(jsonVersions, i);
+                releaseDate = getReleaseDateFromJsonArray(jsonVersions, i);
             }
             if (jsonVersions.getJSONObject(i).has("released") && jsonVersions.getJSONObject(i).get("released").toString().equals("true")) {
                 Version version = new Version();
@@ -64,8 +61,39 @@ public class GetVersionsFromJira implements Controller<String, List<Version>> {
         }
     }
 
+    private String getNameFromJsonArray(JSONArray jsonVersions, int i) {
+        if (jsonVersions.getJSONObject(i).has(NAME)) {
+            return jsonVersions.getJSONObject(i).getString(NAME);
+        }
+        return null;
+    }
+
+    private String getIdFromJsonArray(JSONArray jsonVersions, int i) {
+        if (jsonVersions.getJSONObject(i).has(ID)) {
+            return jsonVersions.getJSONObject(i).getString(ID);
+        }
+        return null;
+    }
+
+    private String getDescriptionFromJsonArray(JSONArray jsonVersions, int i) {
+        if (jsonVersions.getJSONObject(i).has(DESCRIPTION)) {
+            return jsonVersions.getJSONObject(i).get(DESCRIPTION).toString();
+        }
+        return null;
+    }
+
+    private String getReleaseDateFromJsonArray(JSONArray jsonVersions, int i) {
+        if (jsonVersions.getJSONObject(i).has(RELEASE_DATE)) {
+            return jsonVersions.getJSONObject(i).get(RELEASE_DATE).toString();
+        }
+        return null;
+    }
+
     public static JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
-        try (InputStream is = new URL(url).openStream(); BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+        URL urlObj = URI.create(url).toURL();
+
+        try (InputStream is = urlObj.openStream();
+             BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
             String jsonText = readAll(rd);
             return new JSONObject(jsonText);
         }
