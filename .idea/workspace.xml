@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Added best classifier computation for what if study">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/WhatIfStats.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/ChooseBClassifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/ChooseBClassifier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/WhatIfStudyCoordinator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/WhatIfStudyCoordinator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/context/ChooseClassifierContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/context/ChooseClassifierContext.java" afterDir="false" />
-    </list>
+    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Added a first implementation of What-if study" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -23,6 +17,7 @@
         <option value="Interface" />
         <option value="Record" />
         <option value="Class" />
+        <option value="GitHub Workflow" />
       </list>
     </option>
   </component>
@@ -49,34 +44,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Experiments.executor": "Debug",
-    "Application.JiraBoundary.executor": "Run",
-    "Application.JiraTempMain.executor": "Run",
-    "Application.Main.executor": "Run",
-    "Application.Unnamed.executor": "Run",
-    "Application.WekaCorrelation.executor": "Run",
-    "Application.org.isw2.weka.Main.executor": "Run",
-    "Maven.isw2_method_bugginess [pmd:pmd].executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/HP/IdeaProjects/isw2_method_bugginess/src/main/resources/refactoring/bookkeeper",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "Debugger_Data_Views_Java",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Experiments.executor&quot;: &quot;Debug&quot;,
+    &quot;Application.JiraBoundary.executor&quot;: &quot;Run&quot;,
+    &quot;Application.JiraTempMain.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Unnamed.executor&quot;: &quot;Run&quot;,
+    &quot;Application.WekaCorrelation.executor&quot;: &quot;Run&quot;,
+    &quot;Application.org.isw2.weka.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.isw2_method_bugginess [pmd:pmd].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/HP/IdeaProjects/isw2_method_bugginess/src/main/resources/refactoring/bookkeeper&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;Debugger_Data_Views_Java&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\HP\IdeaProjects\isw2_method_bugginess\src\main\resources\refactoring\bookkeeper" />
@@ -192,6 +187,7 @@
       <workItem from="1770045600056" duration="12077000" />
       <workItem from="1770104648602" duration="22005000" />
       <workItem from="1770186746189" duration="18980000" />
+      <workItem from="1770304844881" duration="324000" />
     </task>
     <task id="LOCAL-00001" summary="Optimized the code and added the mechanism that save computed metrics in CSV.">
       <option name="closed" value="true" />
@@ -529,7 +525,23 @@
       <option name="project" value="LOCAL" />
       <updated>1770192789862</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="Added the workflow to automatically analyze code with SonarQube">
+      <option name="closed" value="true" />
+      <created>1770304981051</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1770304981051</updated>
+    </task>
+    <task id="LOCAL-00044" summary="Added a first implementation of What-if study">
+      <option name="closed" value="true" />
+      <created>1770305165512</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1770305165512</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -547,8 +559,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Modified mechanism that get the tickets from Jira and the implementation of Proportion algorithm." />
-    <MESSAGE value="Implemented a filter for the outliers." />
     <MESSAGE value="Modified mechanism that get versions from Jira." />
     <MESSAGE value="Modified mechanism that analyze the files." />
     <MESSAGE value="Moved all files in a new package. Modified mechanism that get commit from git." />
@@ -572,7 +582,9 @@
     <MESSAGE value="Fix a bug" />
     <MESSAGE value="Added the mechanism that compute the metrics after and before refactoring" />
     <MESSAGE value="Added best classifier computation for what if study" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added best classifier computation for what if study" />
+    <MESSAGE value="Added the workflow to automatically analyze code with SonarQube" />
+    <MESSAGE value="Added a first implementation of What-if study" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added a first implementation of What-if study" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
