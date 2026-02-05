@@ -4,17 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Added the mechanism that compute the metrics after and before refactoring">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/ChooseBClassifier.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/PreliminaryWhatIf.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/context/ChooseClassifierContext.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/factory/ChooseClassifierFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/factory/PreliminaryWhatIfFactory.java" afterDir="false" />
+    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Added best classifier computation for what if study">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/WhatIfStats.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/experiment/Experiments.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/experiment/Experiments.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/CoordinatorContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/context/CoordinatorContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/ChooseBClassifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/ChooseBClassifier.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/WhatIfStudyCoordinator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/WhatIfStudyCoordinator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/factory/CoordinatorFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/factory/CoordinatorFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/context/ChooseClassifierContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/context/ChooseClassifierContext.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,8 +21,8 @@
       <list>
         <option value="Enum" />
         <option value="Interface" />
-        <option value="Class" />
         <option value="Record" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -54,34 +49,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Experiments.executor&quot;: &quot;Run&quot;,
-    &quot;Application.JiraBoundary.executor&quot;: &quot;Run&quot;,
-    &quot;Application.JiraTempMain.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Unnamed.executor&quot;: &quot;Run&quot;,
-    &quot;Application.WekaCorrelation.executor&quot;: &quot;Run&quot;,
-    &quot;Application.org.isw2.weka.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.isw2_method_bugginess [pmd:pmd].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/HP/IdeaProjects/isw2_method_bugginess/src/main/resources/refactoring/bookkeeper&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;Debugger_Data_Views_Java&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Experiments.executor": "Debug",
+    "Application.JiraBoundary.executor": "Run",
+    "Application.JiraTempMain.executor": "Run",
+    "Application.Main.executor": "Run",
+    "Application.Unnamed.executor": "Run",
+    "Application.WekaCorrelation.executor": "Run",
+    "Application.org.isw2.weka.Main.executor": "Run",
+    "Maven.isw2_method_bugginess [pmd:pmd].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/HP/IdeaProjects/isw2_method_bugginess/src/main/resources/refactoring/bookkeeper",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "Debugger_Data_Views_Java",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\HP\IdeaProjects\isw2_method_bugginess\src\main\resources\refactoring\bookkeeper" />
@@ -196,7 +191,7 @@
       <workItem from="1770025044915" duration="18000" />
       <workItem from="1770045600056" duration="12077000" />
       <workItem from="1770104648602" duration="22005000" />
-      <workItem from="1770186746189" duration="5042000" />
+      <workItem from="1770186746189" duration="18980000" />
     </task>
     <task id="LOCAL-00001" summary="Optimized the code and added the mechanism that save computed metrics in CSV.">
       <option name="closed" value="true" />
@@ -526,7 +521,15 @@
       <option name="project" value="LOCAL" />
       <updated>1770131063022</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="Added best classifier computation for what if study">
+      <option name="closed" value="true" />
+      <created>1770192789862</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1770192789862</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -544,7 +547,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Modified mechanism that computes changes metrics" />
     <MESSAGE value="Modified mechanism that get the tickets from Jira and the implementation of Proportion algorithm." />
     <MESSAGE value="Implemented a filter for the outliers." />
     <MESSAGE value="Modified mechanism that get versions from Jira." />
@@ -569,7 +571,8 @@
     <MESSAGE value="Removed custom_ruleset.xml" />
     <MESSAGE value="Fix a bug" />
     <MESSAGE value="Added the mechanism that compute the metrics after and before refactoring" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added the mechanism that compute the metrics after and before refactoring" />
+    <MESSAGE value="Added best classifier computation for what if study" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added best classifier computation for what if study" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -578,6 +581,11 @@
           <properties class="org.isw2.exceptions.ProcessingException" package="org.isw2.exceptions" />
           <option name="timeStamp" value="24" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/isw2/whatif/WhatIfStudyCoordinator.java</url>
+          <line>75</line>
+          <option name="timeStamp" value="34" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <pin-to-top-manager>

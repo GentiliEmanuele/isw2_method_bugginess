@@ -15,10 +15,7 @@ import org.isw2.weka.utils.context.SplitDataByVersionContext;
 import org.isw2.whatif.context.ChooseClassifierContext;
 import weka.classifiers.Classifier;
 import weka.core.Instances;
-import weka.core.converters.CSVLoader;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 public class ChooseBClassifier implements Controller<ChooseClassifierContext, Classifier> {
@@ -26,7 +23,7 @@ public class ChooseBClassifier implements Controller<ChooseClassifierContext, Cl
     @Override
     public Classifier execute(ChooseClassifierContext context) throws ProcessingException {
         // Read the dateset
-        Instances dataSet = getDataSet(context.projectName());
+        Instances dataSet = context.dataset();
 
         AbstractControllerFactory<SplitDataByVersionContext, List<Instances>> splitterFactory = new SplitDataByVersionFactory();
         AbstractControllerFactory<WalkForwardContext, Map<Integer, Statistics>> walkForwardFactory = new WalkForwardFactory();
@@ -57,6 +54,7 @@ public class ChooseBClassifier implements Controller<ChooseClassifierContext, Cl
 
             if (currentScore > bestScore) {
                 bClassifierType = entry.getKey();
+                System.out.println("New BClassifier found " + bClassifierType.name());
                 bestScore = currentScore;
             }
         }
@@ -64,15 +62,6 @@ public class ChooseBClassifier implements Controller<ChooseClassifierContext, Cl
         return bClassifierType != null ? ClassifierFactory.createClassifier(bClassifierType) : null;
     }
 
-    private Instances getDataSet(String projectName) throws ProcessingException {
-        try {
-            CSVLoader loader = new CSVLoader();
-            loader.setSource(new File("output/" + projectName + ".csv"));
-            return loader.getDataSet();
-        } catch (IOException e) {
-            throw new ProcessingException(e.getMessage());
-        }
-    }
 
     private double computeMeanF1Score(Map<Integer, Statistics> statsByRun) {
         double weightedSum = 0.0;
