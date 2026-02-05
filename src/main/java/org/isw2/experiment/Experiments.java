@@ -55,6 +55,8 @@ public class Experiments {
 
             // Build a model with Weka using the dataset
             WekaBoundary.wekaBoundaryWork(projectName, classifiersToTest, activeFeatureSelection, featureSelectionType);
+
+            System.out.println();
         }
     }
 }

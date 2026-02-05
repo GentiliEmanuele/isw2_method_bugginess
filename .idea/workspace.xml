@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Change branches name in workflow" />
+    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Removed a piece of commented code">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -187,7 +189,7 @@
       <workItem from="1770045600056" duration="12077000" />
       <workItem from="1770104648602" duration="22005000" />
       <workItem from="1770186746189" duration="18980000" />
-      <workItem from="1770304844881" duration="622000" />
+      <workItem from="1770304844881" duration="1305000" />
     </task>
     <task id="LOCAL-00001" summary="Optimized the code and added the mechanism that save computed metrics in CSV.">
       <option name="closed" value="true" />
@@ -549,7 +551,23 @@
       <option name="project" value="LOCAL" />
       <updated>1770305397537</updated>
     </task>
-    <option name="localTasksCounter" value="46" />
+    <task id="LOCAL-00046" summary="Change Java version in workflow">
+      <option name="closed" value="true" />
+      <created>1770305525892</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1770305525892</updated>
+    </task>
+    <task id="LOCAL-00047" summary="Removed a piece of commented code">
+      <option name="closed" value="true" />
+      <created>1770305845056</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1770305845056</updated>
+    </task>
+    <option name="localTasksCounter" value="48" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -567,8 +585,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Modified mechanism that analyze the files." />
-    <MESSAGE value="Moved all files in a new package. Modified mechanism that get commit from git." />
     <MESSAGE value="Added MethodsKey as key for the methods' hashmap. Added an implementation for ordered holdout." />
     <MESSAGE value="Modified mechanism that get tickets from Jira." />
     <MESSAGE value="Extrapolated tuning logic from evaluation logic." />
@@ -592,7 +608,9 @@
     <MESSAGE value="Added the workflow to automatically analyze code with SonarQube" />
     <MESSAGE value="Added a first implementation of What-if study" />
     <MESSAGE value="Change branches name in workflow" />
-    <option name="LAST_COMMIT_MESSAGE" value="Change branches name in workflow" />
+    <MESSAGE value="Change Java version in workflow" />
+    <MESSAGE value="Removed a piece of commented code" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed a piece of commented code" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -603,7 +621,7 @@
         </breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/isw2/whatif/WhatIfStudyCoordinator.java</url>
-          <line>75</line>
+          <line>77</line>
           <option name="timeStamp" value="34" />
         </line-breakpoint>
       </breakpoints>
