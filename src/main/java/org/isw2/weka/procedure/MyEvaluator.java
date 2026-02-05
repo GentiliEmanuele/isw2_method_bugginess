@@ -18,14 +18,14 @@ import java.util.BitSet;
 import java.util.List;
 
 public class MyEvaluator extends ASEvaluation implements SubsetEvaluator {
-    private Classifier classifier;
+    private static Classifier classifier;
     private SelectedTag f1Tag;
 
     private Instances training;
     private Instances test;
 
-    public void setClassifier(Classifier classifier) {
-        this.classifier = classifier;
+    public static void setClassifier(Classifier classifier) {
+        MyEvaluator.classifier = classifier;
     }
 
     public void setF1Tag(SelectedTag f1Tag) {
@@ -82,7 +82,7 @@ public class MyEvaluator extends ASEvaluation implements SubsetEvaluator {
 
     private Statistics applyOrderedHoldout(Instances training, Instances testing) throws ProcessingException {
         AbstractControllerFactory<OrderedHoldoutContext, Statistics> orderedHoldoutFactory = new OrderedHoldoutFactory();
-        return orderedHoldoutFactory.process(new OrderedHoldoutContext(training, 0.8, this.classifier, testing, new DummyTuner()));
+        return orderedHoldoutFactory.process(new OrderedHoldoutContext(training, 0.8, classifier, testing, new DummyTuner()));
     }
 
 

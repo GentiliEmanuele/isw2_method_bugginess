@@ -1,17 +1,13 @@
 package org.isw2.dataset.core.controller;
 
-import org.isw2.absfactory.AbstractControllerFactory;
-import org.isw2.dataset.core.controller.context.LinkCommitsAndTicketsContext;
 import org.isw2.dataset.core.controller.context.ProportionContext;
 import org.isw2.dataset.exceptions.ProcessingException;
 import org.isw2.absfactory.Controller;
-import org.isw2.dataset.factory.LinkCommitsAndTicketsFactory;
 import org.isw2.dataset.jira.model.Ticket;
 import org.isw2.dataset.jira.model.Version;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -62,28 +58,5 @@ public class Proportion implements Controller<ProportionContext, Void> {
             nPreviousVersions.add(versions.get(i));
         }
         return nPreviousVersions;
-    }
-
-    private void removeOutliers(List<Ticket> tickets) {
-        if (tickets.isEmpty()) return;
-
-        List<Integer> sizes = new ArrayList<>();
-        for (Ticket t : tickets) {
-            sizes.add(t.getAffectedVersions().size());
-        }
-
-        Collections.sort(sizes);
-
-        int q1 = getPercentile(sizes, 25);
-        int q3 = getPercentile(sizes, 75);
-        int iqr = q3 - q1;
-        double upperLimit = q3 + 1.5 * iqr;
-
-        tickets.removeIf(t -> t.getAffectedVersions().size() > upperLimit);
-    }
-
-    private static int getPercentile(List<Integer> sortedData, double percentile) {
-        int index = (int) Math.ceil(percentile / 100.0 * sortedData.size());
-        return sortedData.get(index - 1);
     }
 }

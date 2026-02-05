@@ -28,6 +28,9 @@ import java.util.Map;
 
 
 public class WhatIfStudyCoordinator implements Controller<CoordinatorContext, Map<Version, Map<MethodKey, Method>>> {
+
+    private static final String CODE_SMELL = "codeSmell";
+
     @Override
     public Map<Version, Map<MethodKey, Method>> execute(CoordinatorContext context) throws ProcessingException {
         // This allows to answer to the two preliminary questions
@@ -58,6 +61,7 @@ public class WhatIfStudyCoordinator implements Controller<CoordinatorContext, Ma
 
         // Train BClassifier on A (original dataset)
         trainBestClassifier(bClassifier, train);
+
         int expectedBugComplete = countExpectedBuggy(test);
         int actualBugComplete = countActualBuggy(test, bClassifier);
 
@@ -97,7 +101,7 @@ public class WhatIfStudyCoordinator implements Controller<CoordinatorContext, Ma
     }
 
     private Instances filterMethodWithSmells(Instances dataset) throws ProcessingException {
-        int indexCodeSmellCol = dataset.attribute("codeSmell").index();
+        int indexCodeSmellCol = dataset.attribute(CODE_SMELL).index();
 
         RemoveWithValues filter = new RemoveWithValues();
         // Parse the index from 0-based to 1-based
@@ -114,7 +118,7 @@ public class WhatIfStudyCoordinator implements Controller<CoordinatorContext, Ma
     }
 
     private Instances filterMethodWithoutSmells(Instances dataset) throws ProcessingException {
-        int index0Based = dataset.attribute("codeSmell").index();
+        int index0Based = dataset.attribute(CODE_SMELL).index();
 
         RemoveWithValues filter = new RemoveWithValues();
         filter.setAttributeIndex(String.valueOf(index0Based + 1));
@@ -134,7 +138,7 @@ public class WhatIfStudyCoordinator implements Controller<CoordinatorContext, Ma
     private Instances resetSmell(Instances dataset) {
         Instances copyDataset = new Instances(dataset);
 
-        int colIndex = copyDataset.attribute("codeSmell").index();
+        int colIndex = copyDataset.attribute(CODE_SMELL).index();
 
         for (int i = 0; i < copyDataset.numInstances(); i++) {
             copyDataset.instance(i).setValue(colIndex, 0.0);

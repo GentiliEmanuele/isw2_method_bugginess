@@ -4,12 +4,10 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.*;
 import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.patch.FileHeader;
 import org.eclipse.jgit.patch.HunkHeader;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 import org.isw2.dataset.exceptions.ProcessingException;
 import org.isw2.absfactory.Controller;
@@ -93,7 +91,7 @@ public class GetCommitFromGit implements Controller<String, List<Commit>> {
         return odt.toLocalDate().format(DateTimeFormatter.ISO_LOCAL_DATE);
     }
 
-    private List<Change> getFileDiffBetweenCommit(Git git, RevCommit startCommit, RevCommit endCommit) throws IOException, GitAPIException {
+    private List<Change> getFileDiffBetweenCommit(Git git, RevCommit startCommit, RevCommit endCommit) throws IOException {
         Repository repository = git.getRepository();
         ObjectId oldTree = startCommit.getTree();
         ObjectId newTree =  endCommit.getTree();

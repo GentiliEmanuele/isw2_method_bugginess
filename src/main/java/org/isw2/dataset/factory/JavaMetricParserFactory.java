@@ -7,7 +7,6 @@ import org.isw2.dataset.core.model.MethodKey;
 import org.isw2.dataset.metrics.controller.JavaMetricParser;
 import org.isw2.dataset.metrics.controller.context.ParserContext;
 
-import java.util.List;
 import java.util.Map;
 
 public class JavaMetricParserFactory extends AbstractControllerFactory<ParserContext, Map<MethodKey, Method>> {

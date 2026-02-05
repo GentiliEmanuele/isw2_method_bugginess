@@ -48,12 +48,11 @@ public class Labeling implements Controller<LabelingContext, Void> {
         for (Version affectedVersion : affectedVersions) {
             LocalDate affectedVersionReleaseDate = LocalDate.parse(affectedVersion.getReleaseDate());
             LocalDate fixCommitDate = LocalDate.parse(fixCommit.commitTime());
-            if (affectedVersionReleaseDate.isAfter(fixCommitDate)) {
+            Map<MethodKey, Method> methodsInVersion = methodsByVersions.get(affectedVersion);
+
+            if (affectedVersionReleaseDate.isAfter(fixCommitDate) || methodsInVersion == null) {
                 continue;
             }
-
-            Map<MethodKey, Method> methodsInVersion = methodsByVersions.get(affectedVersion);
-            if (methodsInVersion == null) continue;
 
             for (Method historicalMethod : methodsInVersion.values()) {
                 if (historicalMethod.getMethodKey().equals(targetKey)) {
@@ -65,7 +64,7 @@ public class Labeling implements Controller<LabelingContext, Void> {
     }
 
     private List<Method> touchedMethods(Map<MethodKey, Method> touchedMethods, Commit fixCommit) {
-        if (touchedMethods == null || touchedMethods.isEmpty()) return null;
+        if (touchedMethods == null || touchedMethods.isEmpty()) return List.of();
         List<Method> touchedMethodList = new ArrayList<>();
         for (Method method : touchedMethods.values()) {
             if (methodIsTouchedByCommit(method, fixCommit)) touchedMethodList.add(method);

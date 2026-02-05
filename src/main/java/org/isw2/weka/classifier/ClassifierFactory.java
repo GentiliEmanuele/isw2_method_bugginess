@@ -1,7 +1,5 @@
 package org.isw2.weka.classifier;
 
-import net.sf.saxon.om.One;
-import org.isw2.dataset.exceptions.ProcessingException;
 import weka.classifiers.Classifier;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.functions.SMO;

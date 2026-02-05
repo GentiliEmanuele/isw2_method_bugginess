@@ -18,7 +18,6 @@ import javax.tools.*;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,9 +90,6 @@ public class JavaMetricParser implements Controller<ParserContext, Map<MethodKey
 
                     // Check if the class is anonymous
                     if (classTree.getSimpleName().isEmpty()) {
-
-                        // Generate a new name row-based
-                        // simpleName = "Anonymous_Line" + lineNum;
                         return null;
                     } else {
                         // In this case is a normal class

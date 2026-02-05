@@ -6,10 +6,8 @@ import org.isw2.dataset.core.controller.AnalyzeFile;
 import org.isw2.dataset.core.controller.context.AnalyzeFileContext;
 import org.isw2.dataset.core.model.Method;
 import org.isw2.dataset.core.model.MethodKey;
-import org.isw2.dataset.core.model.MethodsKey;
 import org.isw2.dataset.git.model.Commit;
 
-import java.util.List;
 import java.util.Map;
 
 public class AnalyzeFileFactory extends AbstractControllerFactory<AnalyzeFileContext, Map<Commit, Map<MethodKey, Method>>> {

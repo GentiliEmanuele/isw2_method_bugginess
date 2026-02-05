@@ -54,7 +54,6 @@ public class ChooseBClassifier implements Controller<ChooseClassifierContext, Cl
 
             if (currentScore > bestScore) {
                 bClassifierType = entry.getKey();
-                System.out.println("New BClassifier found " + bClassifierType.name());
                 bestScore = currentScore;
             }
         }

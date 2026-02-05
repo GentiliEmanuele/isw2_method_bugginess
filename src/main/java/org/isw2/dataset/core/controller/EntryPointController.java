@@ -16,8 +16,6 @@ import org.isw2.dataset.jira.model.Ticket;
 import org.isw2.dataset.jira.model.Version;
 import org.isw2.dataset.metrics.controller.context.LinkMethodAndSmellContext;
 import org.isw2.dataset.metrics.model.CodeSmell;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
@@ -27,7 +25,6 @@ import java.util.logging.Logger;
 public class EntryPointController implements Controller<EntryPointContext, Void> {
 
     private static final Logger logger = Logger.getLogger(EntryPointController.class.getName());
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(EntryPointController.class);
 
     @Override
     public Void execute(EntryPointContext context) throws ProcessingException {
@@ -107,7 +104,7 @@ public class EntryPointController implements Controller<EntryPointContext, Void>
         try {
             writeOutcome(context.projectName(), methodsByVersion);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ProcessingException(e.getMessage());
         }
 
         return null;

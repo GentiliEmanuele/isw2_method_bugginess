@@ -12,7 +12,7 @@ public class LinkMethodAndSmell implements Controller<LinkMethodAndSmellContext,
 
     @Override
     public Void execute(LinkMethodAndSmellContext context) throws ProcessingException {
-        context.methodsByVersion().forEach((version, methodsByVersion) -> {
+        context.methodsByVersion().forEach((version, methodsByVersion) ->
             methodsByVersion.keySet().forEach(key -> {
                 // 1. Get the smells for the specified files
                 String smellKey = version.getName() + "_" + key.path();
@@ -25,8 +25,8 @@ public class LinkMethodAndSmell implements Controller<LinkMethodAndSmellContext,
                 if (smellsOfThisFile != null && method != null) {
                     mapMethodsAndSmells(smellsOfThisFile, method);
                 }
-            });
-        });
+            })
+        );
         return null;
     }
 

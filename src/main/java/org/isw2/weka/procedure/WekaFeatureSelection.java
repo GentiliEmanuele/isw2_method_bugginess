@@ -31,7 +31,7 @@ public class WekaFeatureSelection {
         );
 
         MyEvaluator evaluator = new MyEvaluator();
-        evaluator.setClassifier(new J48());
+        MyEvaluator.setClassifier(new J48());
         evaluator.setF1Tag(f1Tag);
 
         // Configure the search method
@@ -39,7 +39,7 @@ public class WekaFeatureSelection {
 
         // Parallelize the search
         int availableProcessors = Runtime.getRuntime().availableProcessors();
-        int safeSlots = Math.min(Math.max(1, availableProcessors / 2), 4);
+        int safeSlots = Math.clamp(availableProcessors / 2, 1, 4);
         search.setNumExecutionSlots(safeSlots);
 
         // Choose forward (false) or backward (true)
