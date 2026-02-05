@@ -11,6 +11,7 @@ import org.isw2.dataset.core.model.Method;
 import org.isw2.dataset.core.model.MethodKey;
 import org.isw2.dataset.exceptions.ProcessingException;
 import org.isw2.absfactory.Controller;
+import org.isw2.dataset.metrics.MethodParserScanner;
 import org.isw2.dataset.metrics.controller.context.ParserContext;
 import org.isw2.dataset.metrics.controller.context.VisitReturn;
 
@@ -81,107 +82,10 @@ public class JavaMetricParser implements Controller<ParserContext, Map<MethodKey
     }
 
     private void parseTrees(CompilationUnitTree compilationUnitTree, Trees trees, Map<MethodKey, Method> methods, String path) {
+        MethodParserScanner scanner = new MethodParserScanner(compilationUnitTree, trees, methods, path);
         for (Tree tree : compilationUnitTree.getTypeDecls()) {
-            tree.accept(new TreeScanner<Object, String>() {
-                @Override
-                public Object visitClass(ClassTree classTree, String parentName) {
-                    String simpleName;
-                    String currentClassName;
-
-                    // Check if the class is anonymous
-                    if (classTree.getSimpleName().isEmpty()) {
-                        return null;
-                    } else {
-                        // In this case is a normal class
-                        simpleName = sanitize(classTree.getSimpleName().toString());
-                    }
-
-                    // Build the whole name (Parent.Child)
-                    if (parentName != null && !parentName.isEmpty()) {
-                        String separator = classTree.getSimpleName().isEmpty() ? "$" : ".";
-                        currentClassName = parentName + separator + simpleName;
-                    } else {
-                        currentClassName = simpleName;
-                    }
-
-                    return super.visitClass(classTree, currentClassName);
-                }
-
-                @Override
-                public Object visitMethod(MethodTree methodTree, String currentClassName) {
-                    if (methodTree.getBody() == null) {
-                        return super.visitMethod(methodTree, currentClassName);
-                    }
-                    Method method = new Method();
-
-                    String modifiers = getModifiers(methodTree).isEmpty() ? "" : getModifiers(methodTree) + " ";
-                    String cleanPath = path.startsWith("/") ? path.substring(1) : path;
-                    method.setMethodKey(new MethodKey(cleanPath, currentClassName, modifiers + getReturnValue(methodTree) + " " + getMethodName(methodTree) + "(" + getMethodParameters(methodTree) + ")"));
-
-                    long startPosition = trees.getSourcePositions().getStartPosition(compilationUnitTree, methodTree);
-                    long endPosition = trees.getSourcePositions().getEndPosition(compilationUnitTree, methodTree);
-                    int startLine = (int) compilationUnitTree.getLineMap().getLineNumber(startPosition);
-                    int endLine = (int) compilationUnitTree.getLineMap().getLineNumber(endPosition);
-                    method.setStartLine(startLine);
-                    method.setEndLine(endLine);
-                    method.getMetrics().setLinesOfCode((endLine - startLine) + 1);
-                    VisitReturn ret = VisitMethod.execute(methodTree);
-                    method.getMetrics().setCyclomaticComplexity(ret.cyclomaticComplexity());
-                    method.getMetrics().setStatementsCount(ret.statementCount());
-                    method.getMetrics().setCognitiveComplexity(ret.cognitiveComplexity());
-                    method.getMetrics().setHalsteadComplexity(ret.hc());
-                    method.getMetrics().setNestingDepth(ret.nestingDepth());
-                    method.getMetrics().setNumberOfBranchesAndDecisionPoint(ret.cyclomaticComplexity() - 1);
-                    method.getMetrics().setParameterCount(getParametersCounter(methodTree));
-
-                    methods.put(method.getMethodKey(), method);
-                    return super.visitMethod(methodTree, currentClassName);
-                }
-            }, null);
+            tree.accept(scanner, null);
         }
-    }
-
-    private String sanitize(String input) {
-        if (input == null) return "";
-
-        return input.replace("\n", " ")
-                .replace("\r", " ")
-                .replace("\t", " ")
-                .replaceAll("\\s+", " ")
-                .trim();
-    }
-
-    private String getMethodName(MethodTree methodTree) {
-        return sanitize(methodTree.getName().toString());
-    }
-
-    private String getMethodParameters(MethodTree methodTree) {
-        if (methodTree.getParameters().isEmpty()) {
-            return "void";
-        } else {
-            return sanitize(methodTree.getParameters().toString());
-        }
-    }
-
-    private String getReturnValue(MethodTree methodTree) {
-        if (methodTree.getReturnType() != null) {
-            return sanitize(methodTree.getReturnType().toString());
-        } else {
-            return "void";
-        }
-    }
-
-    private int getParametersCounter(MethodTree methodTree) {
-        return methodTree.getParameters().size();
-    }
-
-    private String getModifiers(MethodTree methodTree) {
-        if (methodTree.getModifiers() == null) {
-            return "";
-        }
-        return sanitize(methodTree.getModifiers().getFlags().toString()).replace("[", "")
-                .replace("]", "")
-                .replace(",", "");
     }
 
 }
