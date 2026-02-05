@@ -2,6 +2,8 @@ package org.isw2.whatif;
 
 import org.isw2.absfactory.AbstractControllerFactory;
 import org.isw2.absfactory.Controller;
+import org.isw2.dataset.core.boundary.EntryPointBoundary;
+import org.isw2.dataset.core.controller.context.EntryPointContext;
 import org.isw2.dataset.core.model.Method;
 import org.isw2.dataset.core.model.MethodKey;
 import org.isw2.dataset.exceptions.ProcessingException;
@@ -33,7 +35,7 @@ public class WhatIfStudyCoordinator implements Controller<CoordinatorContext, Ma
         Map<Version, Map<MethodKey, Method>> refactoredAndNot = preliminaryFactory.process(context.projectName());
 
         // Build the dataset
-        // EntryPointBoundary.startAnalysis(new EntryPointContext(context.projectName(), context.discardPercentage()));
+        EntryPointBoundary.startAnalysis(new EntryPointContext(context.projectName(), context.discardPercentage()));
 
         // Load the dataset and set the class
         Instances dataset = getDataSet(context.projectName());
