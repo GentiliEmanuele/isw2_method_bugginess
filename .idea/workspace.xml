@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Removed other smells">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/MethodParserScanner.java" afterDir="false" />
+    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Created a separated class MethodParserScanner">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/JavaMetricParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/JavaMetricParser.java" afterDir="false" />
     </list>
@@ -191,15 +190,7 @@
       <workItem from="1770045600056" duration="12077000" />
       <workItem from="1770104648602" duration="22005000" />
       <workItem from="1770186746189" duration="18980000" />
-      <workItem from="1770304844881" duration="4476000" />
-    </task>
-    <task id="LOCAL-00002" summary="Modified the mechanism that save the results in CSV, now only one file is produced. Modified the mechanism that compute the change metrics.">
-      <option name="closed" value="true" />
-      <created>1761818575840</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1761818575840</updated>
+      <workItem from="1770304844881" duration="5610000" />
     </task>
     <task id="LOCAL-00003" summary="Added mechanism that computes code smell.">
       <option name="closed" value="true" />
@@ -585,7 +576,15 @@
       <option name="project" value="LOCAL" />
       <updated>1770308547948</updated>
     </task>
-    <option name="localTasksCounter" value="51" />
+    <task id="LOCAL-00051" summary="Created a separated class MethodParserScanner">
+      <option name="closed" value="true" />
+      <created>1770309568424</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1770309568424</updated>
+    </task>
+    <option name="localTasksCounter" value="52" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -603,7 +602,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Implemented a configuration loader. Added ClassifierType and ClassifierFactory for execute experiments." />
     <MESSAGE value="Modified EntryPointController, EntryPointBoundary and EntryPointContext to support the versions discard in function of configuration file. Modified ConfigLoader to support project specific configuration params." />
     <MESSAGE value="Fix a bug in code smell computation." />
     <MESSAGE value="Fix an error on LOC computation." />
@@ -628,7 +626,8 @@
     <MESSAGE value="Try SonarQube analysis" />
     <MESSAGE value="Removed some code smell" />
     <MESSAGE value="Removed other smells" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed other smells" />
+    <MESSAGE value="Created a separated class MethodParserScanner" />
+    <option name="LAST_COMMIT_MESSAGE" value="Created a separated class MethodParserScanner" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

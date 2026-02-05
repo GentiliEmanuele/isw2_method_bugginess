@@ -1,11 +1,8 @@
 package org.isw2.dataset.metrics.controller;
 
-import com.sun.source.tree.ClassTree;
 import com.sun.source.tree.CompilationUnitTree;
-import com.sun.source.tree.MethodTree;
 import com.sun.source.tree.Tree;
 import com.sun.source.util.JavacTask;
-import com.sun.source.util.TreeScanner;
 import com.sun.source.util.Trees;
 import org.isw2.dataset.core.model.Method;
 import org.isw2.dataset.core.model.MethodKey;
@@ -13,7 +10,6 @@ import org.isw2.dataset.exceptions.ProcessingException;
 import org.isw2.absfactory.Controller;
 import org.isw2.dataset.metrics.MethodParserScanner;
 import org.isw2.dataset.metrics.controller.context.ParserContext;
-import org.isw2.dataset.metrics.controller.context.VisitReturn;
 
 import javax.tools.*;
 import java.io.IOException;
