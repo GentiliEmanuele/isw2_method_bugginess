@@ -35,12 +35,26 @@ public class RefactoringStatsToCsv {
             "buggy"
     };
 
-    public static void refactoringStatsToCsv(String projectName, Map<Version, Map<MethodKey, Method>> refactoredByVersion) throws IOException {
+    private static final String [] HEADER2 = {
+            "A.A",
+            "A.E",
+            "B+.A",
+            "B+.E",
+            "B.E",
+            "C.A",
+            "C.E"
+    };
+
+    public static void refactoringStatsToCsv(String projectName, WhatIfStats whatIfStats) throws IOException {
+        refactoringMetricStatsToCsv(projectName, whatIfStats.refactoredAndNot());
+        refactoringNumericStatsToCsv(projectName, whatIfStats);
+    }
+
+    private static void refactoringMetricStatsToCsv(String projectName, Map<Version, Map<MethodKey, Method>> refactoredByVersion) throws IOException {
         try (CSVWriter writer = new CSVWriter(new FileWriter("output/" +  projectName + "_refactoring_stats.csv"))) {
             writer.writeNext(HEADER);
             for (Map.Entry<Version, Map<MethodKey, Method>> entry : refactoredByVersion.entrySet()) {
                 for (Map.Entry<MethodKey, Method> methodEntry : entry.getValue().entrySet()) {
-                    if (methodEntry.getValue().getMethodKey().signature().contains("init")) continue; // Skip no refactored method
                     String[] row = {
                             entry.getKey().getName().contains("before") ? "No" : "Yes",
                             projectName,
@@ -65,6 +79,22 @@ public class RefactoringStatsToCsv {
                     writer.writeNext(row);
                 }
             }
+        }
+    }
+
+    private static void refactoringNumericStatsToCsv(String projectName, WhatIfStats whatIfStats) throws IOException {
+        try (CSVWriter writer = new CSVWriter(new FileWriter("output/" + projectName + "_what-if_stats.csv"))) {
+            writer.writeNext(HEADER2);
+            String[] row = {
+                    String.valueOf(whatIfStats.actualBugComplete()),
+                    String.valueOf(whatIfStats.expectedBugComplete()),
+                    String.valueOf(whatIfStats.actualBugWithSmell()),
+                    String.valueOf(whatIfStats.expectedBugWithSmell()),
+                    String.valueOf(whatIfStats.actualAfterSmellReset()),
+                    String.valueOf(whatIfStats.actualBugWithoutSmell()),
+                    String.valueOf(whatIfStats.expectedBugWithoutSmell())
+            };
+            writer.writeNext(row);
         }
     }
 }

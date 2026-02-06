@@ -4,19 +4,16 @@ package org.isw2.experiment;
 import org.isw2.absfactory.AbstractControllerFactory;
 import org.isw2.dataset.core.boundary.EntryPointBoundary;
 import org.isw2.dataset.core.controller.context.EntryPointContext;
-import org.isw2.dataset.core.model.Method;
-import org.isw2.dataset.core.model.MethodKey;
 import org.isw2.dataset.exceptions.ProcessingException;
-import org.isw2.dataset.jira.model.Version;
 import org.isw2.weka.WekaBoundary;
 import org.isw2.weka.classifier.ClassifierType;
+import org.isw2.whatif.WhatIfStats;
 import org.isw2.whatif.context.CoordinatorContext;
 import org.isw2.whatif.RefactoringStatsToCsv;
 import org.isw2.whatif.factory.CoordinatorFactory;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 
@@ -48,9 +45,9 @@ public class Experiments {
 
             // If what-if study is enabled do it
             if (whatIfEnabled) {
-                AbstractControllerFactory<CoordinatorContext,  Map<Version, Map<MethodKey, Method>>> controllerFactory = new CoordinatorFactory();
-                Map<Version, Map<MethodKey, Method>> refactoredByVersion = controllerFactory.process(new CoordinatorContext(projectName, discardPercentage, classifiersToTest));
-                RefactoringStatsToCsv.refactoringStatsToCsv(projectName, refactoredByVersion);
+                AbstractControllerFactory<CoordinatorContext, WhatIfStats> controllerFactory = new CoordinatorFactory();
+                WhatIfStats whatIfStats = controllerFactory.process(new CoordinatorContext(projectName, discardPercentage, classifiersToTest));
+                RefactoringStatsToCsv.refactoringStatsToCsv(projectName, whatIfStats);
             }
 
             // Build a model with Weka using the dataset

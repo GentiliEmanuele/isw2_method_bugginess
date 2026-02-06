@@ -4,17 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Removed a singleton class (suggested by SonarCloud)">
+    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Added the code of refactoring experiments">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/BOOKKEEPER_refactoring_stats.csv" beforeDir="false" afterPath="$PROJECT_DIR$/output/BOOKKEEPER_refactoring_stats.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/experiment/Experiments.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/experiment/Experiments.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/WekaBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/WekaBoundary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/WekaCorrelation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/WekaCorrelation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/classifier/ClassifierFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/classifier/ClassifierFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/classifier/ClassifierType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/classifier/ClassifierType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/procedure/WalkForward.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/procedure/WalkForward.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/utils/StatsToCsv.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/utils/StatsToCsv.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/RefactoringStatsToCsv.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/RefactoringStatsToCsv.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/WhatIfStats.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/WhatIfStats.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/WhatIfStudyCoordinator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/WhatIfStudyCoordinator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/refactoring/BOOKKEEPER/after.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/refactoring/BOOKKEEPER/after.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/factory/CoordinatorFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/factory/CoordinatorFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,6 +84,10 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\HP\IdeaProjects\isw2_method_bugginess\src\main\resources\refactoring\bookkeeper" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\HP\IdeaProjects\isw2_method_bugginess\src\main\resources\refactoring\OPENJPA" />
+      <recent name="C:\Users\HP\IdeaProjects\isw2_method_bugginess\src\main\resources\refactoring" />
     </key>
   </component>
   <component name="RunManager">
@@ -200,14 +202,7 @@
       <workItem from="1770186746189" duration="18980000" />
       <workItem from="1770304844881" duration="12642000" />
       <workItem from="1770376286330" duration="17205000" />
-    </task>
-    <task id="LOCAL-00005" summary="Added mechanism that read ticket information by Jira. Removed some code smells.">
-      <option name="closed" value="true" />
-      <created>1762608931236</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1762608931236</updated>
+      <workItem from="1770405573770" duration="5458000" />
     </task>
     <task id="LOCAL-00006" summary="General refactoring">
       <option name="closed" value="true" />
@@ -593,7 +588,15 @@
       <option name="project" value="LOCAL" />
       <updated>1770378578322</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="Added the code of refactoring experiments">
+      <option name="closed" value="true" />
+      <created>1770405747572</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1770405747572</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -611,7 +614,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fix an error on LOC computation." />
     <MESSAGE value="Added a filter for automated generated files (by protocol buffer compiler)." />
     <MESSAGE value="Modified mechanism that compute changes metrics" />
     <MESSAGE value="Modified (again) mechanism that compute changes metrics" />
@@ -636,7 +638,8 @@
     <MESSAGE value="Created a separated class MethodParserScanner" />
     <MESSAGE value="Removed two useless import" />
     <MESSAGE value="Removed a singleton class (suggested by SonarCloud)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed a singleton class (suggested by SonarCloud)" />
+    <MESSAGE value="Added the code of refactoring experiments" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added the code of refactoring experiments" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -645,11 +648,6 @@
           <properties class="org.isw2.exceptions.ProcessingException" package="org.isw2.exceptions" />
           <option name="timeStamp" value="24" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/isw2/whatif/WhatIfStudyCoordinator.java</url>
-          <line>81</line>
-          <option name="timeStamp" value="26" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <pin-to-top-manager>

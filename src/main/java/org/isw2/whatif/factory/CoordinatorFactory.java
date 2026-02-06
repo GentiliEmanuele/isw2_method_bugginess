@@ -2,17 +2,14 @@ package org.isw2.whatif.factory;
 
 import org.isw2.absfactory.AbstractControllerFactory;
 import org.isw2.absfactory.Controller;
-import org.isw2.dataset.core.model.Method;
-import org.isw2.dataset.core.model.MethodKey;
-import org.isw2.dataset.jira.model.Version;
+import org.isw2.whatif.WhatIfStats;
 import org.isw2.whatif.context.CoordinatorContext;
 import org.isw2.whatif.WhatIfStudyCoordinator;
 
-import java.util.Map;
 
-public class CoordinatorFactory extends AbstractControllerFactory<CoordinatorContext,  Map<Version, Map<MethodKey, Method>>> {
+public class CoordinatorFactory extends AbstractControllerFactory<CoordinatorContext,  WhatIfStats> {
     @Override
-    public Controller<CoordinatorContext,  Map<Version, Map<MethodKey, Method>>> createController() {
+    public Controller<CoordinatorContext, WhatIfStats> createController() {
         return new WhatIfStudyCoordinator();
     }
 }
