@@ -1,5 +1,6 @@
 package org.isw2.whatif;
 
+import net.sourceforge.pmd.lang.document.TextFile;
 import org.isw2.absfactory.AbstractControllerFactory;
 import org.isw2.absfactory.Controller;
 import org.isw2.dataset.core.model.Method;
@@ -8,7 +9,7 @@ import org.isw2.dataset.exceptions.ProcessingException;
 import org.isw2.dataset.factory.JavaMetricParserFactory;
 import org.isw2.dataset.factory.LinkMethodAndSmellFactory;
 import org.isw2.dataset.factory.PmdFileAnalyzerFactory;
-import org.isw2.dataset.factory.PmdFileCollectorFactory;
+import org.isw2.dataset.factory.PmdFilePreparatorFactory;
 import org.isw2.dataset.jira.model.Version;
 import org.isw2.dataset.metrics.controller.context.LinkMethodAndSmellContext;
 import org.isw2.dataset.metrics.controller.context.ParserContext;
@@ -45,13 +46,16 @@ public class PreliminaryWhatIf implements Controller<String, Map<Version, Map<Me
         after.setName("after");
 
         // Adding the method for Pmd analysis
-        AbstractControllerFactory<PmdFileCollectorContext, Void> collectorFactory = new PmdFileCollectorFactory();
-        collectorFactory.process(new PmdFileCollectorContext(before, noRefactoredCodePath, noRefactoredCode));
-        collectorFactory.process(new PmdFileCollectorContext(after, refactoredCodePath, refactoredCode));
+        AbstractControllerFactory<PmdFileCollectorContext, TextFile> collectorFactory = new PmdFilePreparatorFactory();
+        TextFile beforeRefactoring = collectorFactory.process(new PmdFileCollectorContext(before, noRefactoredCodePath, noRefactoredCode));
+        TextFile afterRefactoring = collectorFactory.process(new PmdFileCollectorContext(after, refactoredCodePath, refactoredCode));
+        Map<String, TextFile> contentByPathAndVersion = new HashMap<>();
+        contentByPathAndVersion.put(before.getName() + "_" + noRefactoredCodePath, beforeRefactoring);
+        contentByPathAndVersion.put(after.getName() + "_" + refactoredCodePath, afterRefactoring);
 
         // Run the Pmd analysis
-        AbstractControllerFactory<Void, Map<String, List<CodeSmell>>> analyzerFactory = new PmdFileAnalyzerFactory();
-        Map<String, List<CodeSmell>> codeSmells = analyzerFactory.process(null);
+        AbstractControllerFactory<Map<String, TextFile>, Map<String, List<CodeSmell>>> analyzerFactory = new PmdFileAnalyzerFactory();
+        Map<String, List<CodeSmell>> codeSmells = analyzerFactory.process(contentByPathAndVersion);
 
         // Link methods and smells
         Map<Version, Map<MethodKey, Method>> methodsByVersion = new HashMap<>();

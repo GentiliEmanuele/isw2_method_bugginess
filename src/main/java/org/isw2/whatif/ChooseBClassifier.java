@@ -17,8 +17,13 @@ import weka.classifiers.Classifier;
 import weka.core.Instances;
 
 import java.util.*;
+import java.util.logging.Logger;
+
+import static java.util.logging.Level.INFO;
 
 public class ChooseBClassifier implements Controller<ChooseClassifierContext, Classifier> {
+
+    private static final Logger LOGGER = Logger.getLogger(ChooseBClassifier.class.getName());
 
     @Override
     public Classifier execute(ChooseClassifierContext context) throws ProcessingException {
@@ -57,6 +62,8 @@ public class ChooseBClassifier implements Controller<ChooseClassifierContext, Cl
                 bestScore = currentScore;
             }
         }
+
+        LOGGER.log(INFO, "Best classifier found is {0} ", bClassifierType);
 
         return bClassifierType != null ? ClassifierFactory.createClassifier(bClassifierType) : null;
     }

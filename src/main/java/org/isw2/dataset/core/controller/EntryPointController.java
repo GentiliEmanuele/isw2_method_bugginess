@@ -1,10 +1,12 @@
 package org.isw2.dataset.core.controller;
 
+import net.sourceforge.pmd.lang.document.TextFile;
 import org.isw2.absfactory.AbstractControllerFactory;
 import org.isw2.absfactory.Controller;
 import org.isw2.dataset.core.boundary.ExitPointBoundary;
 import org.isw2.dataset.core.boundary.Outcome;
 import org.isw2.dataset.core.controller.context.*;
+import org.isw2.dataset.core.model.AnalysisResult;
 import org.isw2.dataset.core.model.Method;
 import org.isw2.dataset.core.model.MethodKey;
 import org.isw2.dataset.factory.*;
@@ -79,18 +81,18 @@ public class EntryPointController implements Controller<EntryPointContext, Void>
 
         // Analyze files
         logger.info("Analyze files");
-        AbstractControllerFactory<AnalyzeFileContext, Map<Commit, Map<MethodKey, Method>>> analyzeFileFactory = new AnalyzeFileFactory();
-        Map<Commit, Map<MethodKey, Method>> methodsByCommit = analyzeFileFactory.process(new AnalyzeFileContext(context.projectName(), versions));
+        AbstractControllerFactory<AnalyzeFileContext, AnalysisResult> analyzeFileFactory = new AnalyzeFileFactory();
+        AnalysisResult analysisResult = analyzeFileFactory.process(new AnalyzeFileContext(context.projectName(), versions));
 
         // Link methodsByCommit and versions
         logger.info("Link methodByCommit and versions");
         AbstractControllerFactory<WalkVersionsContext, Map<Version, Map<MethodKey, Method>>> walkVersionsFactory = new WalkVersionsFactory();
-        Map<Version, Map<MethodKey, Method>> methodsByVersion = walkVersionsFactory.process(new WalkVersionsContext(methodsByCommit, versions));
+        Map<Version, Map<MethodKey, Method>> methodsByVersion = walkVersionsFactory.process(new WalkVersionsContext(analysisResult.methodsByCommit(), versions));
 
         // Compute code smell
         logger.info("Compute code smell");
-        AbstractControllerFactory<Void, Map<String, List<CodeSmell>>> codeSmellComputationFactory = new PmdFileAnalyzerFactory();
-        Map<String, List<CodeSmell>> smellsByPathAndVersion = codeSmellComputationFactory.process(null);
+        AbstractControllerFactory<Map<String, TextFile>, Map<String, List<CodeSmell>>> codeSmellComputationFactory = new PmdFileAnalyzerFactory();
+        Map<String, List<CodeSmell>> smellsByPathAndVersion = codeSmellComputationFactory.process(analysisResult.pmdFiles());
 
         // Link method and smell
         logger.info("Link code smell and methods");
@@ -99,7 +101,7 @@ public class EntryPointController implements Controller<EntryPointContext, Void>
 
         logger.info("Label methods");
         AbstractControllerFactory<LabelingContext, Void> labelingFactory = new LabelingFactory();
-        labelingFactory.process(new LabelingContext(methodsByVersion, tickets, methodsByCommit));
+        labelingFactory.process(new LabelingContext(methodsByVersion, tickets, analysisResult.methodsByCommit()));
 
         try {
             writeOutcome(context.projectName(), methodsByVersion);

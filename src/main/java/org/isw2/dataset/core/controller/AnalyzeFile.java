@@ -1,5 +1,6 @@
 package org.isw2.dataset.core.controller;
 
+import net.sourceforge.pmd.lang.document.TextFile;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.ObjectId;
@@ -9,6 +10,7 @@ import org.eclipse.jgit.treewalk.TreeWalk;
 import org.isw2.absfactory.AbstractControllerFactory;
 import org.isw2.absfactory.Controller;
 import org.isw2.dataset.core.controller.context.AnalyzeFileContext;
+import org.isw2.dataset.core.model.AnalysisResult;
 import org.isw2.dataset.core.model.Method;
 import org.isw2.dataset.core.model.MethodKey;
 import org.isw2.dataset.exceptions.ProcessingException;
@@ -24,10 +26,11 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-public class AnalyzeFile implements Controller<AnalyzeFileContext, Map<Commit, Map<MethodKey, Method>>> {
+public class AnalyzeFile implements Controller<AnalyzeFileContext, AnalysisResult> {
 
     private final Map<Commit, Map<MethodKey, Method>> methodsByCommit;
     private final Map<String, Map<MethodKey, Method>> currentSystemState;
+    private final Map<String, TextFile> pmdFiles = new HashMap<>();
 
     public AnalyzeFile() {
         methodsByCommit = new HashMap<>();
@@ -35,7 +38,7 @@ public class AnalyzeFile implements Controller<AnalyzeFileContext, Map<Commit, M
     }
 
     @Override
-    public Map<Commit, Map<MethodKey, Method>> execute(AnalyzeFileContext context) throws ProcessingException {
+    public AnalysisResult execute(AnalyzeFileContext context) throws ProcessingException {
         try (Git git = GetCommitFromGit.cloneRepository(context.projectName())) {
             processVersions(
                     git.getRepository(),
@@ -44,7 +47,7 @@ public class AnalyzeFile implements Controller<AnalyzeFileContext, Map<Commit, M
         } catch (IOException | GitAPIException e) {
             throw new ProcessingException(e.getMessage());
         }
-        return methodsByCommit;
+        return new AnalysisResult(methodsByCommit, pmdFiles);
     }
 
 
@@ -60,11 +63,13 @@ public class AnalyzeFile implements Controller<AnalyzeFileContext, Map<Commit, M
     }
 
     private void addFileToPmd(Repository repo, Commit commit, Version version, String path) throws IOException, ProcessingException {
-        // Get the content of the file
-        ObjectId commitId = repo.resolve(commit.id());
-        String content = getFileContent(repo, commitId, path);
-        AbstractControllerFactory<PmdFileCollectorContext, Void> factory = new PmdFileCollectorFactory();
-        factory.process(new PmdFileCollectorContext(version, path, content));
+        String content = getFileContent(repo, repo.resolve(commit.id()), path);
+
+        AbstractControllerFactory<PmdFileCollectorContext, TextFile> factory = new PmdFilePreparatorFactory();
+        TextFile textFile = factory.process(new PmdFileCollectorContext(version, path, content));
+
+        String uniqueId = version.getName() + "_" + path;
+        pmdFiles.put(uniqueId, textFile);
     }
 
     private void applyChangeToState(Repository repo, Commit commit, Version version) throws IOException, ProcessingException {

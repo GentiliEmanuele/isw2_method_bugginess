@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 
-public class PmdFileAnalyzer implements Controller<Void, Map<String, List<CodeSmell>>> {
+public class PmdFileAnalyzer implements Controller<Map<String, TextFile>, Map<String, List<CodeSmell>>> {
 
     private final PmdAnalysis pmdAnalysis;
 
@@ -33,10 +33,10 @@ public class PmdFileAnalyzer implements Controller<Void, Map<String, List<CodeSm
     }
 
     @Override
-    public Map<String, List<CodeSmell>> execute(Void context) throws ProcessingException {
+    public Map<String, List<CodeSmell>> execute(Map<String, TextFile> contentByVersionsAndPath) throws ProcessingException {
         Map<String, List<CodeSmell>> smellsByPathAndVersion = new HashMap<>();
         // Load file for the analysis
-        loadFileForPmdAnalysis();
+        loadFileForPmdAnalysis(contentByVersionsAndPath);
         // Analyze the files
         Report report = pmdAnalysis.performAnalysisAndCollectReport();
         for (RuleViolation violation : report.getViolations()) {
@@ -47,8 +47,7 @@ public class PmdFileAnalyzer implements Controller<Void, Map<String, List<CodeSm
         return smellsByPathAndVersion;
     }
 
-    private void loadFileForPmdAnalysis() {
-        Map<String, TextFile> contentByVersionsAndPath = PmdFileCollector.getInstance().getContentByVersionAndPath();
+    private void loadFileForPmdAnalysis(Map<String, TextFile> contentByVersionsAndPath) {
         Iterator<Map.Entry<String, TextFile>> iterator = contentByVersionsAndPath.entrySet().iterator();
         while (iterator.hasNext()) {
             // Get the next element
