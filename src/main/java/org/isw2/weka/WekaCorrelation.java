@@ -1,8 +1,11 @@
 package org.isw2.weka;
 
+import org.isw2.absfactory.AbstractControllerFactory;
 import org.isw2.absfactory.Controller;
 import org.isw2.dataset.exceptions.ProcessingException;
+import org.isw2.weka.factory.SplitterFactory;
 import org.isw2.weka.model.Correlation;
+import org.isw2.weka.utils.context.SplitterContext;
 import weka.attributeSelection.CorrelationAttributeEval;
 import weka.core.Instances;
 import weka.core.converters.CSVLoader;
@@ -22,6 +25,14 @@ public class WekaCorrelation implements Controller<String, List<Correlation>> {
         // Set the class to be predicted
         if (data.classIndex() == -1)
             data.setClassIndex(data.numAttributes() - 1);
+
+        if (projectName.equals("OPENJPA")) {
+            try {
+                data = sampleData(data);
+            } catch (Exception e) {
+                throw new ProcessingException(e.getMessage());
+            }
+        }
 
         // Build evaluator
         CorrelationAttributeEval eval = buildEvaluator(data);
@@ -60,5 +71,11 @@ public class WekaCorrelation implements Controller<String, List<Correlation>> {
         } catch (Exception e) {
             throw new ProcessingException(e.getMessage());
         }
+    }
+
+    private Instances sampleData(Instances data) throws ProcessingException {
+        AbstractControllerFactory<SplitterContext, List<Instances>> splitterFactory = new SplitterFactory();
+        List<Instances> split = splitterFactory.process(new SplitterContext(0.02, data));
+        return split.getFirst();
     }
 }

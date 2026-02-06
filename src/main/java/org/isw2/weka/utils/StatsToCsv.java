@@ -18,6 +18,7 @@ public class StatsToCsv {
             "Precision",
             "F1Score",
             "areaUnderROC",
+            "kappa"
     };
 
     private static final String [] CORRELATION_HEADER = {
@@ -38,7 +39,8 @@ public class StatsToCsv {
                             String.valueOf(statistics.recall()),
                             String.valueOf(statistics.precision()),
                             String.valueOf(statistics.f1Score()),
-                            String.valueOf(statistics.areaUnderROC())
+                            String.valueOf(statistics.areaUnderROC()),
+                            String.valueOf(statistics.kappa())
                     };
                     writer.writeNext(row);
                 })
@@ -46,7 +48,7 @@ public class StatsToCsv {
         }
     }
 
-    public static void writeCorrelationToCsc(String projectName, List<Correlation> correlations) throws IOException {
+    public static void writeCorrelationToCsv(String projectName, List<Correlation> correlations) throws IOException {
         try (CSVWriter writer = new CSVWriter(new FileWriter("output/weka_correlation" + projectName + ".csv"))) {
             writer.writeNext(CORRELATION_HEADER);
             correlations.forEach(correlation -> {

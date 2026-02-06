@@ -13,5 +13,6 @@ public enum ClassifierType {
     RANDOM_FOREST,
     RANDOM_TREE,
     REP_TREE,
-    SMO
+    SMO,
+    BAGGING
 }

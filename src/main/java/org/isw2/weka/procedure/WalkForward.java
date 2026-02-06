@@ -8,6 +8,7 @@ import org.isw2.weka.factory.OrderedHoldoutFactory;
 import org.isw2.weka.model.Statistics;
 import org.isw2.weka.tuning.Tuner;
 import weka.classifiers.Classifier;
+import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
 
 import java.util.HashMap;
@@ -24,6 +25,7 @@ public class WalkForward implements Controller<WalkForwardContext, Map<Integer, 
         int currentTrainingIndex = 0;
         Map<Integer, Statistics> statsByRun = new HashMap<>();
 
+        LOGGER.log(Level.INFO, "Using {0}", context.classifierType().name());
         for (int currentTestingIndex = 1; currentTestingIndex < context.dataByVersion().size(); currentTestingIndex++) {
             // Build training data
             Instances currentTrainingData = new Instances(context.dataByVersion().get(currentTrainingIndex), 0);
@@ -34,7 +36,20 @@ public class WalkForward implements Controller<WalkForwardContext, Map<Integer, 
 
             // Apply ordered holdout for walk forward iteration
             LOGGER.log(Level.INFO, "Use as testing the version {0}", currentTestingIndex);
-            Statistics currentStats = callOrderedHoldout(currentTrainingData, currentTestingData, context.trainingPercentage(), ClassifierFactory.createClassifier(context.classifierType()), context.tuner());
+            Statistics currentStats;
+            if (context.classifierType().name().equals("RANDOM_FOREST")) {
+                RandomForest rf = new RandomForest();
+                rf.setNumIterations(50);
+
+                rf.setMaxDepth(10);
+
+                rf.setNumFeatures(0);
+
+                rf.setNumExecutionSlots(Runtime.getRuntime().availableProcessors());
+                currentStats= callOrderedHoldout(currentTrainingData, currentTestingData, context.trainingPercentage(), rf, context.tuner());
+            } else {
+                currentStats = callOrderedHoldout(currentTrainingData, currentTestingData, context.trainingPercentage(), ClassifierFactory.createClassifier(context.classifierType()), context.tuner());
+            }
             statsByRun.put(currentTestingIndex, currentStats);
         }
         return statsByRun;

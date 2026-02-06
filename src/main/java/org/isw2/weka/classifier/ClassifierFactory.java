@@ -5,6 +5,7 @@ import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.functions.SMO;
 import weka.classifiers.lazy.IBk;
 import weka.classifiers.lazy.KStar;
+import weka.classifiers.meta.Bagging;
 import weka.classifiers.rules.DecisionTable;
 import weka.classifiers.rules.JRip;
 import weka.classifiers.rules.OneR;
@@ -30,6 +31,7 @@ public class ClassifierFactory {
             case RANDOM_TREE -> new RandomTree();
             case REP_TREE -> new REPTree();
             case SMO -> new SMO();
+            case BAGGING -> new Bagging();
         };
     }
 }

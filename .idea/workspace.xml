@@ -4,19 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Removed two useless import">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/model/AnalysisResult.java" afterDir="false" />
+    <list default="true" id="0b05cb26-9e9a-4fd2-803c-2e1a4fbb7f7b" name="Changes" comment="Removed a singleton class (suggested by SonarCloud)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/AnalyzeFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/AnalyzeFile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/EntryPointController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/core/controller/EntryPointController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/AnalyzeFileFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/AnalyzeFileFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/PmdFileAnalyzerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/PmdFileAnalyzerFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/PmdFileCollectorFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/factory/PmdFilePreparatorFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/PmdFileAnalyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/PmdFileAnalyzer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/PmdFileCollector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/dataset/metrics/controller/PmdFilePreparator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/ChooseBClassifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/ChooseBClassifier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/PreliminaryWhatIf.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/PreliminaryWhatIf.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/experiment/Experiments.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/experiment/Experiments.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/WekaBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/WekaBoundary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/WekaCorrelation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/WekaCorrelation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/classifier/ClassifierFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/classifier/ClassifierFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/classifier/ClassifierType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/classifier/ClassifierType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/procedure/WalkForward.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/procedure/WalkForward.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/weka/utils/StatsToCsv.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/weka/utils/StatsToCsv.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/WhatIfStudyCoordinator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/isw2/whatif/WhatIfStudyCoordinator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/refactoring/BOOKKEEPER/after.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/refactoring/BOOKKEEPER/after.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,34 +55,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Experiments.executor&quot;: &quot;Run&quot;,
-    &quot;Application.JiraBoundary.executor&quot;: &quot;Run&quot;,
-    &quot;Application.JiraTempMain.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Unnamed.executor&quot;: &quot;Run&quot;,
-    &quot;Application.WekaCorrelation.executor&quot;: &quot;Run&quot;,
-    &quot;Application.org.isw2.weka.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.isw2_method_bugginess [pmd:pmd].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/HP/IdeaProjects/isw2_method_bugginess/src/main/resources/refactoring/bookkeeper&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;Debugger_Data_Views_Java&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Experiments.executor": "Run",
+    "Application.JiraBoundary.executor": "Run",
+    "Application.JiraTempMain.executor": "Run",
+    "Application.Main.executor": "Run",
+    "Application.Unnamed.executor": "Run",
+    "Application.WekaCorrelation.executor": "Run",
+    "Application.org.isw2.weka.Main.executor": "Run",
+    "Maven.isw2_method_bugginess [pmd:pmd].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/HP/IdeaProjects/isw2_method_bugginess/src/main/resources/refactoring/bookkeeper",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "Debugger_Data_Views_Java",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\HP\IdeaProjects\isw2_method_bugginess\src\main\resources\refactoring\bookkeeper" />
@@ -201,15 +199,7 @@
       <workItem from="1770104648602" duration="22005000" />
       <workItem from="1770186746189" duration="18980000" />
       <workItem from="1770304844881" duration="12642000" />
-      <workItem from="1770376286330" duration="2066000" />
-    </task>
-    <task id="LOCAL-00004" summary="Added mechanism that computes stmtAdded, maxStmtAdded, stmtDeleted and maxStmtDeleted.">
-      <option name="closed" value="true" />
-      <created>1762019149896</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1762019149896</updated>
+      <workItem from="1770376286330" duration="17205000" />
     </task>
     <task id="LOCAL-00005" summary="Added mechanism that read ticket information by Jira. Removed some code smells.">
       <option name="closed" value="true" />
@@ -595,7 +585,15 @@
       <option name="project" value="LOCAL" />
       <updated>1770310748168</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="Removed a singleton class (suggested by SonarCloud)">
+      <option name="closed" value="true" />
+      <created>1770378578321</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1770378578322</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -613,7 +611,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fix a bug in code smell computation." />
     <MESSAGE value="Fix an error on LOC computation." />
     <MESSAGE value="Added a filter for automated generated files (by protocol buffer compiler)." />
     <MESSAGE value="Modified mechanism that compute changes metrics" />
@@ -638,7 +635,8 @@
     <MESSAGE value="Removed other smells" />
     <MESSAGE value="Created a separated class MethodParserScanner" />
     <MESSAGE value="Removed two useless import" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed two useless import" />
+    <MESSAGE value="Removed a singleton class (suggested by SonarCloud)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed a singleton class (suggested by SonarCloud)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -647,6 +645,11 @@
           <properties class="org.isw2.exceptions.ProcessingException" package="org.isw2.exceptions" />
           <option name="timeStamp" value="24" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/isw2/whatif/WhatIfStudyCoordinator.java</url>
+          <line>81</line>
+          <option name="timeStamp" value="26" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <pin-to-top-manager>

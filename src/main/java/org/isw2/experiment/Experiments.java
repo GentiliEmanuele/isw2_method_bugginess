@@ -41,16 +41,16 @@ public class Experiments {
         for (String projectName : projectNames) {
             double discardPercentage = ConfigLoader.getVersionDiscardPercentage(projectName);
 
+            // Foreach project build the dataset only if rebuild dataset is true
+            if (rebuildDataset) {
+                EntryPointBoundary.startAnalysis(new EntryPointContext(projectName, discardPercentage));
+            }
+
             // If what-if study is enabled do it
             if (whatIfEnabled) {
                 AbstractControllerFactory<CoordinatorContext,  Map<Version, Map<MethodKey, Method>>> controllerFactory = new CoordinatorFactory();
                 Map<Version, Map<MethodKey, Method>> refactoredByVersion = controllerFactory.process(new CoordinatorContext(projectName, discardPercentage, classifiersToTest));
                 RefactoringStatsToCsv.refactoringStatsToCsv(projectName, refactoredByVersion);
-            }
-
-            // Foreach project build the dataset only if rebuild dataset is true
-            if (rebuildDataset) {
-                EntryPointBoundary.startAnalysis(new EntryPointContext(projectName, discardPercentage));
             }
 
             // Build a model with Weka using the dataset

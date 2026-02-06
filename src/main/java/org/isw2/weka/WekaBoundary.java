@@ -24,10 +24,13 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class WekaBoundary {
 
     private static final String RELEASE_ID = "ReleaseID";
+    private static final Logger logger = Logger.getLogger(WekaBoundary.class.getName());
 
     private WekaBoundary() {}
 
@@ -64,10 +67,12 @@ public class WekaBoundary {
             statsByClassifier.put(classifier, statsByRun);
         }
 
+        StatsToCsv.writeStatsToCsv(projectName, statsByClassifier);
+
+        logger.log(Level.INFO, "Start to compute correlation");
         AbstractControllerFactory<String, List<Correlation>> computeCorrelationFactory = new WekaCorrelationFactory();
         List<Correlation> correlations = computeCorrelationFactory.process(projectName);
 
-        StatsToCsv.writeCorrelationToCsc(projectName, correlations);
-        StatsToCsv.writeStatsToCsv(projectName, statsByClassifier);
+        StatsToCsv.writeCorrelationToCsv(projectName, correlations);
     }
 }
